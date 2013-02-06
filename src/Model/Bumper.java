@@ -1,6 +1,6 @@
 package Model;
 
-public class Bumper extends Gizmo {
+public class Bumper implements iGizmo {
 
 	public Bumper() {
 		// TODO Auto-generated constructor stub

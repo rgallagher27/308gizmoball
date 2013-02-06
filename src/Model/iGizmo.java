@@ -11,14 +11,18 @@ public interface iGizmo {
 	
 	public Point getLocation();
 	
+	public void getBounds();
+	
 	public void addTrigger(iGizmo t);
 	
 	public void addTrigger(int k);
 	
 	public void removeTrigger(iGizmo t);
 	
-	public void rotate();
+	public void removeTrigger(int k);
 	
 	public List<iGizmo> getTriggers();
+	
+	public void rotate();
 
 }
