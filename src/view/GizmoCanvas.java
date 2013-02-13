@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Adapted from MySecondCanvas used in G2D framework in CS309.
@@ -13,7 +15,7 @@ import java.awt.RenderingHints;
  *
  */
 
-public class GizmoCanvas extends Canvas {
+public class GizmoCanvas extends Canvas implements Observer {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +35,11 @@ public class GizmoCanvas extends Canvas {
 			g.drawString("This is the Canvas", 200, this.getHeight()/2);
 //			g.drawImage(bufferImage, 0, 0, null); 
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		repaint();
 	}
 
 }
