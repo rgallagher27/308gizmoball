@@ -11,8 +11,6 @@ public interface iGizmo {
 	
 	public Point getLocation();
 	
-	public Point getBounds();
-	
 	public void addTrigger(iGizmo t);
 	
 	public void addTrigger(int k);

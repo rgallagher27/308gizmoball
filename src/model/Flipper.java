@@ -28,12 +28,6 @@ public class Flipper implements iGizmo {
 	}
 
 	@Override
-	public Point getBounds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addTrigger(iGizmo t) {
 		// TODO Auto-generated method stub
 		
