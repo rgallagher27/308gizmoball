@@ -1,78 +1,81 @@
 package model;
 
 import java.awt.Point;
-import java.util.List;
+import java.util.Observable;
 
-public class Flipper implements iGizmo {
+public class Flipper extends Observable implements iGizmo {
+	
+	protected Point point;
+	protected double width, height, rotation, maxRotation, minRotation;
+	protected double rotationIncrement;
+	protected boolean active;
 
-	public Flipper() {
-		// TODO Auto-generated constructor stub
+	public Flipper(Point p, double width, double height) {
+		this.point = p;
+		this.height = height;
+		this.width = width;
+		this.rotation = 0;
+		this.rotationIncrement = 10;
+		this.active = false;
+	}
+	
+	public void toggleFlipper(boolean b)
+	{
+		this.active = b;
 	}
 
 	@Override
-	public void doAction() {
-		// TODO Auto-generated method stub
-		
+	public Point getLocation() 
+	{
+		return this.point;
 	}
 
 	@Override
-	public void setLocation(Point p) {
-		// TODO Auto-generated method stub
-		
+	public void setLocation(Point p) 
+	{	
+		this.point = p;
 	}
 
 	@Override
-	public Point getLocation() {
-		// TODO Auto-generated method stub
-		return null;
+	public double getWidth() 
+	{
+		return this.width;
 	}
 
 	@Override
-	public void addTrigger(iGizmo t) {
-		// TODO Auto-generated method stub
-		
+	public void setWidth(double w) 
+	{
+		this.width = w;
 	}
 
 	@Override
-	public void addTrigger(int k) {
-		// TODO Auto-generated method stub
-		
+	public double getHeight() 
+	{
+		return this.height;
 	}
 
 	@Override
-	public void removeTrigger(iGizmo t) {
-		// TODO Auto-generated method stub
-		
+	public void setHeight(double h) 
+	{
+		this.height = h;
 	}
 
 	@Override
-	public void removeTrigger(int k) {
-		// TODO Auto-generated method stub
-		
+	public void move() {
+		/*
+		 * Implemented in extended classes
+		 */
+	}
+	
+	public double getRotation()
+	{
+		return this.rotation;
 	}
 
 	@Override
-	public List<iGizmo> getTriggers() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setRotation(double r) {
+		/*
+		 * Implemented in extended classes
+		 */
 	}
-
-	@Override
-	public void rotate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setVelocity(Double v) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Double getVelocity() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

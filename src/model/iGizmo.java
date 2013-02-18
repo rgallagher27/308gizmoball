@@ -1,30 +1,25 @@
 package model;
 
 import java.awt.Point;
-import java.util.List;
 
 public interface iGizmo {
 	
-	public void doAction();
+	public Point getLocation();
 	
 	public void setLocation(Point p);
 	
-	public Point getLocation();
+	public double getWidth();
 	
-	public void addTrigger(iGizmo t);
+	public void setWidth(double w);
 	
-	public void addTrigger(int k);
+	public double getHeight();
 	
-	public void removeTrigger(iGizmo t);
+	public void setHeight(double h);
 	
-	public void removeTrigger(int k);
+	public double getRotation();
 	
-	public void setVelocity(Double v);
+	public void setRotation(double r);
 	
-	public Double getVelocity();
-	
-	public List<iGizmo> getTriggers();
-	
-	public void rotate();
+	public void move();
 
 }
