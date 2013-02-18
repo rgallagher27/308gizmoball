@@ -3,15 +3,18 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-public class BuildView extends JFrame {
+public class BuildView extends JFrame implements WindowListener{
 
 	private static final long serialVersionUID = 1L;
+	
 	private GizmoCanvas canvas;
 	private JPanel rightPanel;
 	private JRadioButton gizmo1;
@@ -31,6 +34,7 @@ public class BuildView extends JFrame {
 		setup();
 	}
 	private void setup(){
+		//Build the components.
 		canvas = new GizmoCanvas();
 		rightPanel = new JPanel();
 		gizmo1 = new JRadioButton("Add Gizmo1");
@@ -43,9 +47,13 @@ public class BuildView extends JFrame {
 		removeTrigger = new JRadioButton("Remove Trigger");
 		bottomPanel = new JPanel();
 		load = new JButton("Load Map");
+		load.addActionListener(new ButtonListener(ButtonListener.LOAD));
 		save = new JButton("Save Map");
+		save.addActionListener(new ButtonListener(ButtonListener.SAVE));
 		play = new JButton("Play Mode");
+		play.addActionListener(new ButtonListener(ButtonListener.PLAY));
 		
+		//Build the window.
 		this.setTitle("Gizmoball Build View");
 		this.setSize(640, 480);
 		this.setVisible(true);
@@ -72,8 +80,29 @@ public class BuildView extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new BuildView();
 	}
 
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		System.exit(0);	
+	}
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+	}
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+	}
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+	}
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+	}
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+	}
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+	}
 }

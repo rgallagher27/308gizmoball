@@ -2,12 +2,14 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class PlayView extends JFrame{
+public class PlayView extends JFrame implements WindowListener{
 	private GizmoCanvas canvas;
 	private JPanel panel;
 	private JButton load;
@@ -21,12 +23,17 @@ public class PlayView extends JFrame{
 	}
 
 	private void setup(){
+		//Build the components.
 		canvas = new GizmoCanvas();
 		panel = new JPanel();
 		load = new JButton("Load Map");
+		load.addActionListener(new ButtonListener(ButtonListener.LOAD));
 		start = new JButton("Start Game");
-		build = new JButton("Build Mode");		
+		start.addActionListener(new ButtonListener(ButtonListener.PLAY));
+		build = new JButton("Build Mode");
+		build.addActionListener(new ButtonListener(ButtonListener.BUILD));
 		
+		//Build the window.
 		this.setTitle("Gizmoball Play Mode");
 		this.setSize(640, 480);
 		this.setVisible(true);
@@ -43,5 +50,29 @@ public class PlayView extends JFrame{
 	
 	public static void main(String[] args){
 		new PlayView();
+	}
+	
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		System.exit(0);
+	}
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		System.exit(0);	
+	}
+	@Override
+	public void windowActivated(WindowEvent e) {		
+	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+	}
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {
+	}
+	@Override
+	public void windowOpened(WindowEvent e) {
 	}
 }

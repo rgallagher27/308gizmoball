@@ -69,4 +69,16 @@ public class Wall implements iGizmo {
 		
 	}
 
+	@Override
+	public void setVelocity(Double v) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Double getVelocity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -8,9 +8,10 @@ public class Ball implements iGizmo {
 	private String _id;
 	private Point location;
 	private Point bounds;
-	private Float velocity;
+	private Double velocity;
 	private int width;
 	private int height;
+	
 
 	public Ball() {
 		// TODO Auto-generated constructor stub
@@ -74,6 +75,17 @@ public class Ball implements iGizmo {
 	public void rotate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setVelocity(Double v) {
+		this.velocity = v;
+		
+	}
+
+	@Override
+	public Double getVelocity() {
+		return this.velocity;
 	}
 
 }

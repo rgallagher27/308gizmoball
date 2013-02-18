@@ -21,6 +21,10 @@ public interface iGizmo {
 	
 	public void removeTrigger(int k);
 	
+	public void setVelocity(Double v);
+	
+	public Double getVelocity();
+	
 	public List<iGizmo> getTriggers();
 	
 	public void rotate();
