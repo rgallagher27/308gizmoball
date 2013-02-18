@@ -6,8 +6,26 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FileParser {
+    
+    private ArrayList<String[]> absorbers = new ArrayList<String[]>();
+    private ArrayList<String[]> balls = new ArrayList<String[]>();
+    private ArrayList<String[]> bumpers = new ArrayList<String[]>();
+    private ArrayList<String[]> circles = new ArrayList<String[]>();
+    private ArrayList<String[]> lFlippers = new ArrayList<String[]>();
+    private ArrayList<String[]> rFlippers = new ArrayList<String[]>();
+    private ArrayList<String[]> squares = new ArrayList<String[]>();
+    private ArrayList<String[]> triangles = new ArrayList<String[]>();
+    private ArrayList<String[]> walls = new ArrayList<String[]>();
+    private ArrayList<String[]> gravity = new ArrayList<String[]>();
+    private ArrayList<String[]> friction = new ArrayList<String[]>();
+    private ArrayList<String[]> moves = new ArrayList<String[]>();
+    private ArrayList<String[]> rotates = new ArrayList<String[]>();
+    private ArrayList<String[]> connects = new ArrayList<String[]>();
+    private ArrayList<String[]> keyConnects = new ArrayList<String[]>();
+    private ArrayList<String[]> deletes = new ArrayList<String[]>();
 
     public FileParser() {
         
@@ -39,35 +57,53 @@ public class FileParser {
             switch(tok[0]) {
                 case "":  //blank line in file
                     break;
-                case "Absorber":  //create Absorber
+                case "Absorber":
+                    absorbers.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Ball":  //create Ball
+                case "Ball":
+                    balls.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Bumper":  //create Bumper
+                case "Bumper":
+                    bumpers.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Circle":  //create Circle
+                case "Circle":
+                    circles.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "LeftFlipper":  //create LeftFlipper
+                case "LeftFlipper":
+                    lFlippers.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "RightFlipper":  //create RightFlipper
+                case "RightFlipper":
+                    rFlippers.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Square":  //create Square
+                case "Square":
+                    squares.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Triangle":  //create Triangle
+                case "Triangle":
+                    triangles.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Wall":  //create Wall
+                case "Wall":
+                    walls.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Gravity": //set Gravity
+                case "Gravity":
+                    gravity.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Friction": //set Friction
+                case "Friction":
+                    friction.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Move": //move Gizmo
+                case "Move":
+                    moves.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Rotate": //rotate Gizmo
+                case "Rotate":
+                    rotates.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "Connect": //connect Gizmos
+                case "Connect":
+                    connects.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
-                case "KeyConnect": //key connect Gizmo
+                case "KeyConnect":
+                    keyConnects.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    break;
+                case "Delete":
+                    deletes.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
                 default: //Error throw up error message dialog box
                     break;
@@ -77,6 +113,70 @@ public class FileParser {
     
     public void saveFile() {
         
+    }
+    
+    public ArrayList<String[]> getAbsorbers() {
+        return absorbers;
+    }
+    
+    public ArrayList<String[]> getBalls() {
+        return balls;
+    }
+    
+    public ArrayList<String[]> getBumpers() {
+        return bumpers;
+    }
+    
+    public ArrayList<String[]> getCircles() {
+        return circles;
+    }
+    
+    public ArrayList<String[]> getLFlippers() {
+        return lFlippers;
+    }
+    
+    public ArrayList<String[]> getRFlippers() {
+        return rFlippers;
+    }
+    
+    public ArrayList<String[]> getSquares() {
+        return squares;
+    }
+    
+    public ArrayList<String[]> getTriangles() {
+        return triangles;
+    }
+    
+    public ArrayList<String[]> getWalls() {
+        return walls;
+    }
+    
+    public ArrayList<String[]> getGravity() {
+        return gravity;
+    }
+    
+    public ArrayList<String[]> getFriction() {
+        return friction;
+    }
+    
+    public ArrayList<String[]> getMoves() {
+        return moves;
+    }
+    
+    public ArrayList<String[]> getRotates() {
+        return rotates;
+    }
+    
+    public ArrayList<String[]> getConnects() {
+        return connects;
+    }
+    
+    public ArrayList<String[]> getKeyConnects() {
+        return keyConnects;
+    }
+    
+    public ArrayList<String[]> getDeletes() {
+        return deletes;
     }
 
 }
