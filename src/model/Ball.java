@@ -3,7 +3,7 @@ package model;
 import java.awt.Point;
 import java.util.List;
 
-public class Ball implements iGizmo {
+public class Ball implements iBall {
 	
 	private String _id;
 	private Point location;

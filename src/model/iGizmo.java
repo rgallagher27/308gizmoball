@@ -15,16 +15,7 @@ public interface iGizmo {
 	
 	public void addTrigger(iGizmo t);
 	
-	public void addTrigger(int k);
-	
 	public void removeTrigger(iGizmo t);
-	
-	public void removeTrigger(int k);
-	
-	public void setVelocity(double vx, double vy);
-	
-	public Double getVelocityX();
-	public Double getVelocityY();
 	
 	public List<iGizmo> getTriggers();
 	
@@ -34,6 +25,5 @@ public interface iGizmo {
 
 	public int getHeight();
 
-	public void setLocation(float x, float y); //required to set the ball point.
 
 }

@@ -11,7 +11,7 @@ public interface IOverlord {
 	public boolean addTriangle(String gizmoName, int x, int y);
 	public boolean addFlipper(String gizmoName, int x, int y, boolean orient); //true = right, false = left
 	public boolean addAbsorber(String gizmoName, int x1, int y1, int x2, int y2);
-	public boolean addBall(String gizmoName, float x, float y, double vx, double vy);
+	public boolean addBall(String gizmoName, int x, int y, double vx, double vy);
 	public void removeGizmo(String gizmoName);
 	public List<iGizmo> getGizmos();
 	public iGizmo getGizmo(String gizmoName);
