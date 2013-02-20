@@ -6,29 +6,13 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FileParser {
     
-    private ArrayList<String[]> absorbers = new ArrayList<String[]>();
-    private ArrayList<String[]> balls = new ArrayList<String[]>();
-    private ArrayList<String[]> bumpers = new ArrayList<String[]>();
-    private ArrayList<String[]> circles = new ArrayList<String[]>();
-    private ArrayList<String[]> lFlippers = new ArrayList<String[]>();
-    private ArrayList<String[]> rFlippers = new ArrayList<String[]>();
-    private ArrayList<String[]> squares = new ArrayList<String[]>();
-    private ArrayList<String[]> triangles = new ArrayList<String[]>();
-    private ArrayList<String[]> walls = new ArrayList<String[]>();
-    private ArrayList<String[]> gravity = new ArrayList<String[]>();
-    private ArrayList<String[]> friction = new ArrayList<String[]>();
-    private ArrayList<String[]> moves = new ArrayList<String[]>();
-    private ArrayList<String[]> rotates = new ArrayList<String[]>();
-    private ArrayList<String[]> connects = new ArrayList<String[]>();
-    private ArrayList<String[]> keyConnects = new ArrayList<String[]>();
-    private ArrayList<String[]> deletes = new ArrayList<String[]>();
-
-    public FileParser() {
-        
+    private IOverlord overlord;
+    
+    public FileParser(IOverlord overlord) {
+        this.overlord = overlord;
     }
     
     public void loadFile(String fileName) {
@@ -58,52 +42,57 @@ public class FileParser {
                 case "":  //blank line in file
                     break;
                 case "Absorber":
-                    absorbers.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
                     break;
                 case "Ball":
-                    balls.add(Arrays.copyOfRange(tok, 1, tok.length));
-                    break;
-                case "Bumper":
-                    bumpers.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addBall(tok[1], Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Float.parseFloat(tok[4]), Float.parseFloat(tok[5]));
                     break;
                 case "Circle":
-                    circles.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "LeftFlipper":
-                    lFlippers.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
                     break;
                 case "RightFlipper":
-                    rFlippers.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
                     break;
                 case "Square":
-                    squares.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Triangle":
-                    triangles.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Wall":
-                    walls.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    
                     break;
                 case "Gravity":
-                    gravity.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.setGravity(Float.parseFloat(tok[1]));
                     break;
                 case "Friction":
-                    friction.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.setFriction(Float.parseFloat(tok[1]), Float.parseFloat(tok[2]));
                     break;
                 case "Move":
-                    moves.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.moveGizmo(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Rotate":
-                    rotates.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.rotateGizmo(tok[1]);
                     break;
                 case "Connect":
-                    connects.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    overlord.connect(tok[1], tok[2]);
                     break;
                 case "KeyConnect":
-                    keyConnects.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    boolean temp = false;
+                    if(tok[3].equals("up")) {
+                        temp = true;
+                    } else if(tok[3].equals("down")) {
+                        temp = false;
+                    } else {
+                        //error
+                    }
+                    overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
                     break;
                 case "Delete":
-                    deletes.add(Arrays.copyOfRange(tok, 1, tok.length));
+                    
                     break;
                 default: //Error throw up error message dialog box
                     break;
@@ -115,68 +104,4 @@ public class FileParser {
         
     }
     
-    public ArrayList<String[]> getAbsorbers() {
-        return absorbers;
-    }
-    
-    public ArrayList<String[]> getBalls() {
-        return balls;
-    }
-    
-    public ArrayList<String[]> getBumpers() {
-        return bumpers;
-    }
-    
-    public ArrayList<String[]> getCircles() {
-        return circles;
-    }
-    
-    public ArrayList<String[]> getLFlippers() {
-        return lFlippers;
-    }
-    
-    public ArrayList<String[]> getRFlippers() {
-        return rFlippers;
-    }
-    
-    public ArrayList<String[]> getSquares() {
-        return squares;
-    }
-    
-    public ArrayList<String[]> getTriangles() {
-        return triangles;
-    }
-    
-    public ArrayList<String[]> getWalls() {
-        return walls;
-    }
-    
-    public ArrayList<String[]> getGravity() {
-        return gravity;
-    }
-    
-    public ArrayList<String[]> getFriction() {
-        return friction;
-    }
-    
-    public ArrayList<String[]> getMoves() {
-        return moves;
-    }
-    
-    public ArrayList<String[]> getRotates() {
-        return rotates;
-    }
-    
-    public ArrayList<String[]> getConnects() {
-        return connects;
-    }
-    
-    public ArrayList<String[]> getKeyConnects() {
-        return keyConnects;
-    }
-    
-    public ArrayList<String[]> getDeletes() {
-        return deletes;
-    }
-
 }
