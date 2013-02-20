@@ -62,9 +62,6 @@ public class FileParser {
                 case "Triangle":
                     overlord.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
-                case "Wall":
-                    
-                    break;
                 case "Gravity":
                     overlord.setGravity(Float.parseFloat(tok[1]));
                     break;
