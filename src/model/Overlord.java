@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Overlord implements IOverlord {
 	
-		private static float BALL_RADIUS = 0.2F;
+		private static float BALL_RADIUS = 0.25F;
 		HashMap<String, iGizmo> gizmos;
 		HashMap<Integer, List<iGizmo>> keyTriggersDown;
 		HashMap<Integer, List<iGizmo>> keyTriggersUp;
@@ -115,23 +115,8 @@ public class Overlord implements IOverlord {
 
 		@Override
 		public void loadGame(String mapName) {
-			fileParse = new FileParser();
+			fileParse = new FileParser(this);
 			fileParse.loadFile(mapName);
-			
-			for(String[] a : fileParse.getAbsorbers()){
-				addAbsorber(a[0], Integer.parseInt(a[1]), Integer.parseInt(a[2]), Integer.parseInt(a[3]), Integer.parseInt(a[4]));
-			}
-			
-			for(String[] a : fileParse.getBalls()){
-				addBall(a[0], Float.parseFloat(a[1]), Float.parseFloat(a[2]), Double.parseDouble(a[3]), Double.parseDouble(a[4]));
-			}
-			
-			for(String[] a: fileParse.getCircles()){
-				addCircle(a[0], Integer.parseInt(a[1]), Integer.parseInt(a[2]));
-			}
-			
-			for(String[] a : fileParse.
-					)
 			
 		}
 
@@ -265,34 +250,26 @@ public class Overlord implements IOverlord {
 			}
 			return false;
 		}
-		
-		public boolean addAbsorber(String gizmoName, int x1, int y1, int x2,
-				int y2, double velocity) {
-			if(canPlace("", x1, y1, x2, y2)){
-			gizmos.put(gizmoName, new Absorber(gizmoName, x1, y1, x2, y2, velocity));
-			setPlace(gizmoName, x1, y1, x2, y2);
-			return true;
-			}
-			return false;
-		}
 
 
 
 
 
 		@Override
-		public boolean addBall(String gizmoName, float x, float y, double vx,
+		public boolean addBall(String gizmoName, int x, int y, double vx,
 				double vy) {
 			if(vx == 0.0 && vy == 0.0){
-				if(canPlaceBall("A", x-BALL_RADIUS, y-BALL_RADIUS, x+BALL_RADIUS, y+BALL_RADIUS)){
+				if(canPlaceBall("A", x, y, x, y)){
 					gizmos.put(gizmoName, new Ball(gizmoName, x, y, vx, vy));
-					setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
+					setPlace(gizmoName, x, y, x, y); //we might not want the "ball" in the board
+					/* DO NOT UPDATE OBSERVER AT THIS POINT, DONT DRAW UNDER ABSORBER */
 					return true;
 				}
 			}
-			if(canPlaceBall("", x-BALL_RADIUS, y-BALL_RADIUS, x+BALL_RADIUS, y+BALL_RADIUS)){
+			if(canPlaceBall("", x, y, x, y)){
 				gizmos.put(gizmoName, new Ball(gizmoName, x, y, vx, vy));
-				setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y);//we might not want the "ball" in the board
+				setPlace(gizmoName, x, y, x, y);//we might not want the "ball" in the board
+				/* update here */
 				return true;
 			}
 			return false;
