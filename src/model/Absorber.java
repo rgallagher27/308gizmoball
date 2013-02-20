@@ -9,6 +9,10 @@ public class Absorber implements iGizmo {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Absorber(String gizmoName, int x1, int y1, int x2, int y2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void doAction() {
 		// TODO Auto-generated method stub
@@ -68,17 +72,41 @@ public class Absorber implements iGizmo {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void setVelocity(Double v) {
+	public void setVelocity(Double vx, Double vy) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Double getVelocity() {
+	public Double getVelocityX() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Double getVelocityY() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setLocation(float x, float y) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

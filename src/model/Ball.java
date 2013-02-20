@@ -8,12 +8,17 @@ public class Ball implements iGizmo {
 	private String _id;
 	private Point location;
 	private Point bounds;
-	private Double velocity;
+	private Double velocityX;
+	private Double velocityY;
 	private int width;
 	private int height;
 	
 
 	public Ball() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Ball(String gizmoName, float x, float y, float vx, float vy) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -78,14 +83,42 @@ public class Ball implements iGizmo {
 	}
 
 	@Override
-	public void setVelocity(Double v) {
-		this.velocity = v;
+	public void setVelocity(Double vx, Double vy) {
+		velocityX = vx;
+		velocityY = vy;
 		
 	}
 
 	@Override
-	public Double getVelocity() {
-		return this.velocity;
+	public Double getVelocityX() {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	@Override
+	public Double getVelocityY() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setLocation(float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }
