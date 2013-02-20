@@ -92,7 +92,7 @@ public class FileParser {
                     overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
                     break;
                 case "Delete":
-                    
+                    overlord.removeFromBoard(tok[1]);
                     break;
                 default: //Error throw up error message dialog box
                     break;
