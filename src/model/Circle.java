@@ -6,4 +6,8 @@ public class Circle extends Bumper {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Circle(String gizmoName, int x, int y) {
+		// TODO Auto-generated constructor stub
+	}
+
 }

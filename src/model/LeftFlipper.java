@@ -6,4 +6,9 @@ public class LeftFlipper extends Flipper {
 		// TODO Auto-generated constructor stub
 	}
 
+	public LeftFlipper(String gizmoName, int x, int y) {
+		// TODO Auto-generated constructor stub
+	}
+
+
 }
