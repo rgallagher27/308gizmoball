@@ -12,7 +12,6 @@ public class FileParser {
     
     private ArrayList<String[]> absorbers = new ArrayList<String[]>();
     private ArrayList<String[]> balls = new ArrayList<String[]>();
-    private ArrayList<String[]> bumpers = new ArrayList<String[]>();
     private ArrayList<String[]> circles = new ArrayList<String[]>();
     private ArrayList<String[]> lFlippers = new ArrayList<String[]>();
     private ArrayList<String[]> rFlippers = new ArrayList<String[]>();
@@ -62,9 +61,6 @@ public class FileParser {
                     break;
                 case "Ball":
                     balls.add(Arrays.copyOfRange(tok, 1, tok.length));
-                    break;
-                case "Bumper":
-                    bumpers.add(Arrays.copyOfRange(tok, 1, tok.length));
                     break;
                 case "Circle":
                     circles.add(Arrays.copyOfRange(tok, 1, tok.length));
@@ -121,10 +117,6 @@ public class FileParser {
     
     public ArrayList<String[]> getBalls() {
         return balls;
-    }
-    
-    public ArrayList<String[]> getBumpers() {
-        return bumpers;
     }
     
     public ArrayList<String[]> getCircles() {
