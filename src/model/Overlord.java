@@ -130,7 +130,8 @@ public class Overlord implements IOverlord {
 				addCircle(a[0], Integer.parseInt(a[1]), Integer.parseInt(a[2]));
 			}
 			
-			for(String[] a : fileParse.)
+			for(String[] a : fileParse.
+					)
 			
 		}
 
@@ -264,6 +265,16 @@ public class Overlord implements IOverlord {
 			}
 			return false;
 		}
+		
+		public boolean addAbsorber(String gizmoName, int x1, int y1, int x2,
+				int y2, double velocity) {
+			if(canPlace("", x1, y1, x2, y2)){
+			gizmos.put(gizmoName, new Absorber(gizmoName, x1, y1, x2, y2, velocity));
+			setPlace(gizmoName, x1, y1, x2, y2);
+			return true;
+			}
+			return false;
+		}
 
 
 
@@ -311,14 +322,14 @@ public class Overlord implements IOverlord {
 			iGizmo temp = getGizmo(gizmoName);
 			
 			if(temp.getVelocityX() == 0.0 && temp.getVelocityY() == 0.0){
-				if(canPlaceBall("A", x-BALL_RADIUS, y-BALL_RADIUS, x+BALL_RADIUS, y+BALL_RADIUS)){
+				if(canPlaceBall("A", x, y, x, y)){
 					temp.setLocation(x, y);
 					removeFromBoard(gizmoName);
 					setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
 					return true;
 				}
 			}
-			if(canPlaceBall("", x-BALL_RADIUS, y-BALL_RADIUS, x+BALL_RADIUS, y+BALL_RADIUS)){
+			if(canPlaceBall("", x, y, x, y)){
 				temp.setLocation(x, y);
 				removeFromBoard(gizmoName);
 				setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
