@@ -44,19 +44,7 @@ public class Absorber implements iGizmo {
 	}
 
 	@Override
-	public void addTrigger(int k) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void removeTrigger(iGizmo t) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeTrigger(int k) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -74,24 +62,6 @@ public class Absorber implements iGizmo {
 	}
 	
 	@Override
-	public void setVelocity(double vx, double vy) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Double getVelocityX() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Double getVelocityY() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int getWidth() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -101,12 +71,6 @@ public class Absorber implements iGizmo {
 	public int getHeight() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void setLocation(float x, float y) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
