@@ -8,8 +8,8 @@ public class Ball implements iGizmo {
 	private String _id;
 	private Point location;
 	private Point bounds;
-	private Double velocityX;
-	private Double velocityY;
+	private double velocityX;
+	private double velocityY;
 	private int width;
 	private int height;
 	
@@ -18,7 +18,7 @@ public class Ball implements iGizmo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Ball(String gizmoName, float x, float y, float vx, float vy) {
+	public Ball(String gizmoName, float x, float y, double vx, double vy) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -83,7 +83,7 @@ public class Ball implements iGizmo {
 	}
 
 	@Override
-	public void setVelocity(Double vx, Double vy) {
+	public void setVelocity(double vx, double vy) {
 		velocityX = vx;
 		velocityY = vy;
 		

@@ -74,7 +74,7 @@ public class Absorber implements iGizmo {
 	}
 	
 	@Override
-	public void setVelocity(Double vx, Double vy) {
+	public void setVelocity(double vx, double vy) {
 		// TODO Auto-generated method stub
 		
 	}
