@@ -77,4 +77,9 @@ public class Absorber implements iGizmo {
 		
 	}
 
+	public void removeStoredBall(String ballName) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
