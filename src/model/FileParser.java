@@ -45,7 +45,7 @@ public class FileParser {
                     overlord.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
                     break;
                 case "Ball":
-                    overlord.addBall(tok[1], Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Float.parseFloat(tok[4]), Float.parseFloat(tok[5]));
+                    overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
                     overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
@@ -89,7 +89,7 @@ public class FileParser {
                     overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
                     break;
                 case "Delete":
-                    overlord.removeFromBoard(tok[1]);
+                    overlord.removeGizmo(tok[1]);
                     break;
                 default: //Error throw up error message dialog box
                     break;
