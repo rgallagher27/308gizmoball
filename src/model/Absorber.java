@@ -72,5 +72,9 @@ public class Absorber implements iGizmo {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	public void addBall(iBall ball){
+		
+	}
 
 }
