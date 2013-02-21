@@ -15,10 +15,12 @@ public class Overlord implements IOverlord {
 		private float gravity;
 		private float mu, mu2;
 		String[][] board;
+		private HashMap<String, iBall> balls;
 	
 		
 		Overlord(int boardx, int boardy){
 			gizmos = new HashMap<String, iGizmo>();
+			balls = new HashMap<String, iBall>();
 			keyTriggersDown = new HashMap<Integer, List<iGizmo>>();
 			keyTriggersUp = new HashMap<Integer, List<iGizmo>>();
 			board = new String[boardy][boardx]; // x along, y up
@@ -61,8 +63,10 @@ public class Overlord implements IOverlord {
 		public boolean rotateGizmo(String gizmoName) {
 			iGizmo tmp = getGizmo(gizmoName);
 			if(tmp != null){
-				tmp.rotate();
-				return true;
+				if((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)){
+					tmp.rotate();
+					return true;
+				}
 			}
 			return false;
 		}
@@ -117,26 +121,15 @@ public class Overlord implements IOverlord {
 		public void loadGame(String mapName) {
 			fileParse = new FileParser(this);
 			fileParse.loadFile(mapName);
-			
+			fileParse = null;
 		}
 
 
 		@Override
 		public void saveGame(String mapName) {
-			// TODO Auto-generated method stub
+			
 			
 		}
-
-
-		@Override
-		public List<String> getMapNames() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-
-
-
 
 		@Override
 		public boolean addSquare(String gizmoName, int x, int y) {
@@ -222,18 +215,18 @@ public class Overlord implements IOverlord {
 			return true;
 		}
 		
-		private void setPlace(String gizmo, int startX, int startY, int endX, int endY){
+		private void setPlace(String place, int startX, int startY, int endX, int endY){
 			for(int y = startY; y < endY; y++){
 				for(int x = startX; x < endX; x++){
-					board[y][x] = gizmo;
+					board[y][x] = place;
 				}
 			}
 		}
 		
-		private void removeFromBoard(String gizmoToRemove){
+		private void removeFromBoard(String toRemove){
 			for(int x = 0; x < board[0].length; x++){
 				for(int y = 0; y < board.length; y++){
-					if(board[y][x].equals(gizmoToRemove)){
+					if(board[y][x].equals(toRemove)){
 						board[y][x] = "";
 					}
 				}
@@ -256,19 +249,24 @@ public class Overlord implements IOverlord {
 
 
 		@Override
-		public boolean addBall(String gizmoName, int x, int y, double vx,
+		public boolean addBall(String ballName, String absorberName, float x, float y, double vx,
 				double vy) {
-			if(vx == 0.0 && vy == 0.0){
+			iGizmo absorb = null;
+			if(absorberName.length() > 0){
+				absorb = getGizmo(absorberName);
+			}
+			if(vx == 0.0 && vy == 0.0 && absorb != null){
 				if(canPlaceBall("A", x, y, x, y)){
-					gizmos.put(gizmoName, new Ball(gizmoName, x, y, vx, vy));
-					setPlace(gizmoName, x, y, x, y); //we might not want the "ball" in the board
+					balls.put(ballName, new Ball(ballName, ((float)(absorb.getLocation().getX() + absorb.getWidth()) - 0.25F), ((float)(absorb.getLocation().getY() + absorb.getHeight()) - 0.25F), vx, vy));
+					setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
+					((Absorber) absorb).addBall(getBall(ballName));
 					/* DO NOT UPDATE OBSERVER AT THIS POINT, DONT DRAW UNDER ABSORBER */
 					return true;
 				}
 			}
 			if(canPlaceBall("", x, y, x, y)){
-				gizmos.put(gizmoName, new Ball(gizmoName, x, y, vx, vy));
-				setPlace(gizmoName, x, y, x, y);//we might not want the "ball" in the board
+				balls.put(ballName, new Ball(ballName, x, y, vx, vy));
+				setPlace(ballName, (int)x, (int)y, (int)x, (int)y);//we might not want the "ball" in the board
 				/* update here */
 				return true;
 			}
@@ -295,24 +293,67 @@ public class Overlord implements IOverlord {
 
 
 		@Override
-		public boolean moveGizmo(String gizmoName, float x, float y) {
-			iGizmo temp = getGizmo(gizmoName);
-			
-			if(temp.getVelocityX() == 0.0 && temp.getVelocityY() == 0.0){
+		public boolean moveBall(String ballName, String absorberName, float x, float y) {
+			iBall temp = getBall(ballName);
+			iGizmo absorb = null;
+			if(absorberName.length() > 0){
+				absorb = getGizmo(absorberName);
+			}
+			if(temp.getVelocityX() == 0.0 && temp.getVelocityY() == 0.0 && absorb != null){
 				if(canPlaceBall("A", x, y, x, y)){
-					temp.setLocation(x, y);
-					removeFromBoard(gizmoName);
-					setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
+					temp.setLocation(((float)(absorb.getLocation().getX() + absorb.getWidth()) - 0.25F), ((float)(absorb.getLocation().getY() + absorb.getHeight()) - 0.25F));
+					removeFromBoard(ballName);
+					((Absorber) absorb).addBall(temp);
+					//setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the ball is inside the absorber, dont place on map
+					
 					return true;
 				}
 			}
 			if(canPlaceBall("", x, y, x, y)){
 				temp.setLocation(x, y);
-				removeFromBoard(gizmoName);
-				setPlace(gizmoName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
+				removeFromBoard(ballName);
+				setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
 				return true;
 			}
 			return false;
+		}
+
+
+		@Override
+		public void removeBall(String ballName) {
+			iBall ball = balls.remove(ballName);
+			if(ball != null){
+				for(iGizmo a : getGizmos()){
+					if(a instanceof Absorber){
+						((Absorber) a).removeStoredBall(ballName);
+					}
+				}
+			}
+			
+		}
+
+
+		@Override
+		public List<iBall> getBalls() {
+			return new ArrayList<iBall>(balls.values());
+		}
+
+
+		@Override
+		public iBall getBall(String ballName) {
+			return balls.get(ballName);
+		}
+
+
+		@Override
+		public List<String> getPossibleGizmoCollisions(float ballX, float ballY, boolean horizDirection,
+				boolean vertDirection) {
+			int x = (int) ballX;
+			int y = (int) ballY;
+			
+			/* to be completed */
+			
+			return null;
 		}
 		
 	
