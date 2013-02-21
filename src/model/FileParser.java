@@ -27,6 +27,9 @@ public class FileParser {
             while((strLine = br.readLine()) != null) {
                 input.add(strLine);
             }
+            br.close();
+            in.close();
+            fstream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
