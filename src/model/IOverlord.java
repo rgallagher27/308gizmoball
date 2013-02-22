@@ -2,6 +2,8 @@ package model;
 
 import java.util.List;
 
+import exception.CannotRotateException;
+
 public interface IOverlord {
 	
 	
@@ -20,7 +22,7 @@ public interface IOverlord {
 	public iBall getBall(String ballName);
 	public boolean moveGizmo(String gizmoName, int x, int y);
 	public boolean moveBall(String ballName, String absorberName, float x, float y);
-	public boolean rotateGizmo(String gizmoName);
+	public boolean rotateGizmo(String gizmoName) throws CannotRotateException;
 	public void setGravity(float newGrav);
 	public void setFriction(float mu, float mu2);
 	public boolean keyConnect(int keyNum, boolean direction, String consumer); //up = true, false = down.

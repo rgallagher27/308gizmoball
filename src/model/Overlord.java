@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import exception.CannotRotateException;
+
 public class Overlord implements IOverlord {
 	
 		private static float BALL_RADIUS = 0.25F;
@@ -60,7 +62,7 @@ public class Overlord implements IOverlord {
 
 
 		
-		public boolean rotateGizmo(String gizmoName) {
+		public boolean rotateGizmo(String gizmoName) throws CannotRotateException {
 			iGizmo tmp = getGizmo(gizmoName);
 			if(tmp != null){
 				if((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)){
@@ -257,7 +259,7 @@ public class Overlord implements IOverlord {
 			}
 			if(vx == 0.0 && vy == 0.0 && absorb != null){
 				if(canPlaceBall("A", x, y, x, y)){
-					balls.put(ballName, new Ball(ballName, ((float)(absorb.getLocation().getX() + absorb.getWidth()) - 0.25F), ((float)(absorb.getLocation().getY() + absorb.getHeight()) - 0.25F), vx, vy));
+					balls.put(ballName, new Ball(ballName, ((float)(absorb.getLocation().getX() + absorb.getWidth()) - 0.25F), ((float)(absorb.getLocation().getY() + absorb.getHeight()) - 0.25F), vx, vy, false));
 					setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
 					((Absorber) absorb).addBall(getBall(ballName));
 					/* DO NOT UPDATE OBSERVER AT THIS POINT, DONT DRAW UNDER ABSORBER */
@@ -265,7 +267,7 @@ public class Overlord implements IOverlord {
 				}
 			}
 			if(canPlaceBall("", x, y, x, y)){
-				balls.put(ballName, new Ball(ballName, x, y, vx, vy));
+				balls.put(ballName, new Ball(ballName, x, y, vx, vy, true));
 				setPlace(ballName, (int)x, (int)y, (int)x, (int)y);//we might not want the "ball" in the board
 				/* update here */
 				return true;
@@ -282,7 +284,7 @@ public class Overlord implements IOverlord {
 				iGizmo temp = getGizmo(gizmoName);
 
 				if(canPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1))){
-					temp.setLocation(new Point(x, y));
+					temp.setLocation(new GizPoint(x, y));
 					removeFromBoard(gizmoName);
 					setPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1));
 					return true;
@@ -348,12 +350,58 @@ public class Overlord implements IOverlord {
 		@Override
 		public List<String> getPossibleGizmoCollisions(float ballX, float ballY, boolean horizDirection,
 				boolean vertDirection) {
+			ArrayList<String> collidables = new ArrayList<String>();
 			int x = (int) ballX;
 			int y = (int) ballY;
+			String item = null;
+		
 			
-			/* to be completed */
+			if(horizDirection && vertDirection){ //bottom right.
+				for(int locx = x; locx < board[0].length; locx++){
+					for(int locy = y; locy < board.length; locy++){
+						item = board[locy][locx];
+						if(!item.equals("")){
+							if(!collidables.contains(item))
+								collidables.add(item);
+						}
+					}
+				}
+			}else if(horizDirection && !vertDirection){ //top right
+				for(int locx = x; locx < board[0].length; locx++){
+					for(int locy = 0; locy <= y; locy++){
+						item = board[locy][locx];
+						if(!item.equals("")){
+							if(!collidables.contains(item))
+								collidables.add(item);
+						}
+					}
+				}
+				
+			}else if(!horizDirection && !vertDirection){ //top left
+				for(int locx = 0; locx <= x; locx++){
+					for(int locy = 0; locy <= y; locy++){
+						item = board[locy][locx];
+						if(!item.equals("")){
+							if(!collidables.contains(item))
+								collidables.add(item);
+						}
+					}
+				}
+				
+				
+			}else if(!horizDirection && vertDirection){ //bottom left
+				for(int locx = 0; locx <= x; locx++){
+					for(int locy = y; locy < board.length; locy++){
+						item = board[locy][locx];
+						if(!item.equals("")){
+							if(!collidables.contains(item))
+								collidables.add(item);
+						}
+					}
+				}
+			}
 			
-			return null;
+			return collidables;
 		}
 		
 	
