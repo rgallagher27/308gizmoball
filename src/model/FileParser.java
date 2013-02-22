@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 
 import java.util.ArrayList;
 
+import exception.CannotRotateException;
+
 public class FileParser {
     
     private IOverlord overlord;
@@ -75,7 +77,11 @@ public class FileParser {
                     overlord.moveGizmo(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Rotate":
-                    overlord.rotateGizmo(tok[1]);
+				try {
+					overlord.rotateGizmo(tok[1]);
+				} catch (CannotRotateException e) {
+					System.err.println(tok[1] + " cannot be rotated, this is invalid input.");
+				}
                     break;
                 case "Connect":
                     overlord.connect(tok[1], tok[2]);
