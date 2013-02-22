@@ -3,15 +3,17 @@ package model;
 import java.awt.Point;
 import java.util.List;
 
+import exception.CannotRotateException;
+
 public interface iGizmo {
 	
 	public void doAction();
 	
-	public void setLocation(Point p);
+	public void setLocation(GizPoint p);
 	
-	public Point getLocation();
+	public GizPoint getLocation();
 	
-	public Point getBounds();
+	public GizPoint getBounds();
 	
 	public void addTrigger(iGizmo t);
 	
@@ -19,7 +21,7 @@ public interface iGizmo {
 	
 	public List<iGizmo> getTriggers();
 	
-	public void rotate();
+	public void rotate() throws CannotRotateException;
 
 	public int getWidth();
 

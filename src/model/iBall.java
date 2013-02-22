@@ -6,7 +6,10 @@ public interface iBall {
 	
 	public void setVelocity(double vx, double vy);
 	public void setLocation(float x, float y); //required to set the ball point.
-	public Double getVelocityX();
-	public Double getVelocityY();
-
+	public void setReleased(boolean rel);
+	public boolean getReleased();
+	public double getVelocityX();
+	public double getVelocityY();
+	public double getRadius();
+	public String getName();
 }
