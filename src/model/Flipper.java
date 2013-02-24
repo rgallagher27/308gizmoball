@@ -11,12 +11,12 @@ public class Flipper extends Observable implements iGizmo {
 	protected boolean active;
 
 	public Flipper(Point p, double width, double height) {
-		this.point = p;
-		this.height = height;
-		this.width = width;
-		this.rotation = 0;
-		this.rotationIncrement = 10;
-		this.active = false;
+		this.point 				= p;
+		this.height 			= height;
+		this.width 				= width;
+		this.rotation 			= 0;
+		this.rotationIncrement 	= 10;
+		this.active 			= false;
 	}
 	
 	public void toggleFlipper(boolean b)

@@ -7,7 +7,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import view.PrototypeView;
 
-
 public class Driver {
 
 	public Driver() {

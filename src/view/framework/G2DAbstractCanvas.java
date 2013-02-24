@@ -30,7 +30,7 @@ public class G2DAbstractCanvas {
 	public void setPhysicalDisplay(int physicalWidth, int physicalHeight, Graphics physicalGraphics){
 		this.physicalWidth = physicalWidth;
 		this.physicalHeight = physicalHeight;
-		this.physicalGraphics = physicalGraphics;
+		if(physicalGraphics != null)this.physicalGraphics = physicalGraphics;
 		scaleX = physicalWidth / abstractWidth ;
 		scaleY = physicalHeight / abstractHeight ;
 		double isoScale = Math.min(scaleX, scaleY);

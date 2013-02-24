@@ -15,16 +15,23 @@ public class GameGrid implements iGizmo {
 		this.cellWidth 	= canvasSize.getWidth()  / rows;
 		this.cellHeight = canvasSize.getHeight() / columns;
 		this.gridPoints = new boolean[(int) this.rows][(int) this.columns];
+		this.location 	= null;
 	}
 	
 	public boolean isEmpty(Point p)
 	{
-		return this.gridPoints[p.x][p.y];
+		return !this.gridPoints[p.x][p.y];
 	}
 	
-	public void setGridPoint(Point p, boolean update)
+	public void setGridPoint(Point p, int width, int height, boolean update)
 	{
-		this.gridPoints[p.x][p.y] = update;
+		System.out.println("Gizmo Strating at:" + p.toString());
+		for(int i = p.x; i <= p.x + width; i++){
+			for(int j = p.y; j < p.y + height; j++){
+				System.out.println("Grid Pos: " + i + " : " + j );
+				this.gridPoints[i][j] = update;
+			}
+		}
 	}
 	
 	public double getCellWidth()
@@ -39,7 +46,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public Point getLocation() {
-		// TODO Auto-generated method stub
 		return this.location;
 	}
 
@@ -50,7 +56,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getWidth() {
-		// TODO Auto-generated method stub
 		return this.rows;
 	}
 
@@ -61,7 +66,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getHeight() {
-		// TODO Auto-generated method stub
 		return this.columns;
 	}
 
@@ -72,7 +76,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getRotation() {
-		// TODO Auto-generated method stub
 		return this.rotation;
 	}
 
@@ -83,8 +86,7 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public void move() {
-		// TODO Auto-generated method stub
-
+		//No functionality needed
 	}
 
 }

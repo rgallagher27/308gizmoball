@@ -31,7 +31,7 @@ public class PrototypeView extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 	private final int  timerInterval = 10; //For 24 FPS Aprox
 
-	private final Dimension windowSize = new Dimension(1200, 800);
+	private final Dimension windowSize = new Dimension(640, 420);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
@@ -45,9 +45,9 @@ public class PrototypeView extends JPanel implements Observer {
 		super();
 		this.setPreferredSize(this.windowSize);
 		
-		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
+		this.abstractCanvas 	= new G2DAbstractCanvas(this.canvasSize.getWidth(), this.canvasSize.getHeight());
 		this.prototypeFlippers 	= new ArrayList<iGizmo>();
-		this.eventListener 		= new AnimationEventListener(prototypeFlippers);
+		this.eventListener 		= new AnimationEventListener(this.prototypeFlippers, this.abstractCanvas, this.gameGrid);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
 		
 		/*
@@ -55,7 +55,9 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 */
 		this.prototypeFlippers.add(new LeftFlipper ( new Point(8 ,9), 1, 2) );
-		this.prototypeFlippers.add(new RightFlipper( new Point(11,9), 1, 2));
+		this.prototypeFlippers.add(new RightFlipper( new Point(10,9), 1, 2));
+
+		this.prototypeFlippers.add(new LeftFlipper( new Point(0,0), 1, 2));
 		
 		/*
 		 * Add 'this' as an Observer to each test flipper.
@@ -67,7 +69,7 @@ public class PrototypeView extends JPanel implements Observer {
 			 * be set when attempting to add new gizmo through UI
 			 * once sanity checks have been applied.
 			 */
-			this.gameGrid.setGridPoint(g.getLocation(), true);
+			this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
 		}
 		
 		/*
@@ -77,7 +79,8 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 * Request window focus.
 		 */
-		this.addKeyListener(eventListener);
+		this.addKeyListener(this.eventListener);
+		this.addMouseListener(this.eventListener);
 		this.timer.start();
 		this.requestFocus();
 	}
@@ -112,20 +115,23 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DObject drawFlipper(iGizmo flipper)
 	{	
-		
-		double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-		double flipperWidth 	= (flipper.getWidth()      * cellWidth) / 4;
-		double flipperHeight 	= (flipper.getHeight()     * cellheight);
-		
 		double flipperX = 0;
 		double flipperY = 0;
+		double cellWidth 			= this.gameGrid.getCellWidth();
+		double cellheight 			= this.gameGrid.getCellHeight();
+		double flipperGridX			= flipper.getLocation().x;
+		double flipperGridY        	= flipper.getLocation().y;
+		double flipperGridWidth 	= flipper.getWidth();
+		double flipperGridHeight	= flipper.getHeight();
+		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+		double flipperHeight 		= (flipperGridHeight * cellheight);
+		
 		if(flipper instanceof LeftFlipper){
-			flipperX 		= ((flipper.getLocation().x * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
-			flipperY 		= ((flipper.getLocation().y * cellheight) + (cellheight / 2)) - flipperWidth;
+			flipperX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
+			flipperY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
 		}else if(flipper instanceof RightFlipper){
-			flipperX 		= ((flipper.getLocation().x * cellWidth)  + (cellWidth  / 2)) + flipperWidth;
-			flipperY 		= ((flipper.getLocation().y * cellheight) + (cellheight / 2)) - flipperWidth;
+			flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
+			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
 		}
 		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight);
 					
@@ -148,7 +154,7 @@ public class PrototypeView extends JPanel implements Observer {
 			line.draw(canvas);
 		}
 		
-		for(int i = 0; i <= this.gameGrid.getCellHeight(); i++){
+		for(int i = 0; i <= this.gameGrid.getHeight(); i++){
 			int startPointX  = 0;
 			int startPointY  = (int) (i * this.gameGrid.getCellHeight());
 			int endPointX 	 = (int) (startPointX + (this.gameGrid.getWidth() * this.gameGrid.getCellWidth()));
