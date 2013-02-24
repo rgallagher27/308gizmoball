@@ -1,9 +1,6 @@
 import java.awt.Color;
 
 import javax.swing.JFrame;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import view.PrototypeView;
 
