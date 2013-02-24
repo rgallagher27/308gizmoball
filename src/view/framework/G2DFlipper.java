@@ -73,5 +73,15 @@ public class G2DFlipper implements G2DObject {
 	public void transform(Matrix transformationMatrix) {
 		this.flipperGroup.transform(transformationMatrix);
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 
 }

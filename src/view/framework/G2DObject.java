@@ -21,5 +21,9 @@ public interface G2DObject {
 	public void setColor(Color color);
 	
 	public void transform(Matrix transformationMatrix);
+    
+    public int getX();
+    
+    public int getY();
 	
 }

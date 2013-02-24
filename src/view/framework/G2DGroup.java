@@ -37,5 +37,15 @@ public class G2DGroup implements G2DObject {
 	public void transform(Matrix transformationMatrix) {
 		for (G2DObject o : objects) o.transform(transformationMatrix);
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 
 }

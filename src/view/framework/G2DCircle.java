@@ -30,6 +30,16 @@ public class G2DCircle implements G2DObject {
 			circle.addPoint(temp);
 		}
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 	
 	@Override
 	public void draw(G2DAbstractCanvas absCanvas) {

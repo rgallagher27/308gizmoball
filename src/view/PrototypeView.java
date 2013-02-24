@@ -26,6 +26,12 @@ import view.framework.G2DPoint;
 import view.framework.Matrix;
 import controller.AnimationEventListener;
 
+import view.framework.G2DCircle;
+import view.framework.G2DRectangle;
+import view.framework.G2DTriangle;
+
+import model.FileParser;
+
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
@@ -40,6 +46,10 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DAbstractCanvas abstractCanvas;
 	private List<iGizmo> prototypeFlippers;
+    
+    private List<G2DObject> objects;
+    private List<String> names;
+    private List<String> fNames;
 
 	public PrototypeView() {
 		super();
@@ -49,14 +59,19 @@ public class PrototypeView extends JPanel implements Observer {
 		this.prototypeFlippers 	= new ArrayList<iGizmo>();
 		this.eventListener 		= new AnimationEventListener(prototypeFlippers);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
+        
+        this.objects = new ArrayList<G2DObject>();
+        this.names = new ArrayList<String>();
+        this.fNames = new ArrayList<String>();
 		
 		/*
 		 * Add prototype Left and Right flippers to test against.
 		 * 
 		 */
-		this.prototypeFlippers.add(new LeftFlipper ( new Point(8 ,9), 1, 2) );
-		this.prototypeFlippers.add(new RightFlipper( new Point(11,9), 1, 2));
-		
+        
+        FileParser fp = new FileParser(this);
+        fp.loadFile("Input");
+        
 		/*
 		 * Add 'this' as an Observer to each test flipper.
 		 */
@@ -101,6 +116,9 @@ public class PrototypeView extends JPanel implements Observer {
 		for(iGizmo gizmo : this.prototypeFlippers)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 		
+        for(G2DObject o : this.objects)
+            o.draw(this.abstractCanvas);
+            
 		g.drawImage(bufferImage, 0, 0, null);
 	}
 
@@ -191,4 +209,61 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }
+    
+    public void addCircle(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/2, Color.green));
+    }
+    
+    public void addSquare(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DRectangle(x*cellWidth,
+                                          y*cellheight,
+                                          (x*cellWidth)+(cellWidth),
+                                          (y*cellheight)+(cellheight),
+                                          Color.green));
+    }
+    
+    public void addFlipper(String name, int x, int y, boolean lr) {
+        this.fNames.add(name);
+        if(lr) {
+            this.prototypeFlippers.add(new RightFlipper ( new Point(x ,y), 1, 2));
+        } else {
+            this.prototypeFlippers.add(new LeftFlipper ( new Point(x ,y), 1, 2));
+        }
+
+    }
+    
+    public void addTriangle(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DTriangle((int)(x*cellWidth),
+                                         (int)(y*cellheight),
+                                         (int)cellWidth,
+                                         (int)cellheight,
+                                         Color.green));
+    }
+    
+    public void rotate(String name) {
+        int i = 0;
+        int index = 0;
+        boolean found = false;
+        for(String n : names) {
+            if(n.equals(name)) {
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        if(found) {
+            rotateObjectAroundSelf((double)90, objects.get(index), (double)objects.get(index).getX(), (double)objects.get(index).getY());
+        } else {
+            //No name
+        }
+    }
 }
