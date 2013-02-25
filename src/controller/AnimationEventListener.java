@@ -148,7 +148,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		JPanel source = (JPanel)event.getSource();
+		/*JPanel source = (JPanel)event.getSource();
 		
 		this.absCanvas.setPhysicalDisplay(source.getWidth(), source.getHeight(), null);
 		
@@ -168,10 +168,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			}
 			
 			((Observable)newFlipper).addObserver((Observer) event.getSource());
-			this.gizmos.add(newFlipper);
+			//this.gizmos.add(newFlipper);
 		}else{
-			System.out.println("Cannot place Gizmo at position " + mouseX + " : " + mouseY);
-		}
+			//System.out.println("Cannot place Gizmo at position " + mouseX + " : " + mouseY);
+		}*/
 		
 		
 	}

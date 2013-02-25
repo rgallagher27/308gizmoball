@@ -63,7 +63,7 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 */
         
-        FileParser fp = new FileParser( prototypeFlippers );
+        FileParser fp = new FileParser( prototypeFlippers, gameGrid );
         fp.loadFile("Input");
         
 		/*
@@ -76,7 +76,7 @@ public class PrototypeView extends JPanel implements Observer {
 			 * be set when attempting to add new gizmo through UI
 			 * once sanity checks have been applied.
 			 */
-			this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
+			//this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
 		}
 		 
 		/*

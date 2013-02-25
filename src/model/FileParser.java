@@ -11,9 +11,11 @@ import java.util.List;
 public class FileParser {
     
     private List<iGizmo> gizmos;
+    private GameGrid gameGrid;
     
-    public FileParser( List<iGizmo> g ) {
-        this.gizmos = g;
+    public FileParser( List<iGizmo> g, GameGrid gm ) {
+        this.gizmos 	= g;
+        this.gameGrid 	= gm;
     }
     
     public void loadFile(String fileName) {
@@ -46,11 +48,11 @@ public class FileParser {
                 case "":  //blank line in file
                     break;
                 case "Absorber":
-                	this.gizmos.add(
-        							new Absorber(   tok[1], new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ),
-                									Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
-                									Integer.parseInt(tok[5]) - Integer.parseInt(tok[3]))
-        										);
+                	this.addAbsorber(   tok[1], 
+                						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
+                						Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
+                						Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])
+                					);
                     break;
                 case "Ball":
                 	this.gizmos.add(
@@ -130,6 +132,17 @@ public class FileParser {
     private void rotate(String name) {
     	for(iGizmo g : gizmos){
     		if(g.getIdentifier().equals(name))g.setRotation(90);
+    	}
+    }
+    
+    private void addAbsorber(String id, int x, int y, int width, int height)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
+    		this.gizmos.add(
+					new Absorber(   id, new Point( x, y ),
+									width, 
+									height)
+								);
     	}
     }
     
