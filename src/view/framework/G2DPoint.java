@@ -43,16 +43,16 @@ public class G2DPoint implements G2DObject {
 		return new G2DPoint(getX(), getY(), new Color(color.getRGB()));
 	}
 
-	double getX() {
-		return ptMatrix.get(0, 0);
+	public int getX() {
+		return (int)ptMatrix.get(0, 0);
 	}
 
 	void setX(double x) {
 		ptMatrix.set(0, 0, x);
 	}
 
-	double getY() {
-		return ptMatrix.get(1, 0);
+	public int getY() {
+		return (int)ptMatrix.get(1, 0);
 	}
 
 	void setY(double y) {

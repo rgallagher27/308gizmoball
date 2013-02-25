@@ -57,7 +57,7 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
 		this.prototypeFlippers 	= new ArrayList<iGizmo>();
-		this.eventListener 		= new AnimationEventListener(prototypeFlippers);
+		this.eventListener 		= new AnimationEventListener(prototypeFlippers, abstractCanvas, gameGrid);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
         
         this.objects = new ArrayList<G2DObject>();
@@ -93,6 +93,7 @@ public class PrototypeView extends JPanel implements Observer {
 		 * Request window focus.
 		 */
 		this.addKeyListener(eventListener);
+		this.addMouseListener(eventListener);
 		this.timer.start();
 		this.requestFocus();
 	}
@@ -170,7 +171,7 @@ public class PrototypeView extends JPanel implements Observer {
 			line.draw(canvas);
 		}
 		
-		for(int i = 0; i <= this.gameGrid.getCellHeight(); i++){
+		for(int i = 0; i <= this.gameGrid.getHeight(); i++){
 			int startPointX  = 0;
 			int startPointY  = (int) (i * this.gameGrid.getCellHeight());
 			int endPointX 	 = (int) (startPointX + (this.gameGrid.getWidth() * this.gameGrid.getCellWidth()));
