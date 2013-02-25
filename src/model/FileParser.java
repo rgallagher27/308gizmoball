@@ -48,14 +48,17 @@ public class FileParser {
                 case "":  //blank line in file
                     break;
                 case "Absorber":
-                    pv.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
+                	this.pv.prototypeFlippers.add(
+                							new Absorber(tok[1], new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ),
+                									Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])));
+                    //pv.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
                     break;
                 case "Ball":
                     pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
                 	this.pv.prototypeFlippers.add(
-                							new CircleBumper(tok[2], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+                							new CircleBumper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
                 									1, 1));
                     //pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;

@@ -12,6 +12,7 @@ import java.util.Observer;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import model.Absorber;
 import model.CircleBumper;
 import model.FileParser;
 import model.Flipper;
@@ -117,6 +118,7 @@ public class PrototypeView extends JPanel implements Observer {
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
 		
 		
         //for(G2DObject o : this.objects)
@@ -160,6 +162,19 @@ public class PrototypeView extends JPanel implements Observer {
 									flipperY);
 		return flipperGroup;
 	}
+
+    public G2DObject drawAbsorber(iGizmo absorber)
+    {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+		
+		double x 				= absorber.getLocation().getX() * cellWidth;
+		double y 				= absorber.getLocation().getY() * cellheight;
+    	
+    	return new G2DRectangle(new G2DPoint( x , y ), 
+    			                new G2DPoint( x + (absorber.getWidth() * cellWidth), y + (absorber.getHeight() * cellheight)), 
+    			                Color.red);
+    }
 	
 	private G2DObject drawSquareBumper(iGizmo bumper)
     {
@@ -173,7 +188,7 @@ public class PrototypeView extends JPanel implements Observer {
 				                y*cellheight,
 				                (x*cellWidth)+(cellWidth),
 				                (y*cellheight)+(cellheight),
-				                Color.green);
+				                Color.red);
     }
 	
 	public G2DObject drawCircleBumper(iGizmo circle)
@@ -256,21 +271,6 @@ public class PrototypeView extends JPanel implements Observer {
                                          (int)cellWidth,
                                          (int)cellheight,
                                          Color.green));
-    }
-    
-    public void addAbsorber(String name, int x1, int y1, int x2, int y2) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        this.names.add(name);
-        for(int i = x1; i < x2; i++) {
-            for(int j = y1; j < y2; j++) {
-        this.objects.add(new G2DRectangle(i*cellWidth,
-                                          j*cellheight,
-                                          (i*cellWidth)+(cellWidth),
-                                          (j*cellheight)+(cellheight),
-                                          Color.red));
-            }
-        }
     }
     
     public void addBall(String name, double x, double y, double vx, double vy) {

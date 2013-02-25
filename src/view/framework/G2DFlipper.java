@@ -56,15 +56,15 @@ public class G2DFlipper implements G2DObject {
 		brY = (int) (this.yPos + this.height - (this.width * 2) );
 		
 		
-		G2DCircle   flipperHead = new G2DCircle(new G2DPoint(xPos, yPos), this.width, Color.green);
+		G2DCircle   flipperHead = new G2DCircle(new G2DPoint(xPos, yPos), this.width, Color.orange);
 		
-		G2DPolygon 	flipperBody = new G2DPolygon(Color.green);
+		G2DPolygon 	flipperBody = new G2DPolygon(Color.orange);
 					flipperBody.addPoint(new G2DPoint(tlX, tlY));
 					flipperBody.addPoint(new G2DPoint(trX, trY));
 					flipperBody.addPoint(new G2DPoint(brX, brY));
 					flipperBody.addPoint(new G2DPoint(blX, blY));
 		
-		G2DCircle   flipperBottom = new G2DCircle(new G2DPoint(this.xPos, brY), this.width, Color.green);
+		G2DCircle   flipperBottom = new G2DCircle(new G2DPoint(this.xPos, brY), this.width, Color.orange);
 		
 		this.flipperGroup = new G2DGroup();
 		this.flipperGroup.add(flipperHead);
