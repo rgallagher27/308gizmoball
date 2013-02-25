@@ -111,6 +111,7 @@ public class Absorber implements iGizmo {
 			for(iBall ball : storedBalls){
 				if(ball.getName().equals(ballName)){
 					storedBalls.remove(ball);
+					ball.setReleased(true);
 					break;
 				}
 			}
