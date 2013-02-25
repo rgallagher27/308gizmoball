@@ -54,7 +54,10 @@ public class FileParser {
                     pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
-                    pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.pv.prototypeFlippers.add(
+                							new CircleBumper(tok[2], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+                									1, 1));
+                    //pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "LeftFlipper":
                 	this.pv.prototypeFlippers.add(

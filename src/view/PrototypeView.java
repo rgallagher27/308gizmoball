@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -13,6 +12,8 @@ import java.util.Observer;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import model.CircleBumper;
+import model.FileParser;
 import model.Flipper;
 import model.GameGrid;
 import model.LeftFlipper;
@@ -20,25 +21,22 @@ import model.RightFlipper;
 import model.SquareBumper;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
+import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
 import view.framework.G2DLine;
 import view.framework.G2DObject;
 import view.framework.G2DPoint;
-import view.framework.Matrix;
-import controller.AnimationEventListener;
-
-import view.framework.G2DCircle;
 import view.framework.G2DRectangle;
 import view.framework.G2DTriangle;
-
-import model.FileParser;
+import view.framework.Matrix;
+import controller.AnimationEventListener;
 
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	private final int  timerInterval = 10; //For 24 FPS Aprox
 
-	private final Dimension windowSize = new Dimension(1200, 800);
+	private final Dimension windowSize = new Dimension(640, 480);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
@@ -118,6 +116,7 @@ public class PrototypeView extends JPanel implements Observer {
 		for(iGizmo gizmo : this.prototypeFlippers)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 		
 		
         //for(G2DObject o : this.objects)
@@ -177,6 +176,19 @@ public class PrototypeView extends JPanel implements Observer {
 				                Color.green);
     }
 	
+	public G2DObject drawCircleBumper(iGizmo circle)
+    {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+		
+		double x 				= circle.getLocation().getX();
+		double y 				= circle.getLocation().getY();
+		
+		return new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
+							circle.getWidth() * (cellWidth / 2),
+							Color.green);
+    }
+	
 	private void drawGrid(G2DAbstractCanvas canvas)
 	{
 		for(int i = 0; i <= this.gameGrid.getWidth(); i++){
@@ -233,12 +245,7 @@ public class PrototypeView extends JPanel implements Observer {
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }
     
-    public void addCircle(String name, int x, int y) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        this.names.add(name);
-        this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/2, Color.green));
-    }
+   
     
     public void addTriangle(String name, int x, int y) {
         double cellWidth 		= this.gameGrid.getCellWidth();
