@@ -20,6 +20,7 @@ import model.GameGrid;
 import model.LeftFlipper;
 import model.RightFlipper;
 import model.SquareBumper;
+import model.TriangleBumper;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
@@ -119,6 +120,7 @@ public class PrototypeView extends JPanel implements Observer {
 			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
 		
 		
         //for(G2DObject o : this.objects)
@@ -190,6 +192,28 @@ public class PrototypeView extends JPanel implements Observer {
 				                (y*cellheight)+(cellheight),
 				                Color.red);
     }
+    
+    public G2DObject drawTriangleBumper(iGizmo triangle)
+    {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+		
+		double x 				= triangle.getLocation().getX();
+		double y 				= triangle.getLocation().getY();
+		
+		G2DObject newTriangle = new G2DTriangle((int)(x*cellWidth),
+					                (int)(y*cellheight),
+					                (int)cellWidth,
+					                (int)cellheight,
+					                Color.blue);
+		
+		this.rotateObjectAroundSelf( triangle.getRotation(), newTriangle, 
+									 (x * cellWidth) + (cellWidth / 2), 
+									 (y * cellheight) + (cellheight / 2)
+									);
+    	
+    	return newTriangle;
+    }
 	
 	public G2DObject drawCircleBumper(iGizmo circle)
     {
@@ -260,19 +284,6 @@ public class PrototypeView extends JPanel implements Observer {
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }
     
-   
-    
-    public void addTriangle(String name, int x, int y) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        this.names.add(name);
-        this.objects.add(new G2DTriangle((int)(x*cellWidth),
-                                         (int)(y*cellheight),
-                                         (int)cellWidth,
-                                         (int)cellheight,
-                                         Color.green));
-    }
-    
     public void addBall(String name, double x, double y, double vx, double vy) {
         double cellWidth 		= this.gameGrid.getCellWidth();
 		double cellheight 		= this.gameGrid.getCellHeight();
@@ -329,20 +340,8 @@ public class PrototypeView extends JPanel implements Observer {
     }
     
     public void rotate(String name) {
-        int i = 0;
-        int index = 0;
-        boolean found = false;
-        for(String n : names) {
-            if(n.equals(name)) {
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        if(found) {
-            rotateObjectAroundSelf((double)90, objects.get(index), (double)objects.get(index).getX(), (double)objects.get(index).getY());
-        } else {
-            //No name
-        }
+    	for(iGizmo g : prototypeFlippers){
+    		if(g.getIdentifier().equals(name))g.setRotation(90);
+    	}
     }
 }

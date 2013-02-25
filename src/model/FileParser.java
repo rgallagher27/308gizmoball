@@ -82,7 +82,11 @@ public class FileParser {
                     //pv.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Triangle":
-                    pv.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.pv.prototypeFlippers.add(
+                							new TriangleBumper(tok[1], 
+                									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
+                									1, 1));
+                    //pv.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Gravity":
                     
