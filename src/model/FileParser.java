@@ -137,13 +137,13 @@ public class FileParser {
     
     private void addAbsorber(String id, int x, int y, int width, int height)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
+    	//if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
     		this.gizmos.add(
 					new Absorber(   id, new Point( x, y ),
 									width, 
 									height)
 								);
-    	}
+    	//}
     }
     
 }
