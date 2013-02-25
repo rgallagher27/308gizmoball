@@ -25,6 +25,9 @@ public interface IOverlord {
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException;
 	public void setGravity(float newGrav);
 	public void setFriction(float mu, float mu2);
+	public float getGravity();
+	public float getFrictionMu();
+	public float getFrictionMu2();
 	public boolean keyConnect(int keyNum, boolean direction, String consumer); //up = true, false = down.
 	public boolean connect(String producerGizmo, String consumerGizmo);
 	public void loadGame(String mapName);

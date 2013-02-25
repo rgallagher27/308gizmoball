@@ -4,10 +4,11 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
 
 import exception.CannotRotateException;
 
-public class Overlord implements IOverlord {
+public class Overlord extends Observable implements IOverlord {
 	
 		private static float BALL_RADIUS = 0.25F;
 		HashMap<String, iGizmo> gizmos;
@@ -44,6 +45,8 @@ public class Overlord implements IOverlord {
 			}
 			gizmos.remove(gizmoName);
 			removeFromBoard(gizmoName);
+			setChanged();
+			notifyObservers(gizmoName);
 		}
 
 
@@ -67,6 +70,8 @@ public class Overlord implements IOverlord {
 			if(tmp != null){
 				if((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)){
 					tmp.rotate();
+					setChanged();
+					notifyObservers(gizmoName);
 					return true;
 				}
 			}
@@ -138,6 +143,8 @@ public class Overlord implements IOverlord {
 			if(canPlace("", x, y, x, y)){
 				gizmos.put(gizmoName, new Square(gizmoName, x, y));
 				setPlace(gizmoName, x, y, x, y);
+				setChanged();
+				notifyObservers(gizmoName);
 				return true;
 			}
 			return false;
@@ -152,6 +159,8 @@ public class Overlord implements IOverlord {
 			if(canPlace("", x, y, x, y)){
 			gizmos.put(gizmoName, new Circle(gizmoName, x, y));
 			setPlace(gizmoName, x, y, x, y);
+			setChanged();
+			notifyObservers(gizmoName);
 			return true;
 			}
 			return false;
@@ -166,6 +175,8 @@ public class Overlord implements IOverlord {
 			if(canPlace("", x, y, x, y)){
 			gizmos.put(gizmoName, new Triangle(gizmoName, x, y));
 			setPlace(gizmoName, x, y, x, y);
+			setChanged();
+			notifyObservers(gizmoName);
 			return true;
 			}
 			return false;
@@ -185,6 +196,8 @@ public class Overlord implements IOverlord {
 				gizmos.put(gizmoName, new LeftFlipper(gizmoName, x, y));
 				setPlace(gizmoName, x, y, x+1, y+1);
 			}
+			setChanged();
+			notifyObservers(gizmoName);
 			return true;
 			}
 			return false;
@@ -241,6 +254,8 @@ public class Overlord implements IOverlord {
 			if(canPlace("", x1, y1, x2, y2)){
 			gizmos.put(gizmoName, new Absorber(gizmoName, x1, y1, x2, y2));
 			setPlace(gizmoName, x1, y1, x2, y2);
+			setChanged();
+			notifyObservers(gizmoName);
 			return true;
 			}
 			return false;
@@ -270,6 +285,8 @@ public class Overlord implements IOverlord {
 				balls.put(ballName, new Ball(ballName, x, y, vx, vy, true));
 				setPlace(ballName, (int)x, (int)y, (int)x, (int)y);//we might not want the "ball" in the board
 				/* update here */
+				setChanged();
+				notifyObservers(ballName);
 				return true;
 			}
 			return false;
@@ -287,6 +304,8 @@ public class Overlord implements IOverlord {
 					temp.setLocation(new GizPoint(x, y));
 					removeFromBoard(gizmoName);
 					setPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1));
+					setChanged();
+					notifyObservers(gizmoName);
 					return true;
 				}
 				return false;
@@ -307,7 +326,8 @@ public class Overlord implements IOverlord {
 					removeFromBoard(ballName);
 					((Absorber) absorb).addBall(temp);
 					//setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the ball is inside the absorber, dont place on map
-					
+					setChanged();
+					notifyObservers(ballName);
 					return true;
 				}
 			}
@@ -315,6 +335,8 @@ public class Overlord implements IOverlord {
 				temp.setLocation(x, y);
 				removeFromBoard(ballName);
 				setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //we might not want the "ball" in the board
+				setChanged();
+				notifyObservers(ballName);
 				return true;
 			}
 			return false;
@@ -402,6 +424,24 @@ public class Overlord implements IOverlord {
 			}
 			
 			return collidables;
+		}
+
+
+		@Override
+		public float getGravity() {
+			return gravity;
+		}
+
+
+		@Override
+		public float getFrictionMu() {
+			return mu;
+		}
+
+
+		@Override
+		public float getFrictionMu2() {
+			return mu2;
 		}
 		
 	
