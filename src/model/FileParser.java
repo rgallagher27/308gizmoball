@@ -88,7 +88,7 @@ public class FileParser {
                     
                     break;
                 case "KeyConnect":
-                    
+                    this.keyConnect(Integer.parseInt(tok[2]), tok[3], tok[4]);
                     break;
                 case "Delete":
                     this.delete(tok[1]);
@@ -101,6 +101,11 @@ public class FileParser {
     
     public void saveFile() {
         
+    }
+    
+    private void keyConnect(int keyCode, String type, String consumer )
+    {
+    	
     }
     
     private void delete(String name) {
