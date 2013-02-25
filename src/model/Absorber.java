@@ -103,6 +103,7 @@ public class Absorber implements iGizmo {
 	public void addBall(iBall ball){
 		if(storedBalls == null) storedBalls = new ArrayList<iBall>();
 		storedBalls.add(ball);
+		ball.setReleased(false);
 	}
 
 	public void removeStoredBall(String ballName) {
