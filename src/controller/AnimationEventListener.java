@@ -161,10 +161,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			iGizmo newFlipper = null;
 			
 			if(this.flipperType.equals("L")){
-				newFlipper = new LeftFlipper(new Point(mouseX, mouseY), 1, 2);
+				newFlipper = new LeftFlipper("LFnew", new Point(mouseX, mouseY), 1, 2);
 				
 			}else if(this.flipperType.equals("R")){
-				newFlipper = new RightFlipper(new Point(mouseX, mouseY), 1, 2);
+				newFlipper = new RightFlipper("RFnew", new Point(mouseX, mouseY), 1, 2);
 			}
 			
 			((Observable)newFlipper).addObserver((Observer) event.getSource());

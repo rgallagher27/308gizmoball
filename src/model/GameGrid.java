@@ -104,4 +104,10 @@ public class GameGrid implements iGizmo {
 		//No functionality needed
 	}
 
+	@Override
+	public String getIdentifier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

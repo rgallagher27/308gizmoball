@@ -17,6 +17,7 @@ import model.Flipper;
 import model.GameGrid;
 import model.LeftFlipper;
 import model.RightFlipper;
+import model.SquareBumper;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DFlipper;
@@ -45,7 +46,7 @@ public class PrototypeView extends JPanel implements Observer {
 	private Timer timer;
 	
 	private G2DAbstractCanvas abstractCanvas;
-	private List<iGizmo> prototypeFlippers;
+	public List<iGizmo> prototypeFlippers;
     
     private List<G2DObject> objects;
     private List<String> names;
@@ -116,6 +117,8 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		for(iGizmo gizmo : this.prototypeFlippers)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
+			else if(gizmo instanceof SquareBumper)this.addSquare(gizmo.getIdentifier(), gizmo.getLocation().x, gizmo.getLocation().y);
+		
 		
         for(G2DObject o : this.objects)
             o.draw(this.abstractCanvas);
@@ -231,16 +234,6 @@ public class PrototypeView extends JPanel implements Observer {
                                           (x*cellWidth)+(cellWidth),
                                           (y*cellheight)+(cellheight),
                                           Color.green));
-    }
-    
-    public void addFlipper(String name, int x, int y, boolean lr) {
-        this.fNames.add(name);
-        if(lr) {
-            this.prototypeFlippers.add(new RightFlipper ( new Point(x ,y), 1, 2));
-        } else {
-            this.prototypeFlippers.add(new LeftFlipper ( new Point(x ,y), 1, 2));
-        }
-
     }
     
     public void addTriangle(String name, int x, int y) {

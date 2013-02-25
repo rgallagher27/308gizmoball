@@ -4,6 +4,8 @@ import java.awt.Point;
 
 public interface iGizmo {
 	
+	public String getIdentifier();
+	
 	public Point getLocation();
 	
 	public void setLocation(Point p);

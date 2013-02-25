@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.DataInputStream;
 import java.io.InputStreamReader;
@@ -56,13 +57,23 @@ public class FileParser {
                     pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "LeftFlipper":
-                    pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
+                	this.pv.prototypeFlippers.add(
+				                			new LeftFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+				                					1, 2));
+                    //pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
                     break;
                 case "RightFlipper":
-                    pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
+                	this.pv.prototypeFlippers.add(
+				                			new RightFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+				                					1, 2));
+                    //pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
                     break;
                 case "Square":
-                    pv.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.pv.prototypeFlippers.add( 
+                							new SquareBumper(tok[1],
+                									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
+                									1, 1));
+                    //pv.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Triangle":
                     pv.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));

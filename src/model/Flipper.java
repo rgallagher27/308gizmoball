@@ -9,14 +9,16 @@ public class Flipper extends Observable implements iGizmo {
 	protected double width, height, rotation, maxRotation, minRotation;
 	protected double rotationIncrement;
 	protected boolean active;
+	protected String identifier;
 
-	public Flipper(Point p, double width, double height) {
+	public Flipper(String identifier, Point p, double width, double height) {
 		this.point 				= p;
 		this.height 			= height;
 		this.width 				= width;
 		this.rotation 			= 0;
 		this.rotationIncrement 	= 10;
 		this.active 			= false;
+		this.identifier 		= identifier;
 	}
 	
 	public void toggleFlipper(boolean b)
@@ -77,5 +79,10 @@ public class Flipper extends Observable implements iGizmo {
 		/*
 		 * Implemented in extended classes
 		 */
+	}
+
+	@Override
+	public String getIdentifier() {
+		return this.identifier;
 	}
 }
