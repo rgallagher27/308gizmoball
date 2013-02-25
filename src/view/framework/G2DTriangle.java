@@ -19,6 +19,9 @@ public class G2DTriangle implements G2DObject {
         tri.addPoint(new G2DPoint(x ,y));
         tri.addPoint(new G2DPoint(x+width ,y));
         tri.addPoint(new G2DPoint(x ,y+height));
+        
+        this.x = this.x + width/2;
+        this.y = this.y + height/2;
 	}
     
     @Override

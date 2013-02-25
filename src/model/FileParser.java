@@ -47,10 +47,10 @@ public class FileParser {
                 case "":  //blank line in file
                     break;
                 case "Absorber":
-                    
+                    pv.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
                     break;
                 case "Ball":
-                    
+                    pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
                     pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
@@ -74,7 +74,7 @@ public class FileParser {
                     
                     break;
                 case "Move":
-                    
+                    pv.move(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
                     break;
                 case "Rotate":
 					pv.rotate(tok[1]);
@@ -86,7 +86,7 @@ public class FileParser {
                     
                     break;
                 case "Delete":
-                    
+                    pv.delete(tok[1]);
                     break;
                 default: //Error throw up error message dialog box
                     break;
