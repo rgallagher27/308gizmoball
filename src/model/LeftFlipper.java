@@ -24,7 +24,7 @@ public class LeftFlipper extends Flipper {
 	
 	@Override
 	public void setRotation(double r) {
-		super.rotation = -r;
+		super.rotation    = -r;
 		super.maxRotation -= r;
 		super.minRotation -= r;
 	}

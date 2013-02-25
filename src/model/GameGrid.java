@@ -15,16 +15,37 @@ public class GameGrid implements iGizmo {
 		this.cellWidth 	= canvasSize.getWidth()  / rows;
 		this.cellHeight = canvasSize.getHeight() / columns;
 		this.gridPoints = new boolean[(int) this.rows][(int) this.columns];
+		this.location 	= null;
 	}
 	
 	public boolean isEmpty(Point p)
 	{
-		return this.gridPoints[p.x][p.y];
+		return !this.gridPoints[p.x][p.y];
 	}
 	
-	public void setGridPoint(Point p, boolean update)
+	public boolean setGridPoint(Point p, int width, int height, boolean update)
 	{
-		this.gridPoints[p.x][p.y] = update;
+		if( (p.getX() + width) >= this.rows || (p.getY() + height) > this.columns ) return false;
+		for(int i = p.x; i <= p.x + width; i++){
+			for(int j = p.y; j < p.y + height; j++){
+				if(!this.gridPoints[i][j])this.gridPoints[i][j] = update;
+				else return false;
+			}
+		}
+		return true;
+	}
+	
+	public void printGrid()
+	{
+		
+		for(int i = 0; i < this.rows; i++){
+			for(int j = 0; j < this.columns; j++){
+				if(this.gridPoints[j][i]) System.out.print(1 + " ");
+				else System.out.print(0 + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("END");
 	}
 	
 	public double getCellWidth()
@@ -39,7 +60,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public Point getLocation() {
-		// TODO Auto-generated method stub
 		return this.location;
 	}
 
@@ -50,7 +70,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getWidth() {
-		// TODO Auto-generated method stub
 		return this.rows;
 	}
 
@@ -61,7 +80,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getHeight() {
-		// TODO Auto-generated method stub
 		return this.columns;
 	}
 
@@ -72,7 +90,6 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public double getRotation() {
-		// TODO Auto-generated method stub
 		return this.rotation;
 	}
 
@@ -83,8 +100,7 @@ public class GameGrid implements iGizmo {
 
 	@Override
 	public void move() {
-		// TODO Auto-generated method stub
-
+		//No functionality needed
 	}
 
 }
