@@ -53,8 +53,9 @@ public class FileParser {
         										);
                     break;
                 case "Ball":
-                	
-                    //pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                	this.gizmos.add(
+                					new Ball(tok[1], new Point( (int)Double.parseDouble(tok[2]), (int)Double.parseDouble(tok[3]) ), 
+                								1, 1));
                     break;
                 case "Circle":
                 	this.gizmos.add(

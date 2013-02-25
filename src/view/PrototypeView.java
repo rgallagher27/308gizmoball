@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import model.Absorber;
+import model.Ball;
 import model.CircleBumper;
 import model.FileParser;
 import model.Flipper;
@@ -47,9 +48,6 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DAbstractCanvas abstractCanvas;
 	public List<iGizmo> prototypeFlippers;
-    
-    private List<G2DObject> objects;
-    private List<String> names;
 
 	public PrototypeView() {
 		super();
@@ -60,9 +58,6 @@ public class PrototypeView extends JPanel implements Observer {
 		this.eventListener 		= new AnimationEventListener(prototypeFlippers, abstractCanvas, gameGrid);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
         
-        this.objects = new ArrayList<G2DObject>();
-        this.names = new ArrayList<String>();
-		
 		/*
 		 * Add prototype Left and Right flippers to test against.
 		 * 
@@ -81,7 +76,7 @@ public class PrototypeView extends JPanel implements Observer {
 			 * be set when attempting to add new gizmo through UI
 			 * once sanity checks have been applied.
 			 */
-			this.gameGrid.setGridPoint(g.getLocation(), 2, 2, true);
+			this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
 		}
 		 
 		/*
@@ -119,6 +114,7 @@ public class PrototypeView extends JPanel implements Observer {
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof Ball)this.drawBall(gizmo).draw(abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -128,6 +124,17 @@ public class PrototypeView extends JPanel implements Observer {
 	{
 		this.repaint();
 	}
+    
+    public G2DObject drawBall(iGizmo ball)
+    {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+
+		double x 				= ball.getLocation().getX();
+		double y 				= ball.getLocation().getY();
+		
+    	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue);
+    }
 	
 	private G2DObject drawFlipper(iGizmo flipper)
 	{	
@@ -277,16 +284,4 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }
-    
-    public void addBall(String name, double x, double y, double vx, double vy) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        this.names.add(name);
-        this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue));
-    }
-    
-    public G2DObject drawBall()
-    {
-    	return null;
-    }
 }
