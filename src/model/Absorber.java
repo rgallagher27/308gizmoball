@@ -32,6 +32,9 @@ public class Absorber implements iGizmo {
 		calcBoundSegments();
 	}
 
+	public String getName(){
+		return id;
+	}
 	private void calcBoundSegments(){
 		boundSegments = new ArrayList<LineSegment>();
 		boundSegments.add(new LineSegment(x1,y1,x2, y1));
@@ -111,7 +114,6 @@ public class Absorber implements iGizmo {
 			for(iBall ball : storedBalls){
 				if(ball.getName().equals(ballName)){
 					storedBalls.remove(ball);
-					ball.setReleased(true);
 					break;
 				}
 			}
