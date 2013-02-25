@@ -55,36 +55,22 @@ public class FileParser {
                 					);
                     break;
                 case "Ball":
-                	this.gizmos.add(
-                					new Ball(tok[1], new Point( (int)Double.parseDouble(tok[2]), (int)Double.parseDouble(tok[3]) ), 
-                								1, 1));
+                	this.addBall(tok[1], (int)Double.parseDouble(tok[2]), (int)Double.parseDouble(tok[3]));
                     break;
                 case "Circle":
-                	this.gizmos.add(
-        							new CircleBumper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-        									1, 1));
+                	this.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "LeftFlipper":
-                	this.gizmos.add(
-		                			new LeftFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-		                					1, 2));
+                	this.addFlipper(tok[1], "L", Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "RightFlipper":
-                	this.gizmos.add(
-		                			new RightFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-		                					1, 2));
+                	this.addFlipper(tok[1], "R", Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Square":
-                	this.gizmos.add( 
-        							new SquareBumper(tok[1],
-        									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
-        									1, 1));
+                	this.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Triangle":
-                	this.gizmos.add(
-        							new TriangleBumper(tok[1], 
-        									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
-        									1, 1));
+                	this.addTriangel(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
                     break;
                 case "Gravity":
                     
@@ -137,13 +123,50 @@ public class FileParser {
     
     private void addAbsorber(String id, int x, int y, int width, int height)
     {
-    	//if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
-    		this.gizmos.add(
-					new Absorber(   id, new Point( x, y ),
-									width, 
-									height)
-								);
-    	//}
+    	if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
+    		this.gizmos.add( new Absorber(id, new Point( x, y ), width, height) );
+    	}
+    }
+    
+    private void addBall(String id, int x, int y)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
+        	this.gizmos.add(new Ball(id, new Point( x, y ), 1, 1));	
+    	}
+    }
+    
+    private void addCircle(String id, int x, int y)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
+    		this.gizmos.add(new CircleBumper(id, new Point(x, y), 1, 1));
+    	}
+    }
+    
+    private void addFlipper(String id, String type, int x, int y)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), 2, 2, true)){
+	    	if(type.equals("L")){
+	    		this.gizmos.add(
+            			new LeftFlipper(id, new Point(x, y),1, 2));
+	    	}else if(type.equals("R")){
+	    		this.gizmos.add(
+            			new RightFlipper(id, new Point(x, y),1, 2));
+	    	}
+    	}
+    }
+    
+    private void addSquare(String id, int x, int y)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
+    		this.gizmos.add( new SquareBumper(id, new Point( x, y ), 1, 1));
+    	}
+    }
+    
+    private void addTriangel(String id, int x, int y)
+    {
+    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
+    		this.gizmos.add( new TriangleBumper(id, new Point( x, y ), 1, 1));
+    	}
     }
     
 }
