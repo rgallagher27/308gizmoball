@@ -70,5 +70,15 @@ public class G2DLine implements G2DObject {
 		start.transform(transformationMatrix);
 		end.transform(transformationMatrix);
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 
 }

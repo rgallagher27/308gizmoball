@@ -66,6 +66,16 @@ public class G2DPolygon implements G2DObject {
 	public void transform(Matrix transformationMatrix) {
 		for (G2DPoint pt : points) pt.transform(transformationMatrix);
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 
 
 }

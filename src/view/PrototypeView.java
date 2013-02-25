@@ -1,10 +1,10 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -26,13 +26,18 @@ import view.framework.G2DPoint;
 import view.framework.Matrix;
 import controller.AnimationEventListener;
 
+import view.framework.G2DCircle;
+import view.framework.G2DRectangle;
+import view.framework.G2DTriangle;
+
+import model.FileParser;
+
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int  timerInterval = 10; 
-	private final Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+	private final int  timerInterval = 10; //For 24 FPS Aprox
 
-	private final Dimension windowSize = new Dimension(640, 420);
+	private final Dimension windowSize = new Dimension(1200, 800);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
@@ -41,17 +46,45 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DAbstractCanvas abstractCanvas;
 	private List<iGizmo> prototypeFlippers;
+    
+    private List<G2DObject> objects;
+    private List<String> names;
+    private List<String> fNames;
 
 	public PrototypeView() {
 		super();
 		this.setPreferredSize(this.windowSize);
-		this.setCursor(this.cursor);
 		
-		this.abstractCanvas 	= new G2DAbstractCanvas(this.canvasSize.getWidth(), this.canvasSize.getHeight());
+		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
 		this.prototypeFlippers 	= new ArrayList<iGizmo>();
-		this.eventListener 		= new AnimationEventListener(this.prototypeFlippers, this.abstractCanvas, this.gameGrid);
+		this.eventListener 		= new AnimationEventListener(prototypeFlippers);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
+        
+        this.objects = new ArrayList<G2DObject>();
+        this.names = new ArrayList<String>();
+        this.fNames = new ArrayList<String>();
 		
+		/*
+		 * Add prototype Left and Right flippers to test against.
+		 * 
+		 */
+        
+        FileParser fp = new FileParser(this);
+        fp.loadFile("Input");
+        
+		/*
+		 * Add 'this' as an Observer to each test flipper.
+		 */
+		for(iGizmo g : prototypeFlippers){
+			((Observable) g).addObserver(this);
+			/*
+			 * Set game grid location here just to be complete, would normally 
+			 * be set when attempting to add new gizmo through UI
+			 * once sanity checks have been applied.
+			 */
+			this.gameGrid.setGridPoint(g.getLocation(), 2, 2, true);
+		}
+		 
 		/*
 		 * Add event listener to key presses.
 		 * 
@@ -59,8 +92,7 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 * Request window focus.
 		 */
-		this.addKeyListener(this.eventListener);
-		this.addMouseListener(this.eventListener);
+		this.addKeyListener(eventListener);
 		this.timer.start();
 		this.requestFocus();
 	}
@@ -82,8 +114,11 @@ public class PrototypeView extends JPanel implements Observer {
 		this.drawGrid(this.abstractCanvas);
 		
 		for(iGizmo gizmo : this.prototypeFlippers)
-			if(gizmo instanceof Flipper) this.drawFlipper((Flipper)gizmo).draw(this.abstractCanvas);
+			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 		
+        for(G2DObject o : this.objects)
+            o.draw(this.abstractCanvas);
+            
 		g.drawImage(bufferImage, 0, 0, null);
 	}
 
@@ -93,8 +128,9 @@ public class PrototypeView extends JPanel implements Observer {
 		this.repaint();
 	}
 	
-	private G2DObject drawFlipper(Flipper flipper)
+	private G2DObject drawFlipper(iGizmo flipper)
 	{	
+		
 		double flipperX = 0;
 		double flipperY = 0;
 		double cellWidth 			= this.gameGrid.getCellWidth();
@@ -114,10 +150,10 @@ public class PrototypeView extends JPanel implements Observer {
 			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
 		}
 		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight);
-					
-		this.rotateObjectAroundSelf(flipper.getRotation(), 
-									flipperGroup, 
-									flipperX, 
+        
+		this.rotateObjectAroundSelf(flipper.getRotation(),
+									flipperGroup,
+									flipperX,
 									flipperY);
 		return flipperGroup;
 	}
@@ -134,7 +170,7 @@ public class PrototypeView extends JPanel implements Observer {
 			line.draw(canvas);
 		}
 		
-		for(int i = 0; i <= this.gameGrid.getHeight(); i++){
+		for(int i = 0; i <= this.gameGrid.getCellHeight(); i++){
 			int startPointX  = 0;
 			int startPointY  = (int) (i * this.gameGrid.getCellHeight());
 			int endPointX 	 = (int) (startPointX + (this.gameGrid.getWidth() * this.gameGrid.getCellWidth()));
@@ -177,4 +213,131 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }
+    
+    public void addCircle(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/2, Color.green));
+    }
+    
+    public void addSquare(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DRectangle(x*cellWidth,
+                                          y*cellheight,
+                                          (x*cellWidth)+(cellWidth),
+                                          (y*cellheight)+(cellheight),
+                                          Color.green));
+    }
+    
+    public void addFlipper(String name, int x, int y, boolean lr) {
+        this.fNames.add(name);
+        if(lr) {
+            this.prototypeFlippers.add(new RightFlipper ( new Point(x ,y), 1, 2));
+        } else {
+            this.prototypeFlippers.add(new LeftFlipper ( new Point(x ,y), 1, 2));
+        }
+
+    }
+    
+    public void addTriangle(String name, int x, int y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DTriangle((int)(x*cellWidth),
+                                         (int)(y*cellheight),
+                                         (int)cellWidth,
+                                         (int)cellheight,
+                                         Color.green));
+    }
+    
+    public void addAbsorber(String name, int x1, int y1, int x2, int y2) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        for(int i = x1; i < x2; i++) {
+            for(int j = y1; j < y2; j++) {
+        this.objects.add(new G2DRectangle(i*cellWidth,
+                                          j*cellheight,
+                                          (i*cellWidth)+(cellWidth),
+                                          (j*cellheight)+(cellheight),
+                                          Color.red));
+            }
+        }
+    }
+    
+    public void addBall(String name, double x, double y, double vx, double vy) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        this.names.add(name);
+        this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue));
+    }
+    
+    public void delete(String name) {
+        int index = 0;
+        int i = 0;
+        boolean found = false;
+        for(String n : names) {
+            if(n.equals(name)) {
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        if(found) {
+            names.remove(index);
+            objects.remove(index);
+        } else {
+            //No name
+        }
+    }
+    
+    public void move(String name, double x, double y) {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+        int i = 0;
+        int index = 0;
+        boolean found = false;
+        for(String n : names) {
+            if(n.equals(name)) {
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        if(found) {
+            double[][] moveToOrigin = 	{ {1.0, 0.0, objects.get(index).getX()} ,
+                {0.0, 1.0, objects.get(index).getY()},
+                {0.0, 0.0, 1.0}
+            };
+            double[][] move = 	{ {1.0, 0.0, x*cellWidth} ,
+                {0.0, 1.0, y*cellheight},
+                {0.0, 0.0, 1.0}
+            };
+            objects.get(index).transform(new Matrix(moveToOrigin));
+            objects.get(index).transform(new Matrix(move));
+        } else {
+            //No name
+        }
+    }
+    
+    public void rotate(String name) {
+        int i = 0;
+        int index = 0;
+        boolean found = false;
+        for(String n : names) {
+            if(n.equals(name)) {
+                found = true;
+                index = i;
+            }
+            i++;
+        }
+        if(found) {
+            rotateObjectAroundSelf((double)90, objects.get(index), (double)objects.get(index).getX(), (double)objects.get(index).getY());
+        } else {
+            //No name
+        }
+    }
 }

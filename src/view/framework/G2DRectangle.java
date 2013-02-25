@@ -66,5 +66,15 @@ public class G2DRectangle implements G2DObject {
 	public void transform(Matrix transformationMatrix) {
 		poly.transform(transformationMatrix);
 	}
+    
+    @Override
+    public int getX() {
+        return 0;
+    }
+    
+    @Override
+    public int getY() {
+        return 0;
+    }
 
 }
