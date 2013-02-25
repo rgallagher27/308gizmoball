@@ -117,11 +117,11 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		for(iGizmo gizmo : this.prototypeFlippers)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
-			else if(gizmo instanceof SquareBumper)this.addSquare(gizmo.getIdentifier(), gizmo.getLocation().x, gizmo.getLocation().y);
+			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
 		
 		
-        for(G2DObject o : this.objects)
-            o.draw(this.abstractCanvas);
+        //for(G2DObject o : this.objects)
+            //o.draw(this.abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -161,6 +161,21 @@ public class PrototypeView extends JPanel implements Observer {
 									flipperY);
 		return flipperGroup;
 	}
+	
+	private G2DObject drawSquareBumper(iGizmo bumper)
+    {
+        double cellWidth 		= this.gameGrid.getCellWidth();
+		double cellheight 		= this.gameGrid.getCellHeight();
+		
+		double x = bumper.getLocation().getX();
+		double y = bumper.getLocation().getY();
+    	
+    	return new G2DRectangle(x*cellWidth,
+				                y*cellheight,
+				                (x*cellWidth)+(cellWidth),
+				                (y*cellheight)+(cellheight),
+				                Color.green);
+    }
 	
 	private void drawGrid(G2DAbstractCanvas canvas)
 	{
@@ -223,17 +238,6 @@ public class PrototypeView extends JPanel implements Observer {
 		double cellheight 		= this.gameGrid.getCellHeight();
         this.names.add(name);
         this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/2, Color.green));
-    }
-    
-    public void addSquare(String name, int x, int y) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        this.names.add(name);
-        this.objects.add(new G2DRectangle(x*cellWidth,
-                                          y*cellheight,
-                                          (x*cellWidth)+(cellWidth),
-                                          (y*cellheight)+(cellheight),
-                                          Color.green));
     }
     
     public void addTriangle(String name, int x, int y) {
