@@ -8,9 +8,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.PrototypeView;
-import view.framework.Matrix;
-
 public class FileParser {
     
     private List<iGizmo> gizmos;

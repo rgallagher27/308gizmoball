@@ -50,7 +50,6 @@ public class PrototypeView extends JPanel implements Observer {
     
     private List<G2DObject> objects;
     private List<String> names;
-    private List<String> fNames;
 
 	public PrototypeView() {
 		super();
@@ -63,7 +62,6 @@ public class PrototypeView extends JPanel implements Observer {
         
         this.objects = new ArrayList<G2DObject>();
         this.names = new ArrayList<String>();
-        this.fNames = new ArrayList<String>();
 		
 		/*
 		 * Add prototype Left and Right flippers to test against.
@@ -121,10 +119,6 @@ public class PrototypeView extends JPanel implements Observer {
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
-		
-		
-        //for(G2DObject o : this.objects)
-            //o.draw(this.abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -289,5 +283,10 @@ public class PrototypeView extends JPanel implements Observer {
 		double cellheight 		= this.gameGrid.getCellHeight();
         this.names.add(name);
         this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue));
+    }
+    
+    public G2DObject drawBall()
+    {
+    	return null;
     }
 }
