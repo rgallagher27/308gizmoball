@@ -29,7 +29,7 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int  timerInterval = 10; //For 24 FPS Aprox
+	private final int  timerInterval = 10; 
 	private final Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
 
 	private final Dimension windowSize = new Dimension(640, 420);
@@ -82,7 +82,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.drawGrid(this.abstractCanvas);
 		
 		for(iGizmo gizmo : this.prototypeFlippers)
-			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
+			if(gizmo instanceof Flipper) this.drawFlipper((Flipper)gizmo).draw(this.abstractCanvas);
 		
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -93,7 +93,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.repaint();
 	}
 	
-	private G2DObject drawFlipper(iGizmo flipper)
+	private G2DObject drawFlipper(Flipper flipper)
 	{	
 		double flipperX = 0;
 		double flipperY = 0;

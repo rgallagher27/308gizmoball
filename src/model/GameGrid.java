@@ -37,15 +37,16 @@ public class GameGrid implements iGizmo {
 	
 	public void printGrid()
 	{
-		
+		System.out.println("- - - - - - - - - - - - - - - - - - - - - -");
 		for(int i = 0; i < this.rows; i++){
+			System.out.print("| ");
 			for(int j = 0; j < this.columns; j++){
 				if(this.gridPoints[j][i]) System.out.print(1 + " ");
 				else System.out.print(0 + " ");
 			}
-			System.out.println();
+			System.out.println("|");
 		}
-		System.out.println("END");
+		System.out.println("- - - - - - - - - - - - - - - - - - - - - - ");
 	}
 	
 	public double getCellWidth()

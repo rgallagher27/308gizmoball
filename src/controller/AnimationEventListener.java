@@ -53,7 +53,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		if(KeyEvent.VK_ESCAPE == event.getKeyCode()) System.exit(0);
+		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
 		for(iGizmo g : gizmos){
 			switch (event.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
