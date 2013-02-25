@@ -24,11 +24,14 @@ public class GameGrid implements iGizmo {
 	}
 	
 	public boolean setGridPoint(Point p, int width, int height, boolean update)
-	{
-		if( (p.getX() + width) >= this.rows || (p.getY() + height) >= this.columns ) return false;
-		for(int i = p.x; i <= p.x + width; i++){
+	{	
+		if( (p.getX() + width) > this.rows || (p.getY() + height) > this.columns ) return false;
+		
+		for(int i = p.x; i < p.x + width; i++){
 			for(int j = p.y; j < p.y + height; j++){
-				if(!this.gridPoints[i][j])this.gridPoints[i][j] = update;
+				if(!this.gridPoints[i][j]){
+					this.gridPoints[i][j] = update;
+				}
 				else return false;
 			}
 		}
