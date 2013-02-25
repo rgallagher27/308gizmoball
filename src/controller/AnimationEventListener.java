@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -7,6 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JPanel;
 
@@ -26,6 +29,9 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	private boolean _Space;
 	private boolean _Left;
 	private boolean _Right;
+	
+	private String flipperType = "L";
+			
 
 	public AnimationEventListener(List<iGizmo> gizmos, G2DAbstractCanvas absCanvas, GameGrid gmGrid) 
 	{
@@ -45,11 +51,11 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	 * 
 	 */
 	@Override
-	public void keyPressed(KeyEvent arg0) 
+	public void keyPressed(KeyEvent event) 
 	{	
-		if(KeyEvent.VK_ESCAPE == arg0.getKeyCode()) System.exit(0);
+		if(KeyEvent.VK_ESCAPE == event.getKeyCode()) System.exit(0);
 		for(iGizmo g : gizmos){
-			switch (arg0.getKeyCode()) {
+			switch (event.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
 					if(g instanceof LeftFlipper)
 						((LeftFlipper) g).toggleFlipper(true);
@@ -80,29 +86,43 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	 * 
 	 */
 	@Override
-	public void keyReleased(KeyEvent arg0) 
+	public void keyReleased(KeyEvent event) 
 	{
-		for(iGizmo g : gizmos){
-			switch (arg0.getKeyCode()) {
-				case KeyEvent.VK_LEFT:
-					if(g instanceof LeftFlipper)
-						if(!this._Space)((LeftFlipper) g).toggleFlipper(false);
-					this._Left = false;
-					break;
-				case KeyEvent.VK_RIGHT:
-					if(g instanceof RightFlipper)
-						if(!this._Space)((RightFlipper) g).toggleFlipper(false);
-					this._Right = false;
-					break;
-				case KeyEvent.VK_SPACE:
-					if(g instanceof Flipper)
-						if(!this._Left || !this._Right)((Flipper) g).toggleFlipper(false);
-					this._Space = false;
-					break;
-				default:
-					break;
-			}
+		switch (event.getKeyCode()) {
+			case KeyEvent.VK_L:
+				this.flipperType = "L";
+				break;
+			case KeyEvent.VK_R :
+				this.flipperType = "R";
+				break;
+			case KeyEvent.VK_P:
+				this.gmGrid.printGrid();
+				break;
+			default:
+				for(iGizmo g : gizmos){
+					switch (event.getKeyCode()) {
+						case KeyEvent.VK_LEFT:
+							if(g instanceof LeftFlipper)
+								if(!this._Space)((LeftFlipper) g).toggleFlipper(false);
+							this._Left = false;
+							break;
+						case KeyEvent.VK_RIGHT:
+							if(g instanceof RightFlipper)
+								if(!this._Space)((RightFlipper) g).toggleFlipper(false);
+							this._Right = false;
+							break;
+						case KeyEvent.VK_SPACE:
+							if(g instanceof Flipper)
+								if(!this._Left || !this._Right)((Flipper) g).toggleFlipper(false);
+							this._Space = false;
+							break;
+						default:
+							break;
+					}
+				}
+				break;
 		}
+		
 	}
 
 	@Override
@@ -132,9 +152,28 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		
 		this.absCanvas.setPhysicalDisplay(source.getWidth(), source.getHeight(), null);
 		
-		System.out.println( this.absCanvas.abstractX( event.getX() ) );
+		int mouseX = (int)(this.absCanvas.abstractX(event.getX()) / this.gmGrid.getCellWidth());
 		
-		System.out.println(this.absCanvas.getScaleX());
+		int mouseY = (int)(this.absCanvas.abstractY(event.getY()) / this.gmGrid.getCellHeight());
+		
+		if(this.gmGrid.setGridPoint(new Point(mouseX, mouseY), 1, 2, true)){
+			
+			iGizmo newFlipper = null;
+			
+			if(this.flipperType.equals("L")){
+				newFlipper = new LeftFlipper(new Point(mouseX, mouseY), 1, 2);
+				
+			}else if(this.flipperType.equals("R")){
+				newFlipper = new RightFlipper(new Point(mouseX, mouseY), 1, 2);
+			}
+			
+			((Observable)newFlipper).addObserver((Observer) event.getSource());
+			this.gizmos.add(newFlipper);
+		}else{
+			System.out.println("Cannot place Gizmo at position " + mouseX + " : " + mouseY);
+		}
+		
+		
 	}
 
 	@Override

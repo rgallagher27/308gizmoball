@@ -23,15 +23,29 @@ public class GameGrid implements iGizmo {
 		return !this.gridPoints[p.x][p.y];
 	}
 	
-	public void setGridPoint(Point p, int width, int height, boolean update)
+	public boolean setGridPoint(Point p, int width, int height, boolean update)
 	{
-		System.out.println("Gizmo Strating at:" + p.toString());
+		if( (p.getX() + width) >= this.rows || (p.getY() + height) > this.columns ) return false;
 		for(int i = p.x; i <= p.x + width; i++){
 			for(int j = p.y; j < p.y + height; j++){
-				System.out.println("Grid Pos: " + i + " : " + j );
-				this.gridPoints[i][j] = update;
+				if(!this.gridPoints[i][j])this.gridPoints[i][j] = update;
+				else return false;
 			}
 		}
+		return true;
+	}
+	
+	public void printGrid()
+	{
+		
+		for(int i = 0; i < this.rows; i++){
+			for(int j = 0; j < this.columns; j++){
+				if(this.gridPoints[j][i]) System.out.print(1 + " ");
+				else System.out.print(0 + " ");
+			}
+			System.out.println();
+		}
+		System.out.println("END");
 	}
 	
 	public double getCellWidth()

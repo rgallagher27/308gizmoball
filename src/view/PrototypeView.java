@@ -1,10 +1,10 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -30,6 +30,7 @@ public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 	private final int  timerInterval = 10; //For 24 FPS Aprox
+	private final Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
 
 	private final Dimension windowSize = new Dimension(640, 420);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
@@ -44,33 +45,12 @@ public class PrototypeView extends JPanel implements Observer {
 	public PrototypeView() {
 		super();
 		this.setPreferredSize(this.windowSize);
+		this.setCursor(this.cursor);
 		
 		this.abstractCanvas 	= new G2DAbstractCanvas(this.canvasSize.getWidth(), this.canvasSize.getHeight());
 		this.prototypeFlippers 	= new ArrayList<iGizmo>();
 		this.eventListener 		= new AnimationEventListener(this.prototypeFlippers, this.abstractCanvas, this.gameGrid);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
-		
-		/*
-		 * Add prototype Left and Right flippers to test against.
-		 * 
-		 */
-		this.prototypeFlippers.add(new LeftFlipper ( new Point(8 ,9), 1, 2) );
-		this.prototypeFlippers.add(new RightFlipper( new Point(10,9), 1, 2));
-
-		this.prototypeFlippers.add(new LeftFlipper( new Point(0,0), 1, 2));
-		
-		/*
-		 * Add 'this' as an Observer to each test flipper.
-		 */
-		for(iGizmo g : prototypeFlippers){
-			((Observable) g).addObserver(this);
-			/*
-			 * Set game grid location here just to be complete, would normally 
-			 * be set when attempting to add new gizmo through UI
-			 * once sanity checks have been applied.
-			 */
-			this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
-		}
 		
 		/*
 		 * Add event listener to key presses.

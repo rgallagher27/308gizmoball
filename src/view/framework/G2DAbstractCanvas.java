@@ -40,7 +40,7 @@ public class G2DAbstractCanvas {
 	
 	public int physicalX(double abstractX){
 		if (physicalGraphics==null) throw new RuntimeException("physical graphics should be set before calculating scalings");
-		return (int) ( Math.round(abstractX * scaleX) + ( (physicalWidth - abstractWidth*scaleX) / 2 ) );
+		return (int) ( Math.round(abstractX * scaleX)  );
 	}
 	public double abstractX(int physicalX){
 		if (physicalGraphics==null) throw new RuntimeException("physical graphics should be set before calculating scalings");
@@ -49,7 +49,7 @@ public class G2DAbstractCanvas {
 	
 	public int physicalY(double abstractY){
 		if (physicalGraphics==null) throw new RuntimeException("physical graphics should be set before calculating scalings");
-		return (int) ( Math.round(abstractY * scaleY) + ( (physicalHeight - abstractHeight*scaleY) / 2 ) );
+		return (int) ( Math.round(abstractY * scaleY)  );
 	}
 	public double abstractY(int physicalY){
 		if (physicalGraphics==null) throw new RuntimeException("physical graphics should be set before calculating scalings");
