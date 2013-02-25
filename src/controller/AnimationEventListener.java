@@ -156,7 +156,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		
 		int mouseY = (int)(this.absCanvas.abstractY(event.getY()) / this.gmGrid.getCellHeight());
 		
-		if(this.gmGrid.setGridPoint(new Point(mouseX, mouseY), 1, 2, true)){
+		if(this.gmGrid.setGridPoint(new Point(mouseX, mouseY), 2, 2, true)){
 			
 			iGizmo newFlipper = null;
 			
