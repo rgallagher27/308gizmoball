@@ -70,7 +70,7 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 */
         
-        FileParser fp = new FileParser(this);
+        FileParser fp = new FileParser( prototypeFlippers );
         fp.loadFile("Input");
         
 		/*
@@ -289,59 +289,5 @@ public class PrototypeView extends JPanel implements Observer {
 		double cellheight 		= this.gameGrid.getCellHeight();
         this.names.add(name);
         this.objects.add(new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue));
-    }
-    
-    public void delete(String name) {
-        int index = 0;
-        int i = 0;
-        boolean found = false;
-        for(String n : names) {
-            if(n.equals(name)) {
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        if(found) {
-            names.remove(index);
-            objects.remove(index);
-        } else {
-            //No name
-        }
-    }
-    
-    public void move(String name, double x, double y) {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-        int i = 0;
-        int index = 0;
-        boolean found = false;
-        for(String n : names) {
-            if(n.equals(name)) {
-                found = true;
-                index = i;
-            }
-            i++;
-        }
-        if(found) {
-            double[][] moveToOrigin = 	{ {1.0, 0.0, objects.get(index).getX()} ,
-                {0.0, 1.0, objects.get(index).getY()},
-                {0.0, 0.0, 1.0}
-            };
-            double[][] move = 	{ {1.0, 0.0, x*cellWidth} ,
-                {0.0, 1.0, y*cellheight},
-                {0.0, 0.0, 1.0}
-            };
-            objects.get(index).transform(new Matrix(moveToOrigin));
-            objects.get(index).transform(new Matrix(move));
-        } else {
-            //No name
-        }
-    }
-    
-    public void rotate(String name) {
-    	for(iGizmo g : prototypeFlippers){
-    		if(g.getIdentifier().equals(name))g.setRotation(90);
-    	}
     }
 }

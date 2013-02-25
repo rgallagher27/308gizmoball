@@ -50,8 +50,6 @@ Connect C109 LF87
 Connect C1110 LF87
 Connect C139 LF87
 
-Move T 0 1
-
 RightFlipper RF137 13 7
 KeyConnect key 87 down RF137
 KeyConnect key 87 up RF137

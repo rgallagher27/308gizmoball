@@ -1,21 +1,22 @@
 package model;
 
 import java.awt.Point;
-import java.io.FileInputStream;
-import java.io.DataInputStream;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import view.PrototypeView;
-
-import java.util.ArrayList;
+import view.framework.Matrix;
 
 public class FileParser {
     
-    private PrototypeView pv;
+    private List<iGizmo> gizmos;
     
-    public FileParser(PrototypeView pv) {
-        this.pv = pv;
+    public FileParser( List<iGizmo> g ) {
+        this.gizmos = g;
     }
     
     public void loadFile(String fileName) {
@@ -48,45 +49,42 @@ public class FileParser {
                 case "":  //blank line in file
                     break;
                 case "Absorber":
-                	this.pv.prototypeFlippers.add(
-                							new Absorber(tok[1], new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ),
-                									Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])));
-                    //pv.addAbsorber(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
+                	this.gizmos.add(
+        							new Absorber(   tok[1], new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ),
+                									Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
+                									Integer.parseInt(tok[5]) - Integer.parseInt(tok[3]))
+        										);
                     break;
                 case "Ball":
-                    pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                	
+                    //pv.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
-                	this.pv.prototypeFlippers.add(
-                							new CircleBumper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-                									1, 1));
-                    //pv.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.gizmos.add(
+        							new CircleBumper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+        									1, 1));
                     break;
                 case "LeftFlipper":
-                	this.pv.prototypeFlippers.add(
-				                			new LeftFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-				                					1, 2));
-                    //pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
+                	this.gizmos.add(
+		                			new LeftFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+		                					1, 2));
                     break;
                 case "RightFlipper":
-                	this.pv.prototypeFlippers.add(
-				                			new RightFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
-				                					1, 2));
-                    //pv.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
+                	this.gizmos.add(
+		                			new RightFlipper(tok[1], new Point(Integer.parseInt(tok[2]), Integer.parseInt(tok[3])),
+		                					1, 2));
                     break;
                 case "Square":
-                	this.pv.prototypeFlippers.add( 
-                							new SquareBumper(tok[1],
-                									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
-                									1, 1));
-                    //pv.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.gizmos.add( 
+        							new SquareBumper(tok[1],
+        									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
+        									1, 1));
                     break;
                 case "Triangle":
-                	this.pv.prototypeFlippers.add(
-                							new TriangleBumper(tok[1], 
-                									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
-                									1, 1));
-                    //pv.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                	this.gizmos.add(
+        							new TriangleBumper(tok[1], 
+        									new Point( Integer.parseInt(tok[2]), Integer.parseInt(tok[3]) ), 
+        									1, 1));
                     break;
                 case "Gravity":
                     
@@ -95,10 +93,10 @@ public class FileParser {
                     
                     break;
                 case "Move":
-                    pv.move(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
+                    this.move(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
                     break;
                 case "Rotate":
-					pv.rotate(tok[1]);
+					this.rotate(tok[1]);
                     break;
                 case "Connect":
                     
@@ -107,7 +105,7 @@ public class FileParser {
                     
                     break;
                 case "Delete":
-                    pv.delete(tok[1]);
+                    this.delete(tok[1]);
                     break;
                 default: //Error throw up error message dialog box
                     break;
@@ -117,6 +115,23 @@ public class FileParser {
     
     public void saveFile() {
         
+    }
+    
+    private void delete(String name) {
+        
+    	
+    }
+    
+    private void move(String name, double x, double y) {
+    	for(iGizmo g : gizmos){
+    		if(g.getIdentifier().equals(name))g.setLocation( new Point((int)x, (int)y) );
+    	}
+    }
+    
+    private void rotate(String name) {
+    	for(iGizmo g : gizmos){
+    		if(g.getIdentifier().equals(name))g.setRotation(90);
+    	}
     }
     
 }
