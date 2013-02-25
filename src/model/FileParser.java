@@ -118,8 +118,9 @@ public class FileParser {
     }
     
     private void delete(String name) {
-        
-    	
+    	for(iGizmo g : gizmos){
+    		if( g.getIdentifier().equals(name) ) this.gizmos.remove(g);
+    	}
     }
     
     private void move(String name, double x, double y) {
