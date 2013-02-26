@@ -2,6 +2,9 @@ package model;
 
 import java.awt.geom.Point2D;
 
+import model.physics.Circle;
+import model.physics.Vect;
+
 public interface iBall {
 	
 	public String getIdentifier();
@@ -9,6 +12,12 @@ public interface iBall {
 	public Point2D.Double getLocation();
 	
 	public void setLocation(Point2D.Double p);
+	
+	public Circle returnBounds();
+	
+	public Vect getVelocity();
+	
+	public void setVelocity(Vect v);
 	
 	public double getRowWidth();
 	

@@ -30,6 +30,10 @@ public interface iGizmo {
 	
 	public void setRotation(double r);
 	
+	public double timeUntilCollision(iBall ball);
+	
+	public void collide(iBall ball);
+	
 	public void move();
 
 }

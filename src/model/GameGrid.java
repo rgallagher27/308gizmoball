@@ -123,4 +123,16 @@ public class GameGrid implements iGizmo {
 		this.cellHeight = h;
 	}
 
+	@Override
+	public double timeUntilCollision(iBall ball) {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
+
+	@Override
+	public void collide(iBall ball) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

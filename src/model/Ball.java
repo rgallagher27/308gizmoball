@@ -3,12 +3,19 @@ package model;
 import java.awt.geom.Point2D;
 import java.util.Observable;
 
+import model.physics.Circle;
+import model.physics.Vect;
+
 public class Ball extends Observable implements iBall {
 
 	protected Point2D.Double point;
 	protected double row, column, cellWidth, cellHeight;
-	protected double velocityX, velocityY;
+	protected Vect gravity;
+	protected Vect friction;
+	protected Vect velocity;
+	protected Circle physicsCircle;
 	protected String identifier;
+	protected double i = 0;
 
 	public Ball(String identifier, Point2D.Double p, double row, double column, double width, double height) {
 		this.point 			= p;
@@ -17,8 +24,9 @@ public class Ball extends Observable implements iBall {
 		this.identifier 	= identifier;
 		this.cellWidth		= width;
 		this.cellHeight		= height;
-		
-		this.velocityY = -50;
+		this.physicsCircle	= new Circle(this.point, this.cellWidth/4);
+		this.gravity 		= new Vect(0, ((double)25/24));
+		this.velocity 		= new Vect(0, -1.4);
 	}
 
 	@Override
@@ -69,22 +77,32 @@ public class Ball extends Observable implements iBall {
 
 	@Override
 	public void move() {
-		double t = (double) 1 / (double) 24; 
 		
-		System.out.println(t);
+		double tick = ((double) 1) / 24;
 		
-		double yVel = this.velocityY;
-		double xVel = this.velocityX;
-		yVel = yVel + 25;
-		double ytemp = yVel * (1 - (0.025 * t) - (0.025 * Math.abs(yVel)));
-		double xtemp = xVel * (1 - ((0.025 / 24 ) * t) - ((0.025 * this.cellWidth / 2) * Math.abs(xVel)));
-		//ball.setVelocity(xtemp, ytemp);
-		this.velocityX = xtemp;
-		this.velocityY = ytemp;
+		double ytemp = this.velocity.y() * (1 - (0.025 * tick) - (0.025 * Math.abs(this.velocity.y())));
+		double xtemp = this.velocity.x() * (1 - (0.025 * tick) - (0.025 * Math.abs(this.velocity.x())));
 		
-		this.point.setLocation(this.point.x + this.velocityX, this.point.y + 0.6601950130931442);
+		System.out.println(xtemp +  " : " + ytemp);
 		
-		//System.out.println(xtemp + " : " + ytemp);
+		this.friction = new Vect(xtemp, ytemp);
+		
+	    //this.velocity = this.velocity.plus(this.gravity);
+	    
+		//this.velocity = this.velocity.minus(this.friction);
+	    
+		Vect currentPos = new Vect(point);
+			 currentPos = currentPos.plus(this.velocity);
+			 currentPos = currentPos.plus(this.gravity);
+		
+		this.point.x  	= currentPos.x();
+		this.point.y	= currentPos.y();
+		
+		//System.out.println(this.velocity.toString());
+		
+		Point2D.Double newCirclePoint = new Point2D.Double(this.point.x * this.cellWidth, this.point.y * cellHeight);
+		
+		this.physicsCircle = new Circle(newCirclePoint, this.getCellWidth() / 4);
 		
 		this.setChanged();
 		this.notifyObservers();
@@ -110,6 +128,23 @@ public class Ball extends Observable implements iBall {
 	@Override
 	public void setCellHeight(double h) {
 		this.cellHeight = h;
+	}
+
+	@Override
+	public Circle returnBounds() {
+		// TODO Auto-generated method stub
+		return this.physicsCircle;
+	}
+
+	@Override
+	public Vect getVelocity() {
+		// TODO Auto-generated method stub
+		return this.velocity;
+	}
+
+	@Override
+	public void setVelocity(Vect v) {
+		this.velocity = v;
 	}
 
 }

@@ -182,8 +182,8 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DObject drawSquareBumper(iGizmo bumper)
     {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
+        double cellWidth 		= bumper.getCellWidth();
+		double cellheight 		= bumper.getCellHeight();
 		
 		double x = bumper.getLocation().getX();
 		double y = bumper.getLocation().getY();

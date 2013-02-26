@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -18,6 +19,8 @@ import model.LeftFlipper;
 import model.RightFlipper;
 import model.iBall;
 import model.iGizmo;
+import model.physics.Geometry;
+import model.physics.Vect;
 import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
@@ -125,8 +128,28 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		for(iGizmo g : this.gizmos)
-			g.move();
+		double min;
+		for(iGizmo g : this.gizmos){
+			
+			if(!this.balls.isEmpty()){
+				iBall b = this.balls.get(0);
+				if( (min = g.timeUntilCollision(b)) < ((double)1/24)) {
+					
+					Point2D.Double tmp = b.getLocation();
+				
+					Vect tmpVect = b.getVelocity();
+					
+					tmp.x = tmpVect.x() + tmp.x;
+					tmp.y = tmpVect.y() + tmp.y;
+					
+					//b.setLocation(tmp);
+					
+					g.collide(this.balls.get(0));
+				}
+			}else{
+				g.move();
+			}
+		}
 		
 		for(iBall b : this.balls)
 			b.move();
