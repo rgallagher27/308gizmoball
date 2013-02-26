@@ -9,6 +9,7 @@ public interface IOverlord {
 	
 	
 	public boolean addSquare(String gizmoName, int x, int y);
+	public void setBallLocation(String ballName, float x, float y);
 	public boolean addCircle(String gizmoName, int x, int y);
 	public boolean addTriangle(String gizmoName, int x, int y);
 	public boolean addFlipper(String gizmoName, int x, int y, boolean orient); //true = right, false = left
@@ -32,6 +33,6 @@ public interface IOverlord {
 	public boolean connect(String producerGizmo, String consumerGizmo);
 	public void loadGame(String mapName);
 	public void saveGame(String mapName);
-	public List<String> getPossibleGizmoCollisions(float ballX, float ballY, boolean horizDirection, boolean vertDirection); //True = Up, False = Down.
+	
 
 }

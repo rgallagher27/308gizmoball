@@ -5,7 +5,10 @@ import java.util.List;
 
 import exception.CannotRotateException;
 
+import physics.Circle;
+import physics.Geometry;
 import physics.LineSegment;
+import physics.Vect;
 
 public class Absorber implements iGizmo {
 	
@@ -37,17 +40,22 @@ public class Absorber implements iGizmo {
 	}
 	private void calcBoundSegments(){
 		boundSegments = new ArrayList<LineSegment>();
-		boundSegments.add(new LineSegment(x1,y1,x2, y1));
-		boundSegments.add(new LineSegment(x1, y1, x1, y2));
-		boundSegments.add(new LineSegment(x2, y1, x2, y2));
-		boundSegments.add(new LineSegment(x1, y2, x2, y2));
+		//x1=0 y1 = 19 x2 = 20 y2 = 20
+		//boundSegments.add(new LineSegment(x1,y1, x2, y1)); // -1 gap for ball
+		//boundSegments.add(new LineSegment(x1, y1, x1, y2));
+		//boundSegments.add(new LineSegment(x2, y1, x2, y2));
+		//boundSegments.add(new LineSegment(x1, y2, x2, y2));
 	}
 	
 	
 	@Override
 	public void doAction() {
+		iBall ball;
 		if(storedBalls.size() > 0){
-		storedBalls.remove(0).setReleased(true);
+			ball = storedBalls.remove(0);
+			ball.setLocation(ball.getLocation().getX(), ball.getLocation().getY());
+			ball.setVelocity(-10, -10);
+			ball.setReleased(true);
 		}
 	}
 
@@ -107,6 +115,7 @@ public class Absorber implements iGizmo {
 		if(storedBalls == null) storedBalls = new ArrayList<iBall>();
 		storedBalls.add(ball);
 		ball.setReleased(false);
+		ball.setImmunity(1);
 	}
 
 	public void removeStoredBall(String ballName) {
@@ -125,6 +134,53 @@ public class Absorber implements iGizmo {
 	public GizPoint getBounds() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public double timeTillCol(iBall ball) {
+		Circle circle = new Circle(ball.getLocation().getX(), ball.getLocation().getY(), ball.getRadius());
+		Vect vel = new Vect(ball.getVelocityX(), ball.getVelocityY());
+		double min;
+		if(getBoundSegments().size() > 0){
+		min = Geometry.timeUntilWallCollision(getBoundSegments().get(0), circle, vel);
+		
+		for(LineSegment ls : getBoundSegments()){
+			if(Geometry.timeUntilWallCollision(ls, circle, vel) < min){
+				min = Geometry.timeUntilWallCollision(ls, circle, vel);
+			}
+		}
+		}else{
+			min = Double.POSITIVE_INFINITY;
+		}
+		return min;
+	}
+
+	@Override
+	public iBall collide(iBall ball) {
+		System.out.println("COLLIDE WITH ABSORBER!");
+		Circle circle = new Circle(ball.getLocation().getX(), ball.getLocation().getY(), ball.getRadius());
+		Vect vel = new Vect(ball.getVelocityX(), ball.getVelocityY());
+		
+		LineSegment minLs = getBoundSegments().get(0);
+		
+		double min = Geometry.timeUntilWallCollision(getBoundSegments().get(0), circle, vel);
+		
+		for(LineSegment ls : getBoundSegments()){
+			if(Geometry.timeUntilWallCollision(ls, circle, vel) < min){
+				min = Geometry.timeUntilWallCollision(ls, circle, vel);
+				minLs = ls;
+			}
+		}
+		
+		System.out.println(minLs.p1().x() + ":" + minLs.p1().y() + "- " + minLs.p2().x() + ":" + minLs.p2().y());
+		//Vect afterRef = reflectWall(minLs, vel, 0);
+		// TODO Auto-generated method stub
+		ball.setLocation(((float)(getLocation().getX() + getWidth()) - 0.25F), ((float)(getLocation().getY() + getHeight()) - 0.25F));
+		ball.setReleased(false);
+		ball.setVelocity(0, 0);
+		ball.setImmunity(1);
+		addBall(ball);
+		return ball;
 	}
 
 }

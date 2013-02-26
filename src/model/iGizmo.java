@@ -3,11 +3,15 @@ package model;
 
 import java.util.List;
 
+import physics.LineSegment;
+
 import exception.CannotRotateException;
 
 public interface iGizmo {
 	
 	public void doAction();
+	
+	public String getName();
 	
 	public void setLocation(GizPoint p);
 	
@@ -26,6 +30,12 @@ public interface iGizmo {
 	public int getWidth();
 
 	public int getHeight();
+	
+	public List<LineSegment> getBoundSegments();
+	
+	public double timeTillCol(iBall ball);
+	
+	public iBall collide(iBall ball);
 
 
 }

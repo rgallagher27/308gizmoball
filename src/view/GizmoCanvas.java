@@ -18,6 +18,7 @@ import java.util.Observer;
 public class GizmoCanvas extends Canvas implements Observer {
 	
 	private static final long serialVersionUID = 1L;
+	
 
 	public void paint(Graphics g){
 		if(this.isDisplayable()){

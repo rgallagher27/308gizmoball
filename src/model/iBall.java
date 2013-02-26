@@ -13,4 +13,6 @@ public interface iBall {
 	public double getVelocityY();
 	public double getRadius();
 	public String getName();
+	public void setImmunity(int b);
+	public int getImmunity();
 }

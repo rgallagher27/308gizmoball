@@ -21,12 +21,19 @@ public class Overlord extends Observable implements IOverlord {
 		private HashMap<String, iBall> balls;
 	
 		
-		Overlord(int boardx, int boardy){
+		public Overlord(int boardx, int boardy){
 			gizmos = new HashMap<String, iGizmo>();
 			balls = new HashMap<String, iBall>();
 			keyTriggersDown = new HashMap<Integer, List<iGizmo>>();
 			keyTriggersUp = new HashMap<Integer, List<iGizmo>>();
 			board = new String[boardy][boardx]; // x along, y up
+			
+			for(int x = 0; x < boardx; x++){
+				for(int y = 0; y < boardy; y++){
+					board[y][x] = "";
+				}
+			}
+			gizmos.put("Wall", new Wall(boardx, boardy));
 		}
 
 
@@ -282,7 +289,7 @@ public class Overlord extends Observable implements IOverlord {
 				}
 			}
 			if(canPlaceBall("", x, y, x, y)){
-				balls.put(ballName, new Ball(ballName, x, y, vx, vy, true));
+				balls.put(ballName, new Ball(ballName, x, y, vx, vy, true)); //set to true!
 				setPlace(ballName, (int)x, (int)y, (int)x, (int)y);//we might not want the "ball" in the board
 				/* update here */
 				setChanged();
@@ -369,10 +376,11 @@ public class Overlord extends Observable implements IOverlord {
 		}
 
 
-		@Override
+	
 		public List<String> getPossibleGizmoCollisions(float ballX, float ballY, boolean horizDirection,
 				boolean vertDirection) {
 			ArrayList<String> collidables = new ArrayList<String>();
+			collidables.add("Wall");
 			int x = (int) ballX;
 			int y = (int) ballY;
 			String item = null;
@@ -390,7 +398,7 @@ public class Overlord extends Observable implements IOverlord {
 				}
 			}else if(horizDirection && !vertDirection){ //top right
 				for(int locx = x; locx < board[0].length; locx++){
-					for(int locy = 0; locy <= y; locy++){
+					for(int locy = 0; locy < y; locy++){
 						item = board[locy][locx];
 						if(!item.equals("")){
 							if(!collidables.contains(item))
@@ -400,8 +408,8 @@ public class Overlord extends Observable implements IOverlord {
 				}
 				
 			}else if(!horizDirection && !vertDirection){ //top left
-				for(int locx = 0; locx <= x; locx++){
-					for(int locy = 0; locy <= y; locy++){
+				for(int locx = 0; locx < x; locx++){
+					for(int locy = 0; locy < y; locy++){
 						item = board[locy][locx];
 						if(!item.equals("")){
 							if(!collidables.contains(item))
@@ -412,7 +420,7 @@ public class Overlord extends Observable implements IOverlord {
 				
 				
 			}else if(!horizDirection && vertDirection){ //bottom left
-				for(int locx = 0; locx <= x; locx++){
+				for(int locx = 0; locx < x; locx++){
 					for(int locy = y; locy < board.length; locy++){
 						item = board[locy][locx];
 						if(!item.equals("")){
@@ -442,6 +450,15 @@ public class Overlord extends Observable implements IOverlord {
 		@Override
 		public float getFrictionMu2() {
 			return mu2;
+		}
+
+
+		@Override
+		public void setBallLocation(String ballName, float x, float y) {
+			balls.get(ballName).setLocation(x, y);
+			setChanged();
+			notifyObservers(ballName);
+			
 		}
 		
 	

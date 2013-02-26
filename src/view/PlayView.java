@@ -9,17 +9,21 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controller.PlayController;
+
 public class PlayView extends JFrame implements WindowListener{
 	private GizmoCanvas canvas;
 	private JPanel panel;
 	private JButton load;
 	private JButton start;
 	private JButton build;
+	private PlayController pc;
 
 	private static final long serialVersionUID = 1L;
 	
-	public PlayView(){
+	public PlayView(PlayController pc){
 		setup();
+		this.pc = pc;
 	}
 
 	private void setup(){
@@ -35,7 +39,7 @@ public class PlayView extends JFrame implements WindowListener{
 		
 		//Build the window.
 		this.setTitle("Gizmoball Play Mode");
-		this.setSize(640, 480);
+		this.setSize(900, 900);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
 		canvas.setSize(this.getWidth(), this.getHeight()-100);
@@ -46,10 +50,6 @@ public class PlayView extends JFrame implements WindowListener{
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		this.add(panel, BorderLayout.SOUTH);
 		canvas.repaint();
-	}
-	
-	public static void main(String[] args){
-		new PlayView();
 	}
 	
 	@Override

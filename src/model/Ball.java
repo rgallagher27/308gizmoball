@@ -10,6 +10,7 @@ public class Ball implements iBall {
 	private double velocityX;
 	private double velocityY;
 	private double radius;
+	private int immunity;
 	
 	public Ball(String gizmoName, float x, float y, double vx, double vy, boolean released) {
 		radius = 0.25;
@@ -22,6 +23,14 @@ public class Ball implements iBall {
 
 	public double getRadius(){
 		return radius;
+	}
+	
+	public void setImmunity(int b){
+		immunity = 5;
+	}
+	
+	public int getImmunity(){
+		return immunity;
 	}
 	
 	public String getName(){
@@ -37,7 +46,6 @@ public class Ball implements iBall {
 	public void setVelocity(double vx, double vy) {
 		velocityX = vx;
 		velocityY = vy;
-		
 	}
 
 	@Override
