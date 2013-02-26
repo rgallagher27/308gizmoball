@@ -63,4 +63,4 @@ Connect C183 RF137
 Absorber A 0 19 20 20
 KeyConnect key 127 down A
 Connect A A
-Ball B 4.75 15.5 0.0 0.0
+Ball B 19 15.6 0.0 0.0

@@ -133,18 +133,19 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			
 			if(!this.balls.isEmpty()){
 				iBall b = this.balls.get(0);
-				if( (min = g.timeUntilCollision(b)) < ((double)1/24)) {
+				if( (min = g.timeUntilCollision(b)) == 0) {
 					
 					Point2D.Double tmp = b.getLocation();
 				
 					Vect tmpVect = b.getVelocity();
 					
-					tmp.x = tmpVect.x() + tmp.x;
-					tmp.y = tmpVect.y() + tmp.y;
+					tmp.x =  tmp.x + (tmpVect.x() * min);
+					tmp.y =  tmp.y + (tmpVect.y() * min);
 					
-					//b.setLocation(tmp);
+					b.setLocation(tmp);
+					b.move();
 					
-					g.collide(this.balls.get(0));
+					g.collide(b);
 				}
 			}else{
 				g.move();

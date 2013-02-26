@@ -174,7 +174,7 @@ public class FileParser {
     private void addTriangel(String id, int x, int y)
     {
     	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-    		this.gizmos.add( new TriangleBumper(id, new Point( x, y ), 1, 1));
+    		this.gizmos.add( new TriangleBumper(id, new Point( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
     	}
     }
     

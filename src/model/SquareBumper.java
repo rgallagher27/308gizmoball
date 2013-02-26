@@ -102,7 +102,7 @@ public class SquareBumper extends Observable implements iGizmo {
 	private void fillLineSegments()
 	{
 		double topLX = this.point.x * this.cellWidth;
-		double topLY = (this.point.y) * this.cellHeight;
+		double topLY = this.point.y * this.cellHeight;
 		
 		double topRX = (this.point.x + this.row) * this.cellWidth;
 		double topRY = topLY;
@@ -116,9 +116,7 @@ public class SquareBumper extends Observable implements iGizmo {
 		
 		this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 		
-		LineSegment bottom = new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY);
-		
-		this.lineSegments.add(bottom);
+		this.lineSegments.add(new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY));
 		
 		
 	}
@@ -157,7 +155,6 @@ public class SquareBumper extends Observable implements iGizmo {
 		}
 		
 		ball.setVelocity(Geometry.reflectWall(minLS, ball.getVelocity()));
-		
 	}
 
 }
