@@ -4,8 +4,8 @@ import java.awt.Point;
 
 public class RightFlipper extends Flipper {
 
-	public RightFlipper(String identifier, Point p, double width, double height) {
-		super(identifier, p, width, height);
+	public RightFlipper(String identifier, Point p,  double row, double column, double width, double height) {
+		super(identifier, p, row, column, width, height);
 		super.minRotation = 0;
 		super.maxRotation = 90;
 	}

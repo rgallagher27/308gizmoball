@@ -6,15 +6,17 @@ import java.util.Observable;
 public class Flipper extends Observable implements iGizmo {
 	
 	protected Point point;
-	protected double width, height, rotation, maxRotation, minRotation;
+	protected double row, column, cellWidth, cellHeight, rotation, maxRotation, minRotation;
 	protected double rotationIncrement;
 	protected boolean active;
 	protected String identifier;
 
-	public Flipper(String identifier, Point p, double width, double height) {
+	public Flipper(String identifier, Point p, double row, double column, double width, double height) {
 		this.point 				= p;
-		this.height 			= height;
-		this.width 				= width;
+		this.column 			= column;
+		this.cellWidth			= width;
+		this.cellHeight			= height;
+		this.row 				= row;
 		this.rotation 			= 0;
 		this.rotationIncrement 	= 10;
 		this.active 			= false;
@@ -39,27 +41,27 @@ public class Flipper extends Observable implements iGizmo {
 	}
 
 	@Override
-	public double getWidth() 
+	public double getRowWidth() 
 	{
-		return this.width;
+		return this.row;
 	}
 
 	@Override
-	public void setWidth(double w) 
+	public void setRowWidth(double w) 
 	{
-		this.width = w;
+		this.row = w;
 	}
 
 	@Override
-	public double getHeight() 
+	public double getColumnHeight() 
 	{
-		return this.height;
+		return this.column;
 	}
 
 	@Override
-	public void setHeight(double h) 
+	public void setColumnHeight(double h) 
 	{
-		this.height = h;
+		this.column = h;
 	}
 
 	@Override
@@ -84,5 +86,27 @@ public class Flipper extends Observable implements iGizmo {
 	@Override
 	public String getIdentifier() {
 		return this.identifier;
+	}
+
+	@Override
+	public double getCellWidth() {
+		// TODO Auto-generated method stub
+		return this.cellWidth;
+	}
+
+	@Override
+	public void setCellWidth(double w) {
+		this.cellWidth = w;
+	}
+
+	@Override
+	public double getCellHeight() {
+		// TODO Auto-generated method stub
+		return this.cellHeight;
+	}
+
+	@Override
+	public void setCellHeight(double h) {
+		this.cellHeight = h;
 	}
 }

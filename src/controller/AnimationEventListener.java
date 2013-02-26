@@ -13,33 +13,30 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import model.Flipper;
 import model.GameGrid;
 import model.LeftFlipper;
 import model.RightFlipper;
+import model.iBall;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
 	private List<iGizmo> gizmos;
+	private List<iBall> balls;
 	private G2DAbstractCanvas absCanvas;
 	private GameGrid gmGrid;
-	
-	private boolean _Space;
-	private boolean _Left;
-	private boolean _Right;
 	
 	private String flipperType = "L";
 			
 
-	public AnimationEventListener(List<iGizmo> gizmos, G2DAbstractCanvas absCanvas, GameGrid gmGrid) 
+	public AnimationEventListener(List<iGizmo> gizmos, List<iBall> balls, G2DAbstractCanvas absCanvas, GameGrid gmGrid) 
 	{
 		super();
 		this.gizmos = gizmos;
+		this.balls = balls;
 		this.absCanvas = absCanvas;
 		this.gmGrid = gmGrid;
-		this._Space = this._Left = this._Right = false;
 	}
 
 	/*
@@ -59,17 +56,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 				case KeyEvent.VK_LEFT:
 					if(g instanceof LeftFlipper)
 						((LeftFlipper) g).toggleFlipper(true);
-					this._Left = true;
 					break;
 				case KeyEvent.VK_RIGHT:
 					if(g instanceof RightFlipper)
 						((RightFlipper) g).toggleFlipper(true);
-					this._Right = true;
-					break;
-				case KeyEvent.VK_SPACE:
-					if(g instanceof Flipper)
-						((Flipper) g).toggleFlipper(true);
-					this._Space = true;
 					break;
 				default:
 					break;
@@ -103,18 +93,11 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 					switch (event.getKeyCode()) {
 						case KeyEvent.VK_LEFT:
 							if(g instanceof LeftFlipper)
-								if(!this._Space)((LeftFlipper) g).toggleFlipper(false);
-							this._Left = false;
+								((LeftFlipper) g).toggleFlipper(false);
 							break;
 						case KeyEvent.VK_RIGHT:
 							if(g instanceof RightFlipper)
-								if(!this._Space)((RightFlipper) g).toggleFlipper(false);
-							this._Right = false;
-							break;
-						case KeyEvent.VK_SPACE:
-							if(g instanceof Flipper)
-								if(!this._Left || !this._Right)((Flipper) g).toggleFlipper(false);
-							this._Space = false;
+								((RightFlipper) g).toggleFlipper(false);
 							break;
 						default:
 							break;
@@ -144,6 +127,9 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	{
 		for(iGizmo g : this.gizmos)
 			g.move();
+		
+		for(iBall b : this.balls)
+			b.move();
 	}
 
 	@Override
@@ -161,10 +147,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			iGizmo newFlipper = null;
 			
 			if(this.flipperType.equals("L")){
-				newFlipper = new LeftFlipper("LFnew", new Point(mouseX, mouseY), 1, 2);
+				newFlipper = new LeftFlipper("LFnew", new Point(mouseX, mouseY), 1, 2, gmGrid.getCellWidth(), gmGrid.getCellHeight());
 				
 			}else if(this.flipperType.equals("R")){
-				newFlipper = new RightFlipper("RFnew", new Point(mouseX, mouseY), 1, 2);
+				newFlipper = new RightFlipper("RFnew", new Point(mouseX, mouseY), 1, 2, gmGrid.getCellWidth(), gmGrid.getCellHeight());
 			}
 			
 			((Observable)newFlipper).addObserver((Observer) event.getSource());

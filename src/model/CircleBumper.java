@@ -6,14 +6,17 @@ import java.util.Observable;
 public class CircleBumper extends Observable implements iGizmo {
 
 	protected Point point;
-	protected double width, height;
+	protected double row, column, cellWidth, cellHeight;
 	protected String identifier;
 	
-	public CircleBumper(String identifier, Point p, double width, double height) {
+	public CircleBumper(String identifier, Point p, double row, double column, double width, double height) {
 		this.point 			= p;
-		this.width 			= width;
-		this.height 		= height;
+		this.row 			= row;
+		this.column 		= column;
 		this.identifier 	= identifier;
+		this.cellWidth		= width;
+		this.cellHeight		= height;
+		
 	}
 
 	@Override
@@ -32,23 +35,23 @@ public class CircleBumper extends Observable implements iGizmo {
 	}
 
 	@Override
-	public double getWidth() {
-		return this.width;
+	public double getRowWidth() {
+		return this.row;
 	}
 
 	@Override
-	public void setWidth(double w) {
-		this.width = w;
+	public void setRowWidth(double w) {
+		this.row = w;
 	}
 
 	@Override
-	public double getHeight() {
-		return this.height;
+	public double getColumnHeight() {
+		return this.column;
 	}
 
 	@Override
-	public void setHeight(double h) {
-		this.height = h;
+	public void setColumnHeight(double h) {
+		this.column = h;
 	}
 
 	@Override
@@ -65,6 +68,28 @@ public class CircleBumper extends Observable implements iGizmo {
 	@Override
 	public void move() {
 		//unneeded
+	}
+
+	@Override
+	public double getCellWidth() {
+		// TODO Auto-generated method stub
+		return this.cellWidth;
+	}
+
+	@Override
+	public void setCellWidth(double w) {
+		this.cellWidth = w;
+	}
+
+	@Override
+	public double getCellHeight() {
+		// TODO Auto-generated method stub
+		return this.cellHeight;
+	}
+
+	@Override
+	public void setCellHeight(double h) {
+		this.cellHeight = h;
 	}
 
 }

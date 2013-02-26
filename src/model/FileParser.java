@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -11,10 +12,12 @@ import java.util.List;
 public class FileParser {
     
     private List<iGizmo> gizmos;
+    private List<iBall> balls;
     private GameGrid gameGrid;
     
-    public FileParser( List<iGizmo> g, GameGrid gm ) {
+    public FileParser( List<iGizmo> g, List<iBall> b,  GameGrid gm ) {
         this.gizmos 	= g;
+        this.balls 		= b;
         this.gameGrid 	= gm;
     }
     
@@ -55,7 +58,7 @@ public class FileParser {
                 					);
                     break;
                 case "Ball":
-                	this.addBall(tok[1], (int)Double.parseDouble(tok[2]), (int)Double.parseDouble(tok[3]));
+                	this.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
                     break;
                 case "Circle":
                 	this.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
@@ -129,21 +132,22 @@ public class FileParser {
     private void addAbsorber(String id, int x, int y, int width, int height)
     {
     	if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
-    		this.gizmos.add( new Absorber(id, new Point( x, y ), width, height) );
+    		this.gizmos.add( new Absorber(id, new Point( x, y ), width, height, gameGrid.getCellWidth(), gameGrid.getCellHeight()) );
     	}
     }
     
-    private void addBall(String id, int x, int y)
+    private void addBall(String id, double x, double y)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-        	this.gizmos.add(new Ball(id, new Point( x, y ), 1, 1));	
+    	if(this.gameGrid.setGridPoint(new Point((int)x, (int)y), 1, 1, true)){
+    		System.out.println("Addin BALLS");
+    		this.balls.add(new Ball(id, new Point2D.Double( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()) );
     	}
     }
     
     private void addCircle(String id, int x, int y)
     {
     	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-    		this.gizmos.add(new CircleBumper(id, new Point(x, y), 1, 1));
+    		this.gizmos.add(new CircleBumper(id, new Point(x, y), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
     	}
     }
     
@@ -152,10 +156,10 @@ public class FileParser {
     	if(this.gameGrid.setGridPoint(new Point(x, y), 2, 2, true)){
 	    	if(type.equals("L")){
 	    		this.gizmos.add(
-            			new LeftFlipper(id, new Point(x, y),1, 2));
+            			new LeftFlipper(id, new Point(x, y),1, 2, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
 	    	}else if(type.equals("R")){
 	    		this.gizmos.add(
-            			new RightFlipper(id, new Point(x, y),1, 2));
+            			new RightFlipper(id, new Point(x, y),1, 2, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
 	    	}
     	}
     }

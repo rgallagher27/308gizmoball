@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import model.Absorber;
-import model.Ball;
 import model.CircleBumper;
 import model.FileParser;
 import model.Flipper;
@@ -22,6 +21,7 @@ import model.LeftFlipper;
 import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
+import model.iBall;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
@@ -37,7 +37,7 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int  timerInterval = 10; //For 24 FPS Aprox
+	private final int  timerInterval = 41;
 
 	private final Dimension windowSize = new Dimension(640, 480);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
@@ -47,15 +47,18 @@ public class PrototypeView extends JPanel implements Observer {
 	private Timer timer;
 	
 	private G2DAbstractCanvas abstractCanvas;
-	public List<iGizmo> prototypeFlippers;
+	private List<iGizmo> GizmoCollection;
+	private List<iBall> BallCollection;
+	
 
 	public PrototypeView() {
 		super();
 		this.setPreferredSize(this.windowSize);
 		
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
-		this.prototypeFlippers 	= new ArrayList<iGizmo>();
-		this.eventListener 		= new AnimationEventListener(prototypeFlippers, abstractCanvas, gameGrid);
+		this.GizmoCollection 	= new ArrayList<iGizmo>();
+		this.BallCollection		= new ArrayList<iBall>();
+		this.eventListener 		= new AnimationEventListener(GizmoCollection, BallCollection, abstractCanvas, gameGrid);
 		this.timer 				= new Timer(this.timerInterval, this.eventListener);
         
 		/*
@@ -63,22 +66,18 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 */
         
-        FileParser fp = new FileParser( prototypeFlippers, gameGrid );
+        FileParser fp = new FileParser( GizmoCollection, BallCollection,  gameGrid );
         fp.loadFile("Input");
         
 		/*
-		 * Add 'this' as an Observer to each test flipper.
+		 * Add 'this' as an Observer to each Gizmo object.
 		 */
-		for(iGizmo g : prototypeFlippers){
+		for(iGizmo g : GizmoCollection)
 			((Observable) g).addObserver(this);
-			/*
-			 * Set game grid location here just to be complete, would normally 
-			 * be set when attempting to add new gizmo through UI
-			 * once sanity checks have been applied.
-			 */
-			//this.gameGrid.setGridPoint(g.getLocation(), (int)g.getWidth(), (int)g.getHeight(), true);
-		}
-		 
+		
+		for(iBall b : BallCollection)
+			((Observable) b).addObserver(this);
+		
 		/*
 		 * Add event listener to key presses.
 		 * 
@@ -108,13 +107,15 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		this.drawGrid(this.abstractCanvas);
 		
-		for(iGizmo gizmo : this.prototypeFlippers)
+		for(iGizmo gizmo : this.GizmoCollection)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof Ball)this.drawBall(gizmo).draw(abstractCanvas);
+		
+		for(iBall ball : BallCollection)
+			this.drawBall(ball).draw(abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -125,7 +126,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.repaint();
 	}
     
-    public G2DObject drawBall(iGizmo ball)
+    public G2DObject drawBall(iBall ball)
     {
         double cellWidth 		= this.gameGrid.getCellWidth();
 		double cellheight 		= this.gameGrid.getCellHeight();
@@ -141,12 +142,12 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		double flipperX = 0;
 		double flipperY = 0;
-		double cellWidth 			= this.gameGrid.getCellWidth();
-		double cellheight 			= this.gameGrid.getCellHeight();
+		double cellWidth 			= flipper.getCellWidth();
+		double cellheight 			= flipper.getCellHeight();
 		double flipperGridX			= flipper.getLocation().x;
 		double flipperGridY        	= flipper.getLocation().y;
-		double flipperGridWidth 	= flipper.getWidth();
-		double flipperGridHeight	= flipper.getHeight();
+		double flipperGridWidth 	= flipper.getRowWidth();
+		double flipperGridHeight	= flipper.getColumnHeight();
 		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
 		double flipperHeight 		= (flipperGridHeight * cellheight);
 		
@@ -168,14 +169,14 @@ public class PrototypeView extends JPanel implements Observer {
 
     public G2DObject drawAbsorber(iGizmo absorber)
     {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
+        double cellWidth 		= absorber.getCellWidth();
+		double cellheight 		= absorber.getCellHeight();
 		
 		double x 				= absorber.getLocation().getX() * cellWidth;
 		double y 				= absorber.getLocation().getY() * cellheight;
     	
     	return new G2DRectangle(new G2DPoint( x , y ), 
-    			                new G2DPoint( x + (absorber.getWidth() * cellWidth), y + (absorber.getHeight() * cellheight)), 
+    			                new G2DPoint( x + (absorber.getRowWidth() * cellWidth), y + (absorber.getColumnHeight() * cellheight)), 
     			                Color.red);
     }
 	
@@ -218,33 +219,33 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	public G2DObject drawCircleBumper(iGizmo circle)
     {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
+        double cellWidth 		= circle.getCellWidth();
+		double cellheight 		= circle.getCellHeight();
 		
 		double x 				= circle.getLocation().getX();
 		double y 				= circle.getLocation().getY();
 		
 		return new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
-							circle.getWidth() * (cellWidth / 2),
+							circle.getRowWidth() * (cellWidth / 2),
 							Color.green);
     }
 	
 	private void drawGrid(G2DAbstractCanvas canvas)
 	{
-		for(int i = 0; i <= this.gameGrid.getWidth(); i++){
+		for(int i = 0; i <= this.gameGrid.getRowWidth(); i++){
 			int startPointX  = (int) (i * this.gameGrid.getCellWidth());
 			int startPointY  = 0;
 			int endPointX 	 = startPointX;
-			int endPointY    = (int) (startPointY + (this.gameGrid.getHeight() * this.gameGrid.getCellHeight()));
+			int endPointY    = (int) (startPointY + (this.gameGrid.getColumnHeight() * this.gameGrid.getCellHeight()));
 			
 			G2DLine line = new G2DLine(new G2DPoint(startPointX, startPointY), new G2DPoint(endPointX, endPointY), Color.gray);
 			line.draw(canvas);
 		}
 		
-		for(int i = 0; i <= this.gameGrid.getHeight(); i++){
+		for(int i = 0; i <= this.gameGrid.getColumnHeight(); i++){
 			int startPointX  = 0;
 			int startPointY  = (int) (i * this.gameGrid.getCellHeight());
-			int endPointX 	 = (int) (startPointX + (this.gameGrid.getWidth() * this.gameGrid.getCellWidth()));
+			int endPointX 	 = (int) (startPointX + (this.gameGrid.getRowWidth() * this.gameGrid.getCellWidth()));
 			int endPointY    = startPointY;
 			
 			G2DLine line = new G2DLine(new G2DPoint(startPointX, startPointY), new G2DPoint(endPointX, endPointY), Color.gray);

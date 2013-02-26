@@ -33,22 +33,22 @@ public class TriangleBumper extends Observable implements iGizmo {
 	}
 
 	@Override
-	public double getWidth() {
+	public double getRowWidth() {
 		return this.width;
 	}
 
 	@Override
-	public void setWidth(double w) {
+	public void setRowWidth(double w) {
 		this.width = w;
 	}
 
 	@Override
-	public double getHeight() {
+	public double getColumnHeight() {
 		return this.height;
 	}
 
 	@Override
-	public void setHeight(double h) {
+	public void setColumnHeight(double h) {
 		this.height = h;
 	}
 
@@ -65,6 +65,30 @@ public class TriangleBumper extends Observable implements iGizmo {
 	@Override
 	public void move() {
 		//unneeded
+	}
+
+	@Override
+	public double getCellWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setCellWidth(double w) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getCellHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setCellHeight(double h) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -73,22 +73,22 @@ public class GameGrid implements iGizmo {
 	}
 
 	@Override
-	public double getWidth() {
+	public double getRowWidth() {
 		return this.rows;
 	}
 
 	@Override
-	public void setWidth(double w) {
+	public void setRowWidth(double w) {
 		this.rows = w;
 	}
 
 	@Override
-	public double getHeight() {
+	public double getColumnHeight() {
 		return this.columns;
 	}
 
 	@Override
-	public void setHeight(double h) {
+	public void setColumnHeight(double h) {
 		this.columns = h;
 	}
 
@@ -111,6 +111,16 @@ public class GameGrid implements iGizmo {
 	public String getIdentifier() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setCellWidth(double w) {
+		this.cellWidth = w;
+	}
+
+	@Override
+	public void setCellHeight(double h) {
+		this.cellHeight = h;
 	}
 
 }

@@ -1,14 +1,14 @@
 package model;
 
-import java.awt.Point;
+import java.awt.geom.Point2D;
 
-public interface iGizmo {
+public interface iBall {
 	
 	public String getIdentifier();
 	
-	public Point getLocation();
+	public Point2D.Double getLocation();
 	
-	public void setLocation(Point p);
+	public void setLocation(Point2D.Double p);
 	
 	public double getRowWidth();
 	
@@ -31,5 +31,4 @@ public interface iGizmo {
 	public void setRotation(double r);
 	
 	public void move();
-
 }
