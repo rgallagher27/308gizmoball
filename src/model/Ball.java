@@ -154,7 +154,7 @@ public class Ball extends Observable implements iBall {
 
 			this.isCaptured = update;
 		}else{
-			this.velocity = new Vect(0, -44);
+			this.velocity = new Vect(0, -44.5);
 			
 			this.isCaptured = update;
 		}

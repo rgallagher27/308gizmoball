@@ -25,7 +25,7 @@ import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private double DELTA_T = ((double)1) / 30;
+	private double DELTA_T = ((double)1) / 40;
 	
 	private List<iGizmo> gizmos;
 	private List<iBall> balls;
@@ -163,6 +163,8 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			
 			if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
 				Point2D.Double tmpBall = b.getLocation();
+				
+				System.out.println(lowestTime);
 				
 				Vect tmpVect = b.getVelocity();
 				

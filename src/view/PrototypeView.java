@@ -38,7 +38,7 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int FPS = 30;
+	private final int FPS = 48;
 
 	private final Dimension windowSize = new Dimension(1000, 800);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
