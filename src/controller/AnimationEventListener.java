@@ -25,7 +25,7 @@ import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private double DELTA_T = ((double)1) / 24;
+	private double DELTA_T = ((double)1) / 30;
 	
 	private List<iGizmo> gizmos;
 	private List<iBall> balls;

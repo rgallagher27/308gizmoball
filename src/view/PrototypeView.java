@@ -21,6 +21,7 @@ import model.LeftFlipper;
 import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
+import model.Wall;
 import model.iBall;
 import model.iGizmo;
 import view.framework.G2DAbstractCanvas;
@@ -37,7 +38,7 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int FPS = 24;
+	private final int FPS = 30;
 
 	private final Dimension windowSize = new Dimension(1000, 800);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
@@ -61,10 +62,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.eventListener 		= new AnimationEventListener(GizmoCollection, BallCollection, abstractCanvas, gameGrid);
 		this.timer 				= new Timer(1000/this.FPS, this.eventListener);
         
-		/*
-		 * Add prototype Left and Right flippers to test against.
-		 * 
-		 */
+		this.GizmoCollection.add(new Wall(this.gameGrid.getCellWidth(), this.gameGrid.getCellHeight(), this.gameGrid));
         
         FileParser fp = new FileParser( GizmoCollection, BallCollection,  gameGrid );
         fp.loadFile("Input");
@@ -105,7 +103,7 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
 		
-		this.drawGrid(this.abstractCanvas);
+		//this.drawGrid(this.abstractCanvas);
 		
 		for(iGizmo gizmo : this.GizmoCollection)
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);

@@ -86,13 +86,10 @@ public class Ball extends Observable implements iBall {
 			double friction = 1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT;
 			
 			Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + (gravity.y() * deltaT));
-			
 			this.velocity = newVelocity;
 			
 			this.point.x  	= this.point.x + (deltaT * this.velocity.x());
 			this.point.y	= this.point.y + (deltaT * this.velocity.y());
-			
-			System.out.println(this.point.x + ":" + this.point.y);
 			
 			Point2D.Double newCirclePoint = new Point2D.Double(this.point.x * this.cellWidth, this.point.y * cellHeight);
 			
@@ -157,8 +154,7 @@ public class Ball extends Observable implements iBall {
 
 			this.isCaptured = update;
 		}else{
-			System.out.println("releasing: " + this.point.toString());
-			this.velocity = new Vect(0, -45);
+			this.velocity = new Vect(0, -44);
 			
 			this.isCaptured = update;
 		}
