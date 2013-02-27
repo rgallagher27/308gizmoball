@@ -1,17 +1,13 @@
 import java.awt.Color;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import view.PrototypeView;
 
 public class Driver {
 
 	public Driver() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public static void main(String[] args)
-	{	
 		JFrame prototypeFrame = new JFrame();
 		prototypeFrame.add(new PrototypeView());
 		
@@ -20,6 +16,11 @@ public class Driver {
 		prototypeFrame.pack();
 		prototypeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		prototypeFrame.setVisible(true);
+	}
+	
+	public static void main(String[] args)
+	{	
+		new Driver();
 	}
 
 }

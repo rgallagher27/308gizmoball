@@ -3,10 +3,9 @@ package model;
 import java.awt.Dimension;
 import java.awt.Point;
 
-public class GameGrid implements iGizmo {
+public class GameGrid {
 	
-	protected Point location;
-	protected double rows, columns, cellWidth, cellHeight, rotation;
+	protected double rows, columns, cellWidth, cellHeight;
 	protected boolean gridPoints[][];
 
 	public GameGrid(int rows, int columns, Dimension canvasSize) {
@@ -15,7 +14,6 @@ public class GameGrid implements iGizmo {
 		this.cellWidth 	= canvasSize.getWidth()  / rows;
 		this.cellHeight = canvasSize.getHeight() / columns;
 		this.gridPoints = new boolean[(int) this.rows][(int) this.columns];
-		this.location 	= null;
 	}
 	
 	public boolean isEmpty(Point p)
@@ -62,77 +60,28 @@ public class GameGrid implements iGizmo {
 		return this.cellHeight;
 	}
 
-	@Override
-	public Point getLocation() {
-		return this.location;
-	}
-
-	@Override
-	public void setLocation(Point p) {
-		this.location = p;
-	}
-
-	@Override
 	public double getRowWidth() {
 		return this.rows;
 	}
 
-	@Override
 	public void setRowWidth(double w) {
 		this.rows = w;
 	}
 
-	@Override
 	public double getColumnHeight() {
 		return this.columns;
 	}
 
-	@Override
 	public void setColumnHeight(double h) {
 		this.columns = h;
 	}
 
-	@Override
-	public double getRotation() {
-		return this.rotation;
-	}
-
-	@Override
-	public void setRotation(double r) {
-		this.rotation = r;
-	}
-
-	@Override
-	public void move() {
-		//No functionality needed
-	}
-
-	@Override
-	public String getIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setCellWidth(double w) {
 		this.cellWidth = w;
 	}
 
-	@Override
 	public void setCellHeight(double h) {
 		this.cellHeight = h;
-	}
-
-	@Override
-	public double timeUntilCollision(iBall ball) {
-		// TODO Auto-generated method stub
-		return 1000;
-	}
-
-	@Override
-	public void collide(iBall ball) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

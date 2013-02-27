@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,10 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import model.Absorber;
 import model.GameGrid;
@@ -25,14 +22,14 @@ import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private double DELTA_T = ((double)1) / 40;
+	private final int FPS = 30;
+	private final double DELTA_T = ((double)1) / FPS;
 	
 	private List<iGizmo> gizmos;
 	private List<iBall> balls;
-	private G2DAbstractCanvas absCanvas;
 	private GameGrid gmGrid;
 	
-	private String flipperType = "L";
+	private Timer gameLoop;
 			
 
 	public AnimationEventListener(List<iGizmo> gizmos, List<iBall> balls, G2DAbstractCanvas absCanvas, GameGrid gmGrid) 
@@ -40,8 +37,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		super();
 		this.gizmos = gizmos;
 		this.balls = balls;
-		this.absCanvas = absCanvas;
 		this.gmGrid = gmGrid;
+		
+		this.gameLoop = new Timer(1000/FPS, this);
+		this.gameLoop.start();
 	}
 
 	/*
@@ -89,12 +88,6 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	public void keyReleased(KeyEvent event) 
 	{
 		switch (event.getKeyCode()) {
-			case KeyEvent.VK_L:
-				this.flipperType = "L";
-				break;
-			case KeyEvent.VK_R :
-				this.flipperType = "R";
-				break;
 			case KeyEvent.VK_P:
 				this.gmGrid.printGrid();
 				break;
@@ -139,12 +132,6 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		iGizmo closestGizmo = null;
 		
 		/*
-		 * Move all the static Gizmos
-		 */
-		for(iGizmo g : this.gizmos)
-			g.move();
-		
-		/*
 		 * Move all the Balls while checking for possible
 		 * collisions with iGizmo objects
 		 */
@@ -184,35 +171,16 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 				b.move(DELTA_T);
 			}
 		}
+		
+		/*
+		 * Move all the static Gizmos
+		 */
+		for(iGizmo g : this.gizmos)
+			g.move();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent event) {
-		JPanel source = (JPanel)event.getSource();
-		
-		this.absCanvas.setPhysicalDisplay(source.getWidth(), source.getHeight(), null);
-		
-		int mouseX = (int)(this.absCanvas.abstractX(event.getX()) / this.gmGrid.getCellWidth());
-		
-		int mouseY = (int)(this.absCanvas.abstractY(event.getY()) / this.gmGrid.getCellHeight());
-		
-		if(this.gmGrid.setGridPoint(new Point(mouseX, mouseY), 2, 2, true)){
-			
-			iGizmo newFlipper = null;
-			
-			if(this.flipperType.equals("L")){
-				newFlipper = new LeftFlipper("LFnew", new Point(mouseX, mouseY), 1, 2, gmGrid.getCellWidth(), gmGrid.getCellHeight());
-				
-			}else if(this.flipperType.equals("R")){
-				newFlipper = new RightFlipper("RFnew", new Point(mouseX, mouseY), 1, 2, gmGrid.getCellWidth(), gmGrid.getCellHeight());
-			}
-			
-			((Observable)newFlipper).addObserver((Observer) event.getSource());
-			this.gizmos.add(newFlipper);
-		}else{
-			System.out.println("Cannot place Gizmo at position " + mouseX + " : " + mouseY);
-		}
-		
 		
 	}
 

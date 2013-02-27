@@ -45,7 +45,6 @@ public class PrototypeView extends JPanel implements Observer {
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
 	private AnimationEventListener eventListener;
-	private Timer timer;
 	
 	private G2DAbstractCanvas abstractCanvas;
 	private List<iGizmo> GizmoCollection;
@@ -60,7 +59,6 @@ public class PrototypeView extends JPanel implements Observer {
 		this.GizmoCollection 	= new ArrayList<iGizmo>();
 		this.BallCollection		= new ArrayList<iBall>();
 		this.eventListener 		= new AnimationEventListener(GizmoCollection, BallCollection, abstractCanvas, gameGrid);
-		this.timer 				= new Timer(1000/this.FPS, this.eventListener);
         
 		this.GizmoCollection.add(new Wall(this.gameGrid.getCellWidth(), this.gameGrid.getCellHeight(), this.gameGrid));
         
@@ -85,7 +83,6 @@ public class PrototypeView extends JPanel implements Observer {
 		 */
 		this.addKeyListener(eventListener);
 		this.addMouseListener(eventListener);
-		this.timer.start();
 		this.requestFocus();
 	}
 	

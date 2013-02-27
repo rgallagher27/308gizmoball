@@ -1,113 +1,27 @@
 package model;
 
 import java.awt.Point;
-import java.util.Observable;
+import java.util.ArrayList;
 
 import model.physics.Circle;
-import model.physics.Geometry;
+import model.physics.LineSegment;
 import model.physics.Vect;
 
-public class CircleBumper extends Observable implements iGizmo {
-
-	protected Point point;
-	protected double row, column, cellWidth, cellHeight;
-	protected String identifier;
-	protected Circle physicsCircle;
+public class CircleBumper extends Gizmo implements iGizmo {
 	
 	public CircleBumper(String identifier, Point p, double row, double column, double width, double height) {
-		this.point 			= p;
-		this.row 			= row;
-		this.column 		= column;
-		this.identifier 	= identifier;
-		this.cellWidth		= width;
-		this.cellHeight		= height;
+		super.point 		= p;
+		super.rowWidth 		= row;
+		super.columnHeight	= column;
+		super.identifier 	= identifier;
+		super.cellWidth		= width;
+		super.cellHeight	= height;
 		
-		this.physicsCircle = new Circle(new Vect(this.point.x * this.cellWidth, this.point.y * this.cellHeight), this.cellWidth / 2);
-	}
-
-	@Override
-	public String getIdentifier() {
-		return this.identifier;
-	}
-
-	@Override
-	public Point getLocation() {
-		return this.point;
-	}
-
-	@Override
-	public void setLocation(Point p) {
-		this.point = p;
-	}
-
-	@Override
-	public double getRowWidth() {
-		return this.row;
-	}
-
-	@Override
-	public void setRowWidth(double w) {
-		this.row = w;
-	}
-
-	@Override
-	public double getColumnHeight() {
-		return this.column;
-	}
-
-	@Override
-	public void setColumnHeight(double h) {
-		this.column = h;
-	}
-
-	@Override
-	public double getRotation() {
-		//unneeded
-		return 0;
-	}
-
-	@Override
-	public void setRotation(double r) {
-		//unneeded
-	}
-
-	@Override
-	public void move() {
-		//unneeded
-	}
-
-	@Override
-	public double getCellWidth() {
-		// TODO Auto-generated method stub
-		return this.cellWidth;
-	}
-
-	@Override
-	public void setCellWidth(double w) {
-		this.cellWidth = w;
-	}
-
-	@Override
-	public double getCellHeight() {
-		// TODO Auto-generated method stub
-		return this.cellHeight;
-	}
-
-	@Override
-	public void setCellHeight(double h) {
-		this.cellHeight = h;
-	}
-
-	@Override
-	public double timeUntilCollision(iBall ball) {
-		//return 1000;
-		return Geometry.timeUntilCircleCollision(this.physicsCircle, ball.returnBounds(), ball.getVelocity());
-	}
-
-	@Override
-	public void collide(iBall ball) {
-		ball.setVelocity(
-					Geometry.reflectCircle(this.physicsCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
+		super.lineSegments 	= new ArrayList<LineSegment>();
+		super.circles = new ArrayList<Circle>();
+		
+		super.circles.add(
+				new Circle(new Vect(super.point.x * super.cellWidth, super.point.y * super.cellHeight), super.cellWidth / 2)
 				);
 	}
 
