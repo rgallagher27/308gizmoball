@@ -197,8 +197,8 @@ public class PrototypeView extends JPanel implements Observer {
     
     public G2DObject drawTriangleBumper(iGizmo triangle)
     {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
+        double cellWidth 		= triangle.getCellWidth();
+		double cellheight 		= triangle.getCellHeight();
 		
 		double x 				= triangle.getLocation().getX();
 		double y 				= triangle.getLocation().getY();

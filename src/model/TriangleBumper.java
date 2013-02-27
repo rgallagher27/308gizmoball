@@ -22,6 +22,7 @@ public class TriangleBumper extends Observable implements iGizmo {
 		this.row 			= row;
 		this.column 		= column;
 		this.cellWidth		= width;
+		this.cellHeight     = height;
 		this.rotation		= height;
 		this.identifier 	= identifier;
 		this.rotation       = 0;

@@ -14,6 +14,7 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import model.Absorber;
 import model.GameGrid;
 import model.LeftFlipper;
 import model.RightFlipper;
@@ -65,6 +66,11 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 					if(g instanceof RightFlipper)
 						((RightFlipper) g).toggleFlipper(true);
 					break;
+				case KeyEvent.VK_SPACE:
+					if(g instanceof Absorber){
+						System.out.println("Releasing ball");
+						((Absorber)g).releaseBall();
+					}
 				default:
 					break;
 			}
@@ -155,10 +161,8 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 				}
 			}
 			
-			if(lowestTime < DELTA_T && closestGizmo != null){
+			if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
 				Point2D.Double tmpBall = b.getLocation();
-				
-				System.out.println(lowestTime);
 				
 				Vect tmpVect = b.getVelocity();
 				
@@ -168,7 +172,11 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 				b.setLocation(tmpBall);
 				b.move(lowestTime);
 				
-				closestGizmo.collide(b);
+				if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
+				else{
+					((Absorber)closestGizmo).captureBall(b);
+					b.setCaptured(true);
+				}
 				
 			}else{
 				b.move(DELTA_T);
