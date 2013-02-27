@@ -11,7 +11,6 @@ public class Ball extends Observable implements iBall {
 	protected Point2D.Double point;
 	protected double row, column, cellWidth, cellHeight;
 	protected Vect gravity;
-	protected Vect friction;
 	protected Vect velocity;
 	protected Circle physicsCircle;
 	protected String identifier;
@@ -25,8 +24,8 @@ public class Ball extends Observable implements iBall {
 		this.cellWidth		= width;
 		this.cellHeight		= height;
 		this.physicsCircle	= new Circle(this.point, this.cellWidth/4);
-		this.gravity 		= new Vect(0, 0.025);
-		this.velocity 		= new Vect(0, -.95);
+		this.gravity 		= new Vect(0, 25);
+		this.velocity 		= new Vect(0, 0);
 	}
 
 	@Override
@@ -76,24 +75,20 @@ public class Ball extends Observable implements iBall {
 	}
 
 	@Override
-	public void move() {
+	public void move(double deltaT) {
 		
-		double tick = ((double) 1) / 24;
+		deltaT /= 2;
+		double mu  = 0.025;
+		double mu2 = 0.025;
 		
-		double ytemp = this.velocity.y() * (1 - (0.025 * tick) - (0.025 * Math.abs(this.velocity.y())));
-		double xtemp = this.velocity.x() * (1 - (0.025 * tick) - (0.025 * Math.abs(this.velocity.x())));
+		double friction = 1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT;
 		
-		this.friction = new Vect(xtemp, ytemp);
+		Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + (gravity.y() * deltaT));
 		
-	    this.velocity = this.velocity.plus(this.gravity);
-	    
-		//this.velocity = this.velocity.minus(this.friction);
-	    
-		Vect currentPos = new Vect(point);
-			 currentPos = currentPos.plus(this.velocity);
+		this.velocity = newVelocity;
 		
-		this.point.x  	= currentPos.x();
-		this.point.y	= currentPos.y();
+		this.point.x  	= this.point.x + (deltaT * this.velocity.x());
+		this.point.y	= this.point.y + (deltaT * this.velocity.y());
 		
 		Point2D.Double newCirclePoint = new Point2D.Double(this.point.x * this.cellWidth, this.point.y * cellHeight);
 		

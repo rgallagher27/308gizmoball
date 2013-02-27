@@ -113,7 +113,7 @@ public class Flipper extends Observable implements iGizmo {
 	@Override
 	public double timeUntilCollision(iBall ball) {
 		// TODO Auto-generated method stub
-		return 1000;
+		return Double.POSITIVE_INFINITY;
 	}
 
 	@Override

@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.physics.Vect;
+
 public class FileParser {
     
     private List<iGizmo> gizmos;
@@ -58,7 +60,7 @@ public class FileParser {
                 					);
                     break;
                 case "Ball":
-                	this.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
+                	this.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
                     break;
                 case "Circle":
                 	this.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
@@ -136,11 +138,12 @@ public class FileParser {
     	}
     }
     
-    private void addBall(String id, double x, double y)
+    private void addBall(String id, double x, double y, double xV, double yV)
     {
     	if(this.gameGrid.setGridPoint(new Point((int)x, (int)y), 1, 1, true)){
-    		System.out.println("Addin BALLS");
-    		this.balls.add(new Ball(id, new Point2D.Double( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()) );
+    		iBall newBall = new Ball(id, new Point2D.Double( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight());
+    		newBall.setVelocity(new Vect(xV, yV));
+    		this.balls.add( newBall);
     	}
     }
     

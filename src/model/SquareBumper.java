@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import model.physics.Circle;
 import model.physics.Geometry;
 import model.physics.LineSegment;
 
@@ -13,6 +14,7 @@ public class SquareBumper extends Observable implements iGizmo {
 	protected Point point;
 	protected double row, column, cellWidth, cellHeight;
 	protected List<LineSegment> lineSegments;
+	protected List<Circle> circleCorners;
 	protected String identifier;
 
 	public SquareBumper(String identifier, Point p, double row, double column, double width, double height) {
@@ -24,8 +26,10 @@ public class SquareBumper extends Observable implements iGizmo {
 		this.identifier 	= identifier;
 		
 		this.lineSegments = new ArrayList<LineSegment>();
+		this.circleCorners = new ArrayList<Circle>();
 		
 		this.fillLineSegments();
+		
 	}
 
 	@Override
@@ -101,60 +105,83 @@ public class SquareBumper extends Observable implements iGizmo {
 	
 	private void fillLineSegments()
 	{
-		double topLX = this.point.x * this.cellWidth;
-		double topLY = this.point.y * this.cellHeight;
+		double topLX = (this.point.x * this.cellWidth);
+		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
 		
-		double topRX = (this.point.x + this.row) * this.cellWidth;
+		double topRX = (this.point.x * this.cellWidth) + (this.row * this.cellWidth);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.point.y + this.column) * this.cellHeight;
+		double bottomLY = (this.point.y * this.cellHeight) + (this.column * this.cellHeight) - (this.cellHeight / 2);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;
-
 		
 		this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 		
 		this.lineSegments.add(new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY));
+		
+		this.lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
+		
+		this.lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
+		
+		this.circleCorners.add(new Circle(topLX, topLY, 0));
+		
+		this.circleCorners.add(new Circle(bottomLX, bottomLY, 0));
+		
+		//this.circleCorners.add(new Circle(topRX, topRY, 0));
+		
+		//this.circleCorners.add(new Circle(bottomRX, bottomRY, 0));
 		
 		
 	}
 
 	@Override
 	public double timeUntilCollision(iBall ball) {
-		double min;
+		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		
-		if(!this.lineSegments.isEmpty()){
-			min = Geometry.timeUntilWallCollision(this.lineSegments.get(0), ball.returnBounds(), ball.getVelocity());
-			
-			for(LineSegment l : this.lineSegments){
-				if(  ( newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity())) < min)
-					min = newMin;
-				
-			}
-		}else
-			min = Double.POSITIVE_INFINITY;
-			
+		for(LineSegment l : this.lineSegments){
+			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min)min = newMin;
+		}
+		
+		for(Circle c : this.circleCorners){
+			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min)min = newMin;
+		}
+		
 		return min;
 	}
 
 	@Override
 	public void collide(iBall ball) {
-
-		LineSegment minLS = this.lineSegments.get(0);
-		double min = Geometry.timeUntilWallCollision(this.lineSegments.get(0), ball.returnBounds(), ball.getVelocity());
+		double min = Double.POSITIVE_INFINITY;
 		double newMin;
+		LineSegment closestLine = null;
+		Circle closestCircle = null;
 		
 		for(LineSegment l : this.lineSegments){
-			if(  ( newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity())) < min){
+			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min){
 				min = newMin;
-				minLS = l;
-			}	
+				closestLine = l;
+			}
+		}
+		for(Circle c : this.circleCorners){
+			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min){
+				System.out.println(min);
+				min = newMin;
+				closestLine = null;
+				closestCircle = c;
+			}
 		}
 		
-		ball.setVelocity(Geometry.reflectWall(minLS, ball.getVelocity()));
+		if(closestLine != null)ball.setVelocity(Geometry.reflectWall(closestLine, ball.getVelocity()));
+		if(closestCircle != null)ball.setVelocity(
+					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
+				);
 	}
 
 }

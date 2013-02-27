@@ -37,9 +37,9 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int  timerInterval = 41;
+	private final int FPS = 24;
 
-	private final Dimension windowSize = new Dimension(640, 480);
+	private final Dimension windowSize = new Dimension(1000, 800);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
@@ -59,7 +59,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.GizmoCollection 	= new ArrayList<iGizmo>();
 		this.BallCollection		= new ArrayList<iBall>();
 		this.eventListener 		= new AnimationEventListener(GizmoCollection, BallCollection, abstractCanvas, gameGrid);
-		this.timer 				= new Timer(this.timerInterval, this.eventListener);
+		this.timer 				= new Timer(1000/this.FPS, this.eventListener);
         
 		/*
 		 * Add prototype Left and Right flippers to test against.

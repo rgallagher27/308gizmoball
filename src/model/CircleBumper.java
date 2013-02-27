@@ -3,11 +3,16 @@ package model;
 import java.awt.Point;
 import java.util.Observable;
 
+import model.physics.Circle;
+import model.physics.Geometry;
+import model.physics.Vect;
+
 public class CircleBumper extends Observable implements iGizmo {
 
 	protected Point point;
 	protected double row, column, cellWidth, cellHeight;
 	protected String identifier;
+	protected Circle physicsCircle;
 	
 	public CircleBumper(String identifier, Point p, double row, double column, double width, double height) {
 		this.point 			= p;
@@ -17,6 +22,7 @@ public class CircleBumper extends Observable implements iGizmo {
 		this.cellWidth		= width;
 		this.cellHeight		= height;
 		
+		this.physicsCircle = new Circle(new Vect(this.point.x * this.cellWidth, this.point.y * this.cellHeight), this.cellWidth / 2);
 	}
 
 	@Override
@@ -94,14 +100,15 @@ public class CircleBumper extends Observable implements iGizmo {
 
 	@Override
 	public double timeUntilCollision(iBall ball) {
-		// TODO Auto-generated method stub
-		return 100;
+		//return 1000;
+		return Geometry.timeUntilCircleCollision(this.physicsCircle, ball.returnBounds(), ball.getVelocity());
 	}
 
 	@Override
 	public void collide(iBall ball) {
-		// TODO Auto-generated method stub
-		
+		ball.setVelocity(
+					Geometry.reflectCircle(this.physicsCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
+				);
 	}
 
 }

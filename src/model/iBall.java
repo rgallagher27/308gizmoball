@@ -39,5 +39,5 @@ public interface iBall {
 	
 	public void setRotation(double r);
 	
-	public void move();
+	public void move(double deltaT);
 }

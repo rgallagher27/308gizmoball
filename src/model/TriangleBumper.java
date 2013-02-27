@@ -1,14 +1,14 @@
 package model;
 
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import model.physics.Angle;
 import model.physics.Geometry;
 import model.physics.LineSegment;
+import model.physics.Vect;
 
 public class TriangleBumper extends Observable implements iGizmo {
 
@@ -25,7 +25,6 @@ public class TriangleBumper extends Observable implements iGizmo {
 		this.rotation		= height;
 		this.identifier 	= identifier;
 		this.rotation       = 0;
-		this.lineSegments	= new ArrayList<LineSegment>();
 		
 		this.fillLineSegments();
 	}
@@ -73,6 +72,7 @@ public class TriangleBumper extends Observable implements iGizmo {
 	@Override
 	public void setRotation(double r) {
 		this.rotation = r;
+		this.fillLineSegments();
 	}
 
 	@Override
@@ -102,70 +102,72 @@ public class TriangleBumper extends Observable implements iGizmo {
 	
 	private void fillLineSegments()
 	{
-		double topLX = this.point.x * this.cellWidth;
-		double topLY = this.point.y * this.cellHeight;
+		this.lineSegments	= new ArrayList<LineSegment>();
 		
-		double topRX = (this.point.x + this.row) * this.cellWidth;
+		double topLX = (this.point.x * this.cellWidth) - (this.cellWidth / 2);
+		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
+		
+		double topRX = (this.point.x * this.cellWidth) + (this.row * this.cellWidth) - (this.cellWidth / 2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.point.y + this.column) * this.cellHeight;
+		double bottomLY = (this.point.y * this.cellHeight) + (this.column * this.cellHeight) - (this.cellHeight / 2);
 		
-		double centerX = this.point.x * (this.cellWidth / 2);
-		double centerY = this.point.y * (this.cellHeight / 2);
+		double centerX = (this.point.x * this.cellWidth)  + (this.cellWidth  / 2);
+		double centerY = (this.point.y * this.cellHeight) + (this.cellHeight / 2);
 		
-		this.rotatePoint(topLX, topLY, centerX, centerY);
-		this.rotatePoint(topRX, topRY, centerX, centerY);
-		this.rotatePoint(bottomLX, bottomLY, centerX, centerY);
+		lineSegments.add(
+				Geometry.rotateAround(
+						new LineSegment(topLX, topLY, topRX, topRY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
+						)
+				);
+		lineSegments.add(
+				Geometry.rotateAround(
+						new LineSegment(topLX, topLY, bottomLX, bottomLY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
+						)
+				);
+		lineSegments.add(
+				Geometry.rotateAround(
+						new LineSegment(bottomLX, bottomLY, topRX, topRY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
+						)
+				);
 		
-		lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
+		/*lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 		lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
-		lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
+		lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));*/
 		
-	}
-	
-	private Point2D.Double rotatePoint(double x, double y, double cX, double cY)
-	{
-		double[] pt = {x, y};
-		AffineTransform.getRotateInstance(Math.toRadians(this.rotation), cX, cY).transform(pt, 0, pt, 0, 1);
-		
-		return new Point2D.Double(pt[0], pt[1]);
 		
 	}
 
 	@Override
 	public double timeUntilCollision(iBall ball) {
-		double min;
+		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		
-		if(!this.lineSegments.isEmpty()){
-			min = Geometry.timeUntilWallCollision(this.lineSegments.get(0), ball.returnBounds(), ball.getVelocity());
-			
-			for(LineSegment l : this.lineSegments){
-				if(  ( newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity())) < min)
-					min = newMin;
-				
-			}
-		}else
-			min = Double.POSITIVE_INFINITY;
-			
+		for(LineSegment l : this.lineSegments){
+			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min)min = newMin;
+		}
+		
 		return min;
 	}
 
 	@Override
 	public void collide(iBall ball) {
-		LineSegment minLS = this.lineSegments.get(0);
-		double min = Geometry.timeUntilWallCollision(this.lineSegments.get(0), ball.returnBounds(), ball.getVelocity());
+		double min = Double.POSITIVE_INFINITY;
 		double newMin;
+		LineSegment closestLine = null;
 		
 		for(LineSegment l : this.lineSegments){
-			if(  ( newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity())) < min){
+			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
+			if(newMin < min){
+				System.out.println(min);
 				min = newMin;
-				minLS = l;
-			}	
+				closestLine = l;
+			}
 		}
 		
-		ball.setVelocity(Geometry.reflectWall(minLS, ball.getVelocity()));
+		if(closestLine != null)ball.setVelocity(Geometry.reflectWall(closestLine, ball.getVelocity()));
 	}
 
 }

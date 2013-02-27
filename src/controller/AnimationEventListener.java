@@ -19,11 +19,12 @@ import model.LeftFlipper;
 import model.RightFlipper;
 import model.iBall;
 import model.iGizmo;
-import model.physics.Geometry;
 import model.physics.Vect;
 import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
+	
+	private double DELTA_T = ((double)1) / 24;
 	
 	private List<iGizmo> gizmos;
 	private List<iBall> balls;
@@ -128,32 +129,51 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		double min;
-		for(iGizmo g : this.gizmos){
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iGizmo closestGizmo = null;
+		
+		/*
+		 * Move all the static Gizmos
+		 */
+		for(iGizmo g : this.gizmos)
+			g.move();
+		
+		/*
+		 * Move all the Balls while checking for possible
+		 * collisions with iGizmo objects
+		 */
+		for(iBall b : this.balls){
 			
-			if(!this.balls.isEmpty()){
-				iBall b = this.balls.get(0);
-				if( (min = g.timeUntilCollision(b)) == 0) {
-					
-					Point2D.Double tmp = b.getLocation();
-				
-					Vect tmpVect = b.getVelocity();
-					
-					tmp.x =  tmp.x + (tmpVect.x() * min);
-					tmp.y =  tmp.y + (tmpVect.y() * min);
-					
-					b.setLocation(tmp);
-					b.move();
-					
-					g.collide(b);
+			for(iGizmo g : this.gizmos){
+				double time = g.timeUntilCollision(b);
+				/*
+				 * Only deal with the closest object
+				 */
+				if(time < lowestTime){
+					lowestTime = time;
+					closestGizmo = g;
 				}
+			}
+			
+			if(lowestTime < DELTA_T && closestGizmo != null){
+				Point2D.Double tmpBall = b.getLocation();
+				
+				System.out.println(lowestTime);
+				
+				Vect tmpVect = b.getVelocity();
+				
+				tmpBall.x = tmpBall.x + (lowestTime * tmpVect.x());
+				tmpBall.y = tmpBall.y + (lowestTime * tmpVect.y());
+				
+				b.setLocation(tmpBall);
+				b.move(lowestTime);
+				
+				closestGizmo.collide(b);
+				
 			}else{
-				g.move();
+				b.move(DELTA_T);
 			}
 		}
-		
-		for(iBall b : this.balls)
-			b.move();
 	}
 
 	@Override
