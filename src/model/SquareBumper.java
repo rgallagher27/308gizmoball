@@ -108,7 +108,7 @@ public class SquareBumper extends Observable implements iGizmo {
 		double topLX = (this.point.x * this.cellWidth) - (this.cellWidth / 2);
 		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
 		
-		double topRX = (this.point.x * this.cellWidth) + (this.row * this.cellWidth)- (this.cellWidth / 2);
+		double topRX = (this.point.x * this.cellWidth) + (this.row * this.cellWidth) - (this.cellWidth / 2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;

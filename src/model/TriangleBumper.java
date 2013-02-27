@@ -103,6 +103,7 @@ public class TriangleBumper extends Observable implements iGizmo {
 	
 	private void fillLineSegments()
 	{
+		this.lineSegments   = null;
 		this.lineSegments	= new ArrayList<LineSegment>();
 		
 		double topLX = (this.point.x * this.cellWidth) - (this.cellWidth / 2);
@@ -114,29 +115,26 @@ public class TriangleBumper extends Observable implements iGizmo {
 		double bottomLX = topLX;
 		double bottomLY = (this.point.y * this.cellHeight) + (this.column * this.cellHeight) - (this.cellHeight / 2);
 		
+		double bottomRX = topRX;
+		double bottomRY = bottomLY;
+		
 		double centerX = (this.point.x * this.cellWidth)  + (this.cellWidth  / 2);
 		double centerY = (this.point.y * this.cellHeight) + (this.cellHeight / 2);
 		
-		lineSegments.add(
-				Geometry.rotateAround(
-						new LineSegment(topLX, topLY, topRX, topRY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
-						)
-				);
-		lineSegments.add(
-				Geometry.rotateAround(
-						new LineSegment(topLX, topLY, bottomLX, bottomLY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
-						)
-				);
-		lineSegments.add(
-				Geometry.rotateAround(
-						new LineSegment(bottomLX, bottomLY, topRX, topRY), new Vect(centerX, centerY), new Angle(Math.toRadians(this.rotation))
-						)
-				);
-		
-		/*lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
-		lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
-		lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));*/
-		
+		switch ((int)this.rotation) {
+		case 0:
+			lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
+			lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
+			lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
+			break;
+		case 90:
+			lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
+			lineSegments.add(new LineSegment(topRX, topRY,bottomRX, bottomRY));
+			lineSegments.add(new LineSegment(topLX, topLY, bottomRX, bottomRY));
+
+		default:
+			break;
+		}
 		
 	}
 
