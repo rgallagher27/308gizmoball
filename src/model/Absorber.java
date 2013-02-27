@@ -90,12 +90,9 @@ public class Absorber extends Observable implements iGizmo {
 			if((!this.capturedBalls.isEmpty())){
 				this.capturedBalls.get(0).setCaptured(false);
 				this.capturedBalls.remove(0);
-				
-				System.out.println("Releasing Ball Absorber");
-				
-				this.active = false;
 			}
 		}
+		this.active = false;
 	}
 
 	@Override
