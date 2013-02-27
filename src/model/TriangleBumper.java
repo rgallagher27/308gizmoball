@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import model.physics.Angle;
 import model.physics.Circle;
 import model.physics.Geometry;
 import model.physics.LineSegment;
-import model.physics.Vect;
 
 public class TriangleBumper extends Observable implements iGizmo {
 
