@@ -84,7 +84,6 @@ public class Gizmo extends Observable implements iGizmo {
 	@Override
 	public void setRotation(double r) {
 		this.rotation = r;
-		System.out.println(this.getClass().toString() + " rotating by " + r);
 	}
 
 	@Override

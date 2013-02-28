@@ -101,7 +101,6 @@ public class Ball extends Observable implements iBall {
 
 	@Override
 	public double getCellWidth() {
-		// TODO Auto-generated method stub
 		return this.cellWidth;
 	}
 
@@ -112,7 +111,6 @@ public class Ball extends Observable implements iBall {
 
 	@Override
 	public double getCellHeight() {
-		// TODO Auto-generated method stub
 		return this.cellHeight;
 	}
 
@@ -123,13 +121,11 @@ public class Ball extends Observable implements iBall {
 
 	@Override
 	public Circle returnBounds() {
-		// TODO Auto-generated method stub
 		return this.physicsCircle;
 	}
 
 	@Override
 	public Vect getVelocity() {
-		// TODO Auto-generated method stub
 		return this.velocity;
 	}
 
@@ -140,7 +136,6 @@ public class Ball extends Observable implements iBall {
 
 	@Override
 	public boolean isCaptured() {
-		// TODO Auto-generated method stub
 		return this.isCaptured;
 	}
 
