@@ -7,39 +7,32 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
-import java.util.List;
 
 import javax.swing.Timer;
 
 import model.Absorber;
-import model.GameGrid;
-import model.LeftFlipper;
-import model.RightFlipper;
 import model.iBall;
 import model.iGizmo;
+import model.iOverlord;
 import model.physics.Vect;
-import view.framework.G2DAbstractCanvas;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private final int FPS = 30;
+	private final int FPS = 60;
 	private final double DELTA_T = ((double)1) / FPS;
-	
-	private List<iGizmo> gizmos;
-	private List<iBall> balls;
-	private GameGrid gmGrid;
+
+	private iOverlord overlord;
 	
 	private Timer gameLoop;
 			
 
-	public AnimationEventListener(List<iGizmo> gizmos, List<iBall> balls, G2DAbstractCanvas absCanvas, GameGrid gmGrid) 
+	public AnimationEventListener(iOverlord ov) 
 	{
 		super();
-		this.gizmos = gizmos;
-		this.balls = balls;
-		this.gmGrid = gmGrid;
+		this.overlord 	= ov;
 		
-		this.gameLoop = new Timer(1000/FPS, this);
+		this.gameLoop 	= new Timer(1000/FPS, this);
+		
 		this.gameLoop.start();
 	}
 
@@ -55,7 +48,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		for(iGizmo g : gizmos){
+		/*for(iGizmo g : gizmos){
 			switch (event.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
 					if(g instanceof LeftFlipper)
@@ -73,7 +66,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 				default:
 					break;
 			}
-		}
+		}*/
 	}
 
 	/*
@@ -87,7 +80,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		switch (event.getKeyCode()) {
+		/*switch (event.getKeyCode()) {
 			case KeyEvent.VK_P:
 				this.gmGrid.printGrid();
 				break;
@@ -107,8 +100,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 					}
 				}
 				break;
-		}
-		
+		}*/
 	}
 
 	@Override
@@ -135,9 +127,9 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		 * Move all the Balls while checking for possible
 		 * collisions with iGizmo objects
 		 */
-		for(iBall b : this.balls){
+		for(iBall b : this.overlord.getAllballs()){
 			
-			for(iGizmo g : this.gizmos){
+			for(iGizmo g : this.overlord.getAllGizmos()){
 				double time = g.timeUntilCollision(b);
 				/*
 				 * Only deal with the closest object
@@ -150,8 +142,6 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 			
 			if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
 				Point2D.Double tmpBall = b.getLocation();
-				
-				System.out.println(lowestTime);
 				
 				Vect tmpVect = b.getVelocity();
 				
@@ -175,7 +165,7 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		/*
 		 * Move all the static Gizmos
 		 */
-		for(iGizmo g : this.gizmos)
+		for(iGizmo g : this.overlord.getAllGizmos())
 			g.move();
 	}
 

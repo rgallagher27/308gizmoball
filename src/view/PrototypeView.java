@@ -4,26 +4,23 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import model.Absorber;
 import model.CircleBumper;
-import model.FileParser;
 import model.Flipper;
 import model.GameGrid;
 import model.LeftFlipper;
+import model.Overlord;
 import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
-import model.Wall;
 import model.iBall;
 import model.iGizmo;
+import model.iOverlord;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
@@ -38,41 +35,28 @@ import controller.AnimationEventListener;
 public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
-	private final int FPS = 48;
 
 	private final Dimension windowSize = new Dimension(1000, 800);
 	private final Dimension canvasSize = new Dimension(1000, 1000);
+	private final Dimension gridSize   = new Dimension(20, 20);
 	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
 	
 	private AnimationEventListener eventListener;
 	
 	private G2DAbstractCanvas abstractCanvas;
-	private List<iGizmo> GizmoCollection;
-	private List<iBall> BallCollection;
 	
+	private iOverlord overlord;
 
 	public PrototypeView() {
 		super();
 		this.setPreferredSize(this.windowSize);
 		
+		this.overlord			= new Overlord(this.gridSize, this.canvasSize);
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
-		this.GizmoCollection 	= new ArrayList<iGizmo>();
-		this.BallCollection		= new ArrayList<iBall>();
-		this.eventListener 		= new AnimationEventListener(GizmoCollection, BallCollection, abstractCanvas, gameGrid);
-        
-		this.GizmoCollection.add(new Wall(this.gameGrid.getCellWidth(), this.gameGrid.getCellHeight(), this.gameGrid));
-        
-        FileParser fp = new FileParser( GizmoCollection, BallCollection,  gameGrid );
-        fp.loadFile("Input");
-        
-		/*
-		 * Add 'this' as an Observer to each Gizmo object.
-		 */
-		for(iGizmo g : GizmoCollection)
-			((Observable) g).addObserver(this);
+		this.eventListener 		= new AnimationEventListener(this.overlord);
 		
-		for(iBall b : BallCollection)
-			((Observable) b).addObserver(this);
+		this.overlord.addGizmoObserver(this);
+		this.overlord.addBallObserver(this);
 		
 		/*
 		 * Add event listener to key presses.
@@ -100,16 +84,16 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
 		
-		//this.drawGrid(this.abstractCanvas);
+		this.drawGrid(this.abstractCanvas);
 		
-		for(iGizmo gizmo : this.GizmoCollection)
+		for(iGizmo gizmo : this.overlord.getAllGizmos())
 			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
 			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
 			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
 		
-		for(iBall ball : BallCollection)
+		for(iBall ball : this.overlord.getAllballs())
 			this.drawBall(ball).draw(abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
@@ -129,7 +113,7 @@ public class PrototypeView extends JPanel implements Observer {
 		double x 				= ball.getLocation().getX();
 		double y 				= ball.getLocation().getY();
 		
-    	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.blue);
+    	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
     }
 	
 	private G2DObject drawFlipper(iGizmo flipper)

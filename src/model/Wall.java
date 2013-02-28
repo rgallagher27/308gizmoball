@@ -6,14 +6,11 @@ import model.physics.Circle;
 import model.physics.LineSegment;
 
 public class Wall extends Gizmo implements iGizmo {
-	
-	protected GameGrid gmGrid;
 
-	public Wall(double width, double height, GameGrid gmGrid) {
+	public Wall(double width, double height) {
 		super.identifier    = "WALL";
 		super.cellWidth		= width;
 		super.cellHeight 	= height;
-		this.gmGrid			= gmGrid;
 		
 		super.lineSegments  = new ArrayList<LineSegment>();
 		super.circles	    = new ArrayList<Circle>();
@@ -27,11 +24,11 @@ public class Wall extends Gizmo implements iGizmo {
 		double topLX = 0 - (this.cellWidth / 2);
 		double topLY = 0 - (this.cellHeight / 2);
 		
-		double topRX = (this.gmGrid.rows * this.cellWidth) - (this.cellWidth / 2);
+		double topRX = (20 * this.cellWidth) - (this.cellWidth / 2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.gmGrid.columns * this.cellHeight) - (this.cellHeight / 2);
+		double bottomLY = (20 * this.cellHeight) - (this.cellHeight / 2);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;

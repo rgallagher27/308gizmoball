@@ -8,13 +8,13 @@ import model.physics.LineSegment;
 
 public class SquareBumper extends Gizmo implements iGizmo {
 
-	public SquareBumper(String identifier, Point p, double row, double column, double width, double height) {
+	public SquareBumper(String identifier, Point p, double rowWidth, double columnHeight, double cellWidth, double cellHeight) {
 		super();
 		super.point 		= p;
-		super.rowWidth 		= row;
-		super.columnHeight  = column;
-		super.cellWidth		= width;
-		super.cellHeight 	= height;
+		super.rowWidth 		= rowWidth;
+		super.columnHeight  = columnHeight;
+		super.cellWidth		= cellWidth;
+		super.cellHeight 	= cellHeight;
 		super.identifier 	= identifier;
 		
 		super.lineSegments = new ArrayList<LineSegment>();
@@ -26,16 +26,14 @@ public class SquareBumper extends Gizmo implements iGizmo {
 
 	private void fillLineSegments()
 	{
-		double topLX = (this.point.x * this.cellWidth);
-		double topLY = (this.point.y * this.cellHeight);
+		double topLX = (this.point.x * this.cellWidth)  - ((this.rowWidth * this.cellWidth) / 2);
+		double topLY = (this.point.y * this.cellHeight) - ((this.columnHeight * this.cellHeight) / 2);
 		
-		System.out.println(topLX);
-		
-		double topRX = (this.point.x * this.cellWidth) + (this.rowWidth * this.cellWidth);
+		double topRX = topLX + (this.rowWidth * this.cellWidth);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.point.y * this.cellHeight) + (this.columnHeight * this.cellHeight);
+		double bottomLY = topLY + (this.columnHeight * this.cellHeight);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;

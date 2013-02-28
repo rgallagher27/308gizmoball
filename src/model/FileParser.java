@@ -15,12 +15,13 @@ public class FileParser {
     
     private List<iGizmo> gizmos;
     private List<iBall> balls;
-    private GameGrid gameGrid;
+    private double cellWidth, cellHeight;
     
-    public FileParser( List<iGizmo> g, List<iBall> b,  GameGrid gm ) {
+    public FileParser( List<iGizmo> g, List<iBall> b,  double cellWidth, double cellHeight ) {
         this.gizmos 	= g;
         this.balls 		= b;
-        this.gameGrid 	= gm;
+        this.cellWidth  = cellWidth;
+        this.cellHeight = cellHeight;
     }
     
     public void loadFile(String fileName) {
@@ -133,52 +134,40 @@ public class FileParser {
     
     private void addAbsorber(String id, int x, int y, int width, int height)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), width, height, true)){
-    		this.gizmos.add( new Absorber(id, new Point( x, y ), width, height, gameGrid.getCellWidth(), gameGrid.getCellHeight()) );
-    	}
+    	this.gizmos.add( new Absorber(id, new Point( x, y ), width, height, this.cellWidth, this.cellHeight) );
     }
     
     private void addBall(String id, double x, double y, double xV, double yV)
     {
-    	if(this.gameGrid.setGridPoint(new Point((int)x, (int)y), 1, 1, true)){
-    		iBall newBall = new Ball(id, new Point2D.Double( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight());
-    		newBall.setVelocity(new Vect(xV, yV));
-    		this.balls.add( newBall);
-    	}
+		iBall newBall = new Ball(id, new Point2D.Double( x, y ), 1, 1, this.cellWidth, this.cellHeight);
+		newBall.setVelocity(new Vect(xV, yV));
+		this.balls.add( newBall);
     }
     
     private void addCircle(String id, int x, int y)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-    		this.gizmos.add(new CircleBumper(id, new Point(x, y), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
-    	}
+    	this.gizmos.add(new CircleBumper(id, new Point(x, y), 1, 1, this.cellWidth, this.cellHeight));
     }
     
     private void addFlipper(String id, String type, int x, int y)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), 2, 2, true)){
-	    	if(type.equals("L")){
-	    		this.gizmos.add(
-            			new LeftFlipper(id, new Point(x, y),1, 2, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
-	    	}else if(type.equals("R")){
-	    		this.gizmos.add(
-            			new RightFlipper(id, new Point(x, y),1, 2, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
-	    	}
+    	if(type.equals("L")){
+    		this.gizmos.add(
+        			new LeftFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight));
+    	}else if(type.equals("R")){
+    		this.gizmos.add(
+        			new RightFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight));
     	}
     }
     
     private void addSquare(String id, int x, int y)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-    		this.gizmos.add( new SquareBumper(id, new Point( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
-    	}
+    	this.gizmos.add( new SquareBumper(id, new Point( x, y ), 1, 1, this.cellWidth, this.cellHeight));
     }
     
     private void addTriangel(String id, int x, int y)
     {
-    	if(this.gameGrid.setGridPoint(new Point(x, y), 1, 1, true)){
-    		this.gizmos.add( new TriangleBumper(id, new Point( x, y ), 1, 1, gameGrid.getCellWidth(), gameGrid.getCellHeight()));
-    	}
+    	this.gizmos.add( new TriangleBumper(id, new Point( x, y ), 1, 1, this.cellWidth, this.cellHeight));
     }
     
 }

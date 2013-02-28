@@ -31,18 +31,4 @@ public class Flipper extends Gizmo implements iGizmo {
 	{
 		this.active = b;
 	}
-
-	@Override
-	public void move() {
-		/*
-		 * Implemented in extended classes
-		 */
-	}
-
-	@Override
-	public void setRotation(double r) {
-		/*
-		 * Implemented in extended classes
-		 */
-	}
 }
