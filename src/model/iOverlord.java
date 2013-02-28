@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observer;
@@ -14,9 +15,9 @@ public interface iOverlord {
 	
 	public iBall getBall(String identifier);
 	
-	public Map<Integer, iGizmo> getGizmoDownKeytriggers();
+	public Map<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers();
 	
-	public Map<Integer, iGizmo> getGizmoUpKeytriggers();
+	public Map<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers();
 	
 	
 	/*

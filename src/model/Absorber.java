@@ -28,9 +28,10 @@ public class Absorber extends Gizmo implements iGizmo {
 		this.fillLineSegments();
 	}
 	
-	public void releaseBall()
+	@Override
+	public void performAction(boolean a)
 	{
-		this.active = true;
+		this.active = a;
 	}
 
 	@Override

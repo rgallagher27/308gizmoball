@@ -18,8 +18,8 @@ public class Overlord implements iOverlord {
 	
 	private List<iGizmo> gizmoObjects;
 	private List<iBall> ballObjects;
-	private Map<Integer, iGizmo> gizmoDownTriggers;
-	private Map<Integer, iGizmo> gizmoUpTriggers;
+	private Map<Integer, ArrayList<iGizmo>> gizmoDownTriggers;
+	private Map<Integer, ArrayList<iGizmo>> gizmoUpTriggers;
 	private FileParser fileParser;
 	
 	private double cellWidth, cellHeight;
@@ -33,10 +33,10 @@ public class Overlord implements iOverlord {
 		
 		this.gizmoObjects 		= new ArrayList<iGizmo>();
 		this.ballObjects		= new ArrayList<iBall>();
-		this.gizmoDownTriggers	= new HashMap<Integer, iGizmo>();
-		this.gizmoUpTriggers	= new HashMap<Integer, iGizmo>();
+		this.gizmoDownTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
+		this.gizmoUpTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
 	
-		this.fileParser			= new FileParser(this, gizmoObjects, ballObjects, this.cellWidth, this.cellHeight);
+		this.fileParser			= new FileParser(this);
 		
 		this.fileParser.loadFile("Input");
 		
@@ -80,13 +80,13 @@ public class Overlord implements iOverlord {
 		for(iBall b : this.ballObjects) ((Observable)b).addObserver(o);
 	}
 
-	public Map<Integer, iGizmo> getGizmoDownKeytriggers()
+	public Map<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers()
 	{
 		return this.gizmoDownTriggers;
 	}
 
 	@Override
-	public Map<Integer, iGizmo> getGizmoUpKeytriggers() {
+	public Map<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers() {
 		return this.gizmoUpTriggers;
 	}
 	
@@ -159,11 +159,23 @@ public class Overlord implements iOverlord {
     {
     	switch (type) {
 		case "down":
-			this.gizmoDownTriggers.put(keyCode, this.getGizmo(consumer));
+			if(this.gizmoDownTriggers.containsKey(keyCode)){
+				this.gizmoDownTriggers.get(keyCode).add(this.getGizmo(consumer));
+			}else {
+				ArrayList<iGizmo> newList  = new ArrayList<iGizmo>();
+								  newList.add(this.getGizmo(consumer));
+				this.gizmoDownTriggers.put(keyCode, newList);
+			}
 			break;
 
 		case "up":
-			this.gizmoUpTriggers.put(keyCode, this.getGizmo(consumer));
+			if(this.gizmoUpTriggers.containsKey(keyCode)){
+				this.gizmoUpTriggers.get(keyCode).add(this.getGizmo(consumer));
+			}else {
+				ArrayList<iGizmo> newList  = new ArrayList<iGizmo>();
+								  newList.add(this.getGizmo(consumer));
+				this.gizmoUpTriggers.put(keyCode, newList);
+			}
 			break;
 		default:
 			break;

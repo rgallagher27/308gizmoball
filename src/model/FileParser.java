@@ -1,29 +1,17 @@
 package model;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
-
-import model.physics.Vect;
 
 public class FileParser {
     
 	private iOverlord overlord;
-    private List<iGizmo> gizmos;
-    private List<iBall> balls;
-    private double cellWidth, cellHeight;
     
-    public FileParser(iOverlord overlord, List<iGizmo> g, List<iBall> b,  double cellWidth, double cellHeight ) {
+    public FileParser(iOverlord overlord ) {
     	this.overlord 	= overlord;
-        this.gizmos 	= g;
-        this.balls 		= b;
-        this.cellWidth  = cellWidth;
-        this.cellHeight = cellHeight;
     }
     
     public void loadFile(String fileName) {

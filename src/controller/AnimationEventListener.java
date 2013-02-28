@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -50,14 +51,17 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		 Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
-		    while (it.hasNext()) {
-		        Map.Entry pairs = (Map.Entry)it.next();
-		        
-		        if((int)pairs.getKey() == event.getKeyCode()){
-		        	((iGizmo)pairs.getValue()).performAction(true);
+		Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        
+	        for(iGizmo gizmo : (ArrayList<iGizmo>)pairs.getValue()){
+	        	if((int)pairs.getKey() == event.getKeyCode()){
+		        	gizmo.performAction(true);
 		        }
-		    }
+	        }
+	    }
 	}
 
 	/*
@@ -71,12 +75,15 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		Iterator it = this.overlord.getGizmoUpKeytriggers().entrySet().iterator();
+		Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
 	        
-	        if((int)pairs.getKey() == event.getKeyCode()){
-	        	((iGizmo)pairs.getValue()).performAction(false);
+	        for(iGizmo gizmo : (ArrayList<iGizmo>)pairs.getValue()){
+	        	if((int)pairs.getKey() == event.getKeyCode()){
+		        	gizmo.performAction(false);
+		        }
 	        }
 	    }
 	}
@@ -97,47 +104,13 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) 
-	{
-		double lowestTime = Double.POSITIVE_INFINITY;
-		iGizmo closestGizmo = null;
-		
+	{	
 		/*
 		 * Move all the Balls while checking for possible
 		 * collisions with iGizmo objects
 		 */
 		for(iBall b : this.overlord.getAllballs()){
-			
-			for(iGizmo g : this.overlord.getAllGizmos()){
-				double time = g.timeUntilCollision(b);
-				/*
-				 * Only deal with the closest object
-				 */
-				if(time < lowestTime){
-					lowestTime = time;
-					closestGizmo = g;
-				}
-			}
-			
-			if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
-				Point2D.Double tmpBall = b.getLocation();
-				
-				Vect tmpVect = b.getVelocity();
-				
-				tmpBall.x = tmpBall.x + (lowestTime * tmpVect.x());
-				tmpBall.y = tmpBall.y + (lowestTime * tmpVect.y());
-				
-				b.setLocation(tmpBall);
-				b.move(lowestTime);
-				
-				if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
-				else{
-					((Absorber)closestGizmo).captureBall(b);
-					b.setCaptured(true);
-				}
-				
-			}else{
-				b.move(DELTA_T);
-			}
+			this.ballCollision(b);
 		}
 		
 		/*
@@ -145,6 +118,45 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 		 */
 		for(iGizmo g : this.overlord.getAllGizmos())
 			g.move();
+	}
+	
+	private void ballCollision(iBall b)
+	{
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iGizmo closestGizmo = null;
+		
+		for(iGizmo g : this.overlord.getAllGizmos()){
+			double time = g.timeUntilCollision(b);
+			/*
+			 * Only deal with the closest object
+			 */
+			if(time < lowestTime){
+				lowestTime = time;
+				closestGizmo = g;
+			}
+		}
+		
+		if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
+			Point2D.Double tmpBall = b.getLocation();
+			
+			Vect tmpVect = b.getVelocity();
+			
+			tmpBall.x = tmpBall.x + (lowestTime * tmpVect.x());
+			tmpBall.y = tmpBall.y + (lowestTime * tmpVect.y());
+			
+			b.setLocation(tmpBall);
+			b.move(lowestTime);
+			
+			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
+			else{
+				((Absorber)closestGizmo).captureBall(b);
+				b.setCaptured(true);
+			}
+			
+		}else{
+			b.move(DELTA_T);
+			return;
+		}
 	}
 
 	@Override
