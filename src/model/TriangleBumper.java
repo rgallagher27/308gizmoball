@@ -21,6 +21,11 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		
 		this.fillLineSegments();
 	}
+	@Override
+	public void setRotation(double r) {
+		this.rotation = r;
+		this.fillLineSegments();
+	}
 	
 	private void fillLineSegments()
 	{
@@ -42,36 +47,36 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		double bottomRY = bottomLY;
 	
 		switch ((int)super.rotation) {
-		case 0:
-			lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
-			lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
-			lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
-			
-			circles.add(new Circle(topLX, topLY, 0));
-			circles.add(new Circle(topRX, topRY, 0));
-			circles.add(new Circle(bottomLX, bottomLY, 0));
-			
-			break;
-		case 90:
-			lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
-			lineSegments.add(new LineSegment(topRX, topRY,bottomRX, bottomRY));
-			lineSegments.add(new LineSegment(topLX, topLY, bottomRX, bottomRY));
-			
-			circles.add(new Circle(topLX, topLY, 0));
-			circles.add(new Circle(topRX, topRY, 0));
-			circles.add(new Circle(bottomRX, bottomRY, 0));
-			break;
-		case 180:
-			lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
-			lineSegments.add(new LineSegment(topRX, topRY,bottomRX, bottomRY));
-			lineSegments.add(new LineSegment(bottomRX, bottomRY, bottomLX, bottomLY));
-			
-			circles.add(new Circle(topRX, topRY, 0));
-			circles.add(new Circle(bottomLX, bottomLY, 0));
-			circles.add(new Circle(bottomRX, bottomRY, 0));
-
-		default:
-			break;
+			case 0:
+				lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
+				lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
+				lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
+				
+				circles.add(new Circle(topLX, topLY, 0));
+				circles.add(new Circle(topRX, topRY, 0));
+				circles.add(new Circle(bottomLX, bottomLY, 0));
+				
+				break;
+			case 90:
+				lineSegments.add(new LineSegment(topLX, topLY, bottomRX, bottomRY));
+				lineSegments.add(new LineSegment(bottomRX, bottomRY, topRX, topRY));
+				lineSegments.add(new LineSegment(topRX, topRY, topLX, topLY));
+				
+				circles.add(new Circle(topLX, topLY, 0));
+				circles.add(new Circle(bottomRX, bottomRY, 0));
+				circles.add(new Circle(topRX, topRY, 0));
+				break;
+			case 180:
+				lineSegments.add(new LineSegment(bottomLX, bottomLY, topRX, topRY));
+				lineSegments.add(new LineSegment(topRX, topRY,bottomRX, bottomRY));
+				lineSegments.add(new LineSegment(bottomRX, bottomRY, bottomLX, bottomLY));
+				
+				circles.add(new Circle(topRX, topRY, 0));
+				circles.add(new Circle(bottomLX, bottomLY, 0));
+				circles.add(new Circle(bottomRX, bottomRY, 0));
+	
+			default:
+				break;
 		}
 		
 	}
