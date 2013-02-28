@@ -204,6 +204,8 @@ public class Overlord extends Observable implements iOverlord {
 			else{
 				((Absorber)closestGizmo).captureBall(b);
 				b.setCaptured(true);
+				
+				((Absorber)closestGizmo).performAction(true);
 			}
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
