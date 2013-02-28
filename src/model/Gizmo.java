@@ -136,8 +136,12 @@ public class Gizmo extends Observable implements iGizmo {
 	}
 
 	@Override
+	public void performAction(boolean a) {
+		
+	}
+
+	@Override
 	public void move() {
 		// TODO Auto-generated method stub
 	}
-
 }

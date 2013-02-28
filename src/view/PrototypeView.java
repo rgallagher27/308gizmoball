@@ -36,10 +36,10 @@ public class PrototypeView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Dimension windowSize = new Dimension(1000, 800);
-	private final Dimension canvasSize = new Dimension(1000, 1000);
-	private final Dimension gridSize   = new Dimension(20, 20);
-	private final GameGrid gameGrid	   = new GameGrid(20, 20, this.canvasSize);
+	private final Dimension windowSize 		= new Dimension(1000, 800);
+	private final Dimension canvasSize 		= new Dimension(1000, 1000);
+	private final Dimension gridSize   		= new Dimension(20, 20);
+	private final GizmoFactory gizmoFactory = new GizmoFactory();
 	
 	private AnimationEventListener eventListener;
 	
@@ -84,17 +84,17 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
 		
-		this.drawGrid(this.abstractCanvas);
+		this.gizmoFactory.drawGrid(this.abstractCanvas, 20, 20, 50, 50);
 		
 		for(iGizmo gizmo : this.overlord.getAllGizmos())
-			if(gizmo instanceof Flipper) this.drawFlipper(gizmo).draw(this.abstractCanvas);
-			else if(gizmo instanceof SquareBumper)this.drawSquareBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof CircleBumper)this.drawCircleBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof Absorber)this.drawAbsorber(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof TriangleBumper)this.drawTriangleBumper(gizmo).draw(abstractCanvas);
+			if(gizmo instanceof Flipper) this.gizmoFactory.drawFlipper(gizmo).draw(this.abstractCanvas);
+			else if(gizmo instanceof SquareBumper)this.gizmoFactory.drawSquareBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof CircleBumper)this.gizmoFactory.drawCircleBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof Absorber)this.gizmoFactory.drawAbsorber(gizmo).draw(abstractCanvas);
+			else if(gizmo instanceof TriangleBumper)this.gizmoFactory.drawTriangleBumper(gizmo).draw(abstractCanvas);
 		
 		for(iBall ball : this.overlord.getAllballs())
-			this.drawBall(ball).draw(abstractCanvas);
+			this.gizmoFactory.drawBall(ball).draw(abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -105,162 +105,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.repaint();
 	}
     
-    public G2DObject drawBall(iBall ball)
-    {
-        double cellWidth 		= this.gameGrid.getCellWidth();
-		double cellheight 		= this.gameGrid.getCellHeight();
-
-		double x 				= ball.getLocation().getX();
-		double y 				= ball.getLocation().getY();
-		
-    	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
-    }
-	
-	private G2DObject drawFlipper(iGizmo flipper)
-	{	
-		
-		double flipperX = 0;
-		double flipperY = 0;
-		double cellWidth 			= flipper.getCellWidth();
-		double cellheight 			= flipper.getCellHeight();
-		double flipperGridX			= flipper.getLocation().x;
-		double flipperGridY        	= flipper.getLocation().y;
-		double flipperGridWidth 	= flipper.getRowWidth();
-		double flipperGridHeight	= flipper.getColumnHeight();
-		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-		double flipperHeight 		= (flipperGridHeight * cellheight);
-		
-		if(flipper instanceof LeftFlipper){
-			flipperX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
-			flipperY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
-		}else if(flipper instanceof RightFlipper){
-			flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
-			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
-		}
-		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight);
-        
-		this.rotateObjectAroundSelf(flipper.getRotation(),
-									flipperGroup,
-									flipperX,
-									flipperY);
-		return flipperGroup;
-	}
-
-    public G2DObject drawAbsorber(iGizmo absorber)
-    {
-        double cellWidth 		= absorber.getCellWidth();
-		double cellheight 		= absorber.getCellHeight();
-		
-		double x 				= absorber.getLocation().getX() * cellWidth;
-		double y 				= absorber.getLocation().getY() * cellheight;
-    	
-    	return new G2DRectangle(new G2DPoint( x , y ), 
-    			                new G2DPoint( x + (absorber.getRowWidth() * cellWidth), y + (absorber.getColumnHeight() * cellheight)), 
-    			                Color.red);
-    }
-	
-	private G2DObject drawSquareBumper(iGizmo bumper)
-    {
-        double cellWidth 		= bumper.getCellWidth();
-		double cellheight 		= bumper.getCellHeight();
-		
-		double x = bumper.getLocation().getX();
-		double y = bumper.getLocation().getY();
-    	
-    	return new G2DRectangle(x*cellWidth,
-				                y*cellheight,
-				                (x*cellWidth)+(cellWidth),
-				                (y*cellheight)+(cellheight),
-				                Color.red);
-    }
     
-    public G2DObject drawTriangleBumper(iGizmo triangle)
-    {
-        double cellWidth 		= triangle.getCellWidth();
-		double cellheight 		= triangle.getCellHeight();
-		
-		double x 				= triangle.getLocation().getX();
-		double y 				= triangle.getLocation().getY();
-		
-		G2DObject newTriangle = new G2DTriangle((int)(x*cellWidth),
-					                (int)(y*cellheight),
-					                (int)cellWidth,
-					                (int)cellheight,
-					                Color.blue);
-		
-		this.rotateObjectAroundSelf( triangle.getRotation(), newTriangle, 
-									 (x * cellWidth) + (cellWidth / 2), 
-									 (y * cellheight) + (cellheight / 2)
-									);
-    	
-    	return newTriangle;
-    }
-	
-	public G2DObject drawCircleBumper(iGizmo circle)
-    {
-        double cellWidth 		= circle.getCellWidth();
-		double cellheight 		= circle.getCellHeight();
-		
-		double x 				= circle.getLocation().getX();
-		double y 				= circle.getLocation().getY();
-		
-		return new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
-							circle.getRowWidth() * (cellWidth / 2),
-							Color.green);
-    }
-	
-	private void drawGrid(G2DAbstractCanvas canvas)
-	{
-		for(int i = 0; i <= this.gameGrid.getRowWidth(); i++){
-			int startPointX  = (int) (i * this.gameGrid.getCellWidth());
-			int startPointY  = 0;
-			int endPointX 	 = startPointX;
-			int endPointY    = (int) (startPointY + (this.gameGrid.getColumnHeight() * this.gameGrid.getCellHeight()));
-			
-			G2DLine line = new G2DLine(new G2DPoint(startPointX, startPointY), new G2DPoint(endPointX, endPointY), Color.gray);
-			line.draw(canvas);
-		}
-		
-		for(int i = 0; i <= this.gameGrid.getColumnHeight(); i++){
-			int startPointX  = 0;
-			int startPointY  = (int) (i * this.gameGrid.getCellHeight());
-			int endPointX 	 = (int) (startPointX + (this.gameGrid.getRowWidth() * this.gameGrid.getCellWidth()));
-			int endPointY    = startPointY;
-			
-			G2DLine line = new G2DLine(new G2DPoint(startPointX, startPointY), new G2DPoint(endPointX, endPointY), Color.gray);
-			line.draw(canvas);
-		}
-	}
-
-	/*
-	 * A private method to perform the rotation matrix calculations.
-	 * 
-	 * Steps needed to rotate:
-	 * 		*Move the objects center to the origin (0,0).
-	 * 		*Rotate the Object.
-	 * 		*Move the objects center back to its original position.
-	 */
-	private void rotateObjectAroundSelf(double rotationDegree, G2DObject object, double X, double Y)
-	{			
-		double[][] movetoorigin = 	{ {1.0, 0.0, -X} , 
-									  {0.0, 1.0, -Y}, 
-									  {0.0, 0.0, 1.0} 
-									};
-		
-		double[][] rotate = { {Math.cos(Math.toRadians(rotationDegree)), -Math.sin(Math.toRadians(rotationDegree)), 0.0}, 
-							  {Math.sin(Math.toRadians(rotationDegree)), Math.cos(Math.toRadians(rotationDegree)), 0.0}, 
-							  {0.0, 0.0, 1.0} 
-							};
-		
-		double[][] movetostart = { {1.0, 0.0, X} , 
-								   {0.0, 1.0, Y}, 
-								   {0.0, 0.0, 1.0} 
-								 };
-
-		object.transform(new Matrix(movetoorigin));
-		object.transform(new Matrix(rotate));
-		object.transform(new Matrix(movetostart));
-	}
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }

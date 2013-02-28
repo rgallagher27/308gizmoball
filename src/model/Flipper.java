@@ -22,13 +22,13 @@ public class Flipper extends Gizmo implements iGizmo {
 		super.identifier 		= identifier;
 		
 		super.lineSegments 		= new ArrayList<LineSegment>();
-		super.circles		= new ArrayList<Circle>();
+		super.circles			= new ArrayList<Circle>();
 		
 		this.active 			= false;
 	}
-	
-	public void toggleFlipper(boolean b)
-	{
-		this.active = b;
+
+	@Override
+	public void performAction(boolean a) {
+		this.active = a;
 	}
 }

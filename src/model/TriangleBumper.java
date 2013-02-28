@@ -17,7 +17,7 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		super.cellHeight    = height;
 		super.rotation		= height;
 		super.identifier 	= identifier;
-		super.rotation		= 180;
+		super.rotation		= 0;
 		
 		this.fillLineSegments();
 	}

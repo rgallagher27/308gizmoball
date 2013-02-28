@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.Timer;
 
@@ -18,7 +20,7 @@ import model.physics.Vect;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private final int FPS = 60;
+	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
 
 	private iOverlord overlord;
@@ -48,25 +50,14 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		/*for(iGizmo g : gizmos){
-			switch (event.getKeyCode()) {
-				case KeyEvent.VK_LEFT:
-					if(g instanceof LeftFlipper)
-						((LeftFlipper) g).toggleFlipper(true);
-					break;
-				case KeyEvent.VK_RIGHT:
-					if(g instanceof RightFlipper)
-						((RightFlipper) g).toggleFlipper(true);
-					break;
-				case KeyEvent.VK_SPACE:
-					if(g instanceof Absorber){
-						System.out.println("Releasing ball");
-						((Absorber)g).releaseBall();
-					}
-				default:
-					break;
-			}
-		}*/
+		 Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		    while (it.hasNext()) {
+		        Map.Entry pairs = (Map.Entry)it.next();
+		        
+		        if((int)pairs.getKey() == event.getKeyCode()){
+		        	((iGizmo)pairs.getValue()).performAction(true);
+		        }
+		    }
 	}
 
 	/*
@@ -80,27 +71,14 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		/*switch (event.getKeyCode()) {
-			case KeyEvent.VK_P:
-				this.gmGrid.printGrid();
-				break;
-			default:
-				for(iGizmo g : gizmos){
-					switch (event.getKeyCode()) {
-						case KeyEvent.VK_LEFT:
-							if(g instanceof LeftFlipper)
-								((LeftFlipper) g).toggleFlipper(false);
-							break;
-						case KeyEvent.VK_RIGHT:
-							if(g instanceof RightFlipper)
-								((RightFlipper) g).toggleFlipper(false);
-							break;
-						default:
-							break;
-					}
-				}
-				break;
-		}*/
+		Iterator it = this.overlord.getGizmoUpKeytriggers().entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pairs = (Map.Entry)it.next();
+	        
+	        if((int)pairs.getKey() == event.getKeyCode()){
+	        	((iGizmo)pairs.getValue()).performAction(false);
+	        }
+	    }
 	}
 
 	@Override

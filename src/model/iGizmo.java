@@ -34,6 +34,8 @@ public interface iGizmo {
 	
 	public void collide(iBall ball);
 	
+	public void performAction(boolean a);
+	
 	public void move();
 
 }
