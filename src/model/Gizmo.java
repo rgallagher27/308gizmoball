@@ -106,6 +106,7 @@ public class Gizmo extends Observable implements iGizmo {
 
 	@Override
 	public void collide(iBall ball) {
+		if(ball.equals(null))return;
 		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		LineSegment closestLine = null;
@@ -121,7 +122,6 @@ public class Gizmo extends Observable implements iGizmo {
 		for(Circle c : this.circles){
 			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
-				System.out.println(min);
 				min = newMin;
 				closestLine = null;
 				closestCircle = c;

@@ -19,6 +19,13 @@ public interface iOverlord {
 	
 	public Map<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers();
 	
+	/*
+	 * Collision methods
+	 */
+	 
+	public double collideGizmos(iBall b, double Current_Delta_T);
+	
+	public double collideBalls(iBall b, double Current_Delta_T);
 	
 	/*
 	 * Gizmo and Ball addition methods

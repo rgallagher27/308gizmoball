@@ -12,7 +12,7 @@ import java.util.Observer;
 
 import model.physics.Vect;
 
-public class Overlord implements iOverlord {
+public class Overlord extends Observable implements iOverlord {
 	
 	private Dimension gridDimentions, canvasDimentions;
 	
@@ -35,12 +35,11 @@ public class Overlord implements iOverlord {
 		this.ballObjects		= new ArrayList<iBall>();
 		this.gizmoDownTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
 		this.gizmoUpTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
-	
 		this.fileParser			= new FileParser(this);
 		
-		this.fileParser.loadFile("Input");
-		
 		this.gizmoObjects.add(new Wall(cellWidth, cellHeight));
+		
+		this.fileParser.loadFile("Input");
 
 	}
 
@@ -181,4 +180,61 @@ public class Overlord implements iOverlord {
 			break;
 		}
     }
+
+	@Override
+	public double collideGizmos(iBall b, double Current_Delta_T) {
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iGizmo closestGizmo = null;
+		
+		for(iGizmo g : this.gizmoObjects){
+			double time = g.timeUntilCollision(b);
+			/*
+			 * Only deal with the closest object
+			 */
+			if(time < lowestTime){
+				lowestTime = time;
+				closestGizmo = g;
+			}
+		}
+		
+		
+		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
+			
+			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
+			else{
+				((Absorber)closestGizmo).captureBall(b);
+				b.setCaptured(true);
+			}
+			Current_Delta_T -= lowestTime;
+			return Current_Delta_T;
+			
+		}else{
+			return Current_Delta_T;
+		}
+	}
+
+	@Override
+	public double collideBalls(iBall b, double Current_Delta_T) {
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iBall closestBall = null;
+		
+		for(iBall b2 : this.ballObjects){
+			double time = b2.timeUntilCollision(b);
+			/*
+			 * Only deal with the closest object
+			 */
+			if(time < lowestTime){
+				lowestTime = time;
+				closestBall = b2;
+			}
+		}
+		
+		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
+			closestBall.collide(b);
+			Current_Delta_T -= lowestTime;
+			return Current_Delta_T;
+		}else{
+			return Current_Delta_T;
+		}
+	}
 }

@@ -6,22 +6,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.Timer;
 
-import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
-import model.physics.Vect;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private final int FPS = 30;
+	private final int FPS = 60;
 	private final double DELTA_T = ((double)1) / FPS;
 
 	private iOverlord overlord;
@@ -105,58 +102,27 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{	
+		double Current_Delta_T = this.DELTA_T;
 		/*
 		 * Move all the Balls while checking for possible
-		 * collisions with iGizmo objects
+		 * collisions with iGizmo  and iBall objects
 		 */
 		for(iBall b : this.overlord.getAllballs()){
-			this.ballCollision(b);
+			
+			for(int i = 0; i < 100; i++){
+				Current_Delta_T = this.overlord.collideBalls(b, Current_Delta_T);
+				Current_Delta_T = this.overlord.collideGizmos(b, Current_Delta_T);
+				b.move(Current_Delta_T);
+			}
 		}
-		
+		for(iBall b : this.overlord.getAllballs()){
+			b.move(DELTA_T);
+		}
 		/*
 		 * Move all the static Gizmos
 		 */
 		for(iGizmo g : this.overlord.getAllGizmos())
 			g.move();
-	}
-	
-	private void ballCollision(iBall b)
-	{
-		double lowestTime = Double.POSITIVE_INFINITY;
-		iGizmo closestGizmo = null;
-		
-		for(iGizmo g : this.overlord.getAllGizmos()){
-			double time = g.timeUntilCollision(b);
-			/*
-			 * Only deal with the closest object
-			 */
-			if(time < lowestTime){
-				lowestTime = time;
-				closestGizmo = g;
-			}
-		}
-		
-		if(lowestTime < DELTA_T  && closestGizmo != null && !b.isCaptured()){
-			Point2D.Double tmpBall = b.getLocation();
-			
-			Vect tmpVect = b.getVelocity();
-			
-			tmpBall.x = tmpBall.x + (lowestTime * tmpVect.x());
-			tmpBall.y = tmpBall.y + (lowestTime * tmpVect.y());
-			
-			b.setLocation(tmpBall);
-			b.move(lowestTime);
-			
-			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
-			else{
-				((Absorber)closestGizmo).captureBall(b);
-				b.setCaptured(true);
-			}
-			
-		}else{
-			b.move(DELTA_T);
-			return;
-		}
 	}
 
 	@Override

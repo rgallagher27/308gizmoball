@@ -68,7 +68,11 @@ Ball B 7 15 0 0
 Ball B 8 15 0 0
 Ball B 9 15 0 0
 
-Ball B 15 0 -4 0
-Ball B 16 0 -4 0
-Ball B 17 0 -4 0
-Ball B 18 0 -4 0
+Ball B 6 16 0 0
+Ball B 7 17 0 0
+Ball B 8 18 0 0
+
+Ball B 15 1 -1 0
+Ball B 16 1 -1 0
+Ball B 17 1 -1 0
+Ball B 18 1 -1 0

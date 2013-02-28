@@ -1,11 +1,13 @@
 package model;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
+import model.physics.Vect;
 
 public class Absorber extends Gizmo implements iGizmo {
 
@@ -22,7 +24,7 @@ public class Absorber extends Gizmo implements iGizmo {
 		this.active 		= false;
 		
 		super.lineSegments 	= new ArrayList<LineSegment>();
-		super.circles	= new ArrayList<Circle>();
+		super.circles		= new ArrayList<Circle>();
 		this.capturedBalls 	= new ArrayList<iBall>();
 		
 		this.fillLineSegments();
@@ -38,7 +40,10 @@ public class Absorber extends Gizmo implements iGizmo {
 	public void move() {
 		if(this.active){
 			if((!this.capturedBalls.isEmpty())){
-				this.capturedBalls.get(0).setCaptured(false);
+				iBall b = this.capturedBalls.get(0);
+					  b.setVelocity(new Vect(0, -2));
+					  b.setLocation(new Point2D.Double(19, 18));
+					  b.setCaptured(false);
 				this.capturedBalls.remove(0);
 			}
 		}

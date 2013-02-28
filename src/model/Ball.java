@@ -4,13 +4,15 @@ import java.awt.geom.Point2D;
 import java.util.Observable;
 
 import model.physics.Circle;
+import model.physics.Geometry;
+import model.physics.Geometry.VectPair;
 import model.physics.Vect;
 
 public class Ball extends Observable implements iBall {
 
 	protected Point2D.Double point;
 	protected double row, column, cellWidth, cellHeight;
-	protected Vect gravity;
+	protected double gravity;
 	protected Vect velocity;
 	protected Circle physicsCircle;
 	protected String identifier;
@@ -25,7 +27,7 @@ public class Ball extends Observable implements iBall {
 		this.cellWidth		= width;
 		this.cellHeight		= height;
 		this.physicsCircle	= new Circle(this.point, this.cellWidth/4);
-		this.gravity 		= new Vect(0, 25);
+		this.gravity 		= (double)1/25;
 		this.velocity 		= new Vect(0, 0);
 		this.isCaptured		= false;
 	}
@@ -85,7 +87,7 @@ public class Ball extends Observable implements iBall {
 			
 			double friction = 1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT;
 			
-			Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + (gravity.y() * deltaT));
+			Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + gravity * deltaT);
 			this.velocity = newVelocity;
 			
 			this.point.x  	= this.point.x + (deltaT * this.velocity.x());
@@ -149,10 +151,23 @@ public class Ball extends Observable implements iBall {
 
 			this.isCaptured = update;
 		}else{
-			this.velocity = new Vect(0, -44);
-			
 			this.isCaptured = update;
 		}
+	}
+
+	@Override
+	public double timeUntilCollision(iBall ball)
+	{
+		return Geometry.timeUntilBallBallCollision(this.physicsCircle, this.velocity, ball.returnBounds(), ball.getVelocity());
+	}
+
+	@Override
+	public void collide(iBall ball)
+	{
+		if(ball.equals(null))return;
+		VectPair velPer = Geometry.reflectBalls(this.physicsCircle.getCenter(), 1, this.getVelocity(), ball.returnBounds().getCenter(), 1, ball.getVelocity());
+		this.setVelocity(velPer.v1);
+		ball.setVelocity(velPer.v2);
 	}
 
 }
