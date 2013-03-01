@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.Timer;
 
@@ -18,7 +19,7 @@ import model.iOverlord;
 
 public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
 	
-	private final int FPS = 60;
+	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
 
 	private iOverlord overlord;
@@ -48,10 +49,10 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		Iterator<Entry<Integer, ArrayList<iGizmo>>> it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
 		
 	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
+	        Map.Entry pairs = it.next();
 	        
 	        for(iGizmo gizmo : (ArrayList<iGizmo>)pairs.getValue()){
 	        	if((int)pairs.getKey() == event.getKeyCode()){
@@ -102,27 +103,29 @@ public class AnimationEventListener implements KeyListener, ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{	
-		double Current_Delta_T = this.DELTA_T;
-		/*
-		 * Move all the Balls while checking for possible
-		 * collisions with iGizmo  and iBall objects
-		 */
-		for(iBall b : this.overlord.getAllballs()){
+		new Runnable() {
 			
-			for(int i = 0; i < 100; i++){
-				Current_Delta_T = this.overlord.collideBalls(b, Current_Delta_T);
-				Current_Delta_T = this.overlord.collideGizmos(b, Current_Delta_T);
-				b.move(Current_Delta_T);
+			@Override
+			public void run() {
+				double Current_Delta_T = DELTA_T;
+				/*
+				 * Move all the Balls while checking for possible
+				 * collisions with iGizmo  and iBall objects
+				 */
+				for(iBall b : overlord.getAllballs()){
+					if(b.isCaptured())continue;
+					for(int i = 0; i < 50; i++){
+						Current_Delta_T = overlord.collideBalls(b, Current_Delta_T);
+						Current_Delta_T = overlord.collideGizmos(b, Current_Delta_T);
+						b.move(Current_Delta_T);
+					}
+				}
+				/*
+				 * Move all the static Gizmos
+				 */
+				overlord.moveAllGizmos();
 			}
-		}
-		for(iBall b : this.overlord.getAllballs()){
-			b.move(DELTA_T);
-		}
-		/*
-		 * Move all the static Gizmos
-		 */
-		for(iGizmo g : this.overlord.getAllGizmos())
-			g.move();
+		}.run();
 	}
 
 	@Override

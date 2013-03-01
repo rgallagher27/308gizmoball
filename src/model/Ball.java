@@ -82,12 +82,10 @@ public class Ball extends Observable implements iBall {
 	public void move(double deltaT) {
 		if(!this.isCaptured){	
 			deltaT /= 2;
-			double mu  = 0.025;
-			double mu2 = 0.025;
+			double mu  = 0.015;
+			double mu2 = 0.015;
 			
 			double friction = 1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT;
-			
-			System.out.println( friction );
 			
 			Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + gravity * deltaT);
 			this.velocity = newVelocity;

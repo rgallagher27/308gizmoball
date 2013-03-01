@@ -2,13 +2,12 @@ package model;
 
 import java.awt.Point;
 import java.util.List;
-import java.util.Observable;
 
 import model.physics.Circle;
 import model.physics.Geometry;
 import model.physics.LineSegment;
 
-public class Gizmo extends Observable implements iGizmo {
+public class Gizmo implements iGizmo {
 	
 	protected Point point;
 	protected double rowWidth, columnHeight, cellWidth, cellHeight;

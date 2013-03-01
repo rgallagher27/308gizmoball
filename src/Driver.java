@@ -20,7 +20,14 @@ public class Driver {
 	
 	public static void main(String[] args)
 	{	
-		new Driver();
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				new Driver();
+			}
+		});
 	}
 
 }

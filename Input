@@ -63,53 +63,5 @@ Connect C183 RF137
 Absorber A 0 19 20 20
 KeyConnect key 84 down A
 Connect A A
-Ball B 6 15 0 0
-Ball B 7 15 0 0
-Ball B 8 15 0 0
-Ball B 9 15 0 0
 
-Ball B 6 16 0 0
-Ball B 7 17 0 0
-Ball B 8 18 0 0
-
-Ball B 15 1 -1 0
-Ball B 16 1 -1 0
-Ball B 17 1 -1 0
-Ball B 18 1 -1 0
-
-Ball B 6 15 0 0
-Ball B 7 15 0 0
-Ball B 8 15 0 0
-Ball B 9 15 0 0
-
-Ball B 6 16 0 0
-Ball B 7 17 0 0
-Ball B 8 18 0 0
-
-Ball B 15 1 -1 0
-Ball B 16 1 -1 0
-Ball B 17 1 -1 0
-Ball B 18 1 -1 0
-
-Ball B 6 15 0 0
-Ball B 7 15 0 0
-Ball B 8 15 0 0
-Ball B 9 15 0 0
-
-Ball B 6 16 0 0
-Ball B 7 17 0 0
-Ball B 8 18 0 0
-
-Ball B 15 1 -1 0
-Ball B 16 1 -1 0
-Ball B 17 1 -1 0
-Ball B 18 1 -1 0
-
-Ball B 6 15 0 0
-Ball B 7 15 0 0
-Ball B 8 15 0 0
-Ball B 9 15 0 0
-
-Ball B 6 16 0 0
-Ball B 7 17 0 0
-Ball B 8 18 0 0
+Ball B 0 15 0 0

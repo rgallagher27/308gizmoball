@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 
 import model.physics.Vect;
 
@@ -40,7 +39,6 @@ public class Overlord extends Observable implements iOverlord {
 		this.gizmoObjects.add(new Wall(cellWidth, cellHeight));
 		
 		this.fileParser.loadFile("Input");
-
 	}
 
 	@Override
@@ -67,16 +65,6 @@ public class Overlord extends Observable implements iOverlord {
 			if(b.getIdentifier().equals(identifier))return b;
 		
 		return null;
-	}
-
-	@Override
-	public void addGizmoObserver(Observer o) {
-		for(iGizmo g : this.gizmoObjects) ((Observable)g).addObserver(o);
-	}
-
-	@Override
-	public void addBallObserver(Observer o) {
-		for(iBall b : this.ballObjects) ((Observable)b).addObserver(o);
 	}
 
 	public Map<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers()
@@ -111,10 +99,12 @@ public class Overlord extends Observable implements iOverlord {
     {
     	if(type.equals("L")){
     		this.gizmoObjects.add(
-        			new LeftFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight));
+        			new LeftFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight)
+        			);
     	}else if(type.equals("R")){
     		this.gizmoObjects.add(
-        			new RightFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight));
+        			new RightFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight)
+        			);
     	}
     }
     
@@ -197,19 +187,16 @@ public class Overlord extends Observable implements iOverlord {
 			}
 		}
 		
-		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
 			
 			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
 			else{
 				((Absorber)closestGizmo).captureBall(b);
 				b.setCaptured(true);
-				
-				((Absorber)closestGizmo).performAction(true);
 			}
+			b.move(Current_Delta_T);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
-			
 		}else{
 			return Current_Delta_T;
 		}
@@ -221,6 +208,7 @@ public class Overlord extends Observable implements iOverlord {
 		iBall closestBall = null;
 		
 		for(iBall b2 : this.ballObjects){
+			if(b2.isCaptured())continue;
 			double time = b2.timeUntilCollision(b);
 			/*
 			 * Only deal with the closest object
@@ -232,11 +220,30 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
+			b.move(Current_Delta_T);
 			closestBall.collide(b);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
 		}else{
+			this.setChanged();
+			this.notifyObservers();
 			return Current_Delta_T;
 		}
+	}
+
+	@Override
+	public void notifyAllObservers() {
+		// TODO Auto-generated method stub
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	@Override
+	public void moveAllGizmos() {
+		for(iGizmo g : this.getAllGizmos())
+			g.move();
+		
+		this.setChanged();
+		this.notifyAllObservers();
 	}
 }

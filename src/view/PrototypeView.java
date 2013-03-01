@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,24 +11,13 @@ import javax.swing.JPanel;
 import model.Absorber;
 import model.CircleBumper;
 import model.Flipper;
-import model.GameGrid;
-import model.LeftFlipper;
 import model.Overlord;
-import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 import view.framework.G2DAbstractCanvas;
-import view.framework.G2DCircle;
-import view.framework.G2DFlipper;
-import view.framework.G2DLine;
-import view.framework.G2DObject;
-import view.framework.G2DPoint;
-import view.framework.G2DRectangle;
-import view.framework.G2DTriangle;
-import view.framework.Matrix;
 import controller.AnimationEventListener;
 
 public class PrototypeView extends JPanel implements Observer {
@@ -55,8 +43,7 @@ public class PrototypeView extends JPanel implements Observer {
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
 		this.eventListener 		= new AnimationEventListener(this.overlord);
 		
-		this.overlord.addGizmoObserver(this);
-		this.overlord.addBallObserver(this);
+		((Observable)this.overlord).addObserver(this);
 		
 		/*
 		 * Add event listener to key presses.

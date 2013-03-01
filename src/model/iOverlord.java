@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Observer;
 
 public interface iOverlord {
 	
@@ -19,6 +18,8 @@ public interface iOverlord {
 	
 	public Map<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers();
 	
+	public void moveAllGizmos();
+	
 	/*
 	 * Collision methods
 	 */
@@ -27,13 +28,11 @@ public interface iOverlord {
 	
 	public double collideBalls(iBall b, double Current_Delta_T);
 	
+	public void notifyAllObservers();
+	
 	/*
 	 * Gizmo and Ball addition methods
 	 */
-	public void addGizmoObserver(Observer o);
-	
-	public void addBallObserver(Observer o);
-	
 	public void addAbsorber(String id, int x, int y, int width, int height);
 	
 	public void addBall(String id, double x, double y, double xV, double yV);
