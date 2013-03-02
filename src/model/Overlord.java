@@ -224,8 +224,6 @@ public class Overlord extends Observable implements iOverlord {
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
 		}else{
-			this.setChanged();
-			this.notifyObservers();
 			return Current_Delta_T;
 		}
 	}
