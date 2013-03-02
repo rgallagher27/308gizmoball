@@ -28,8 +28,6 @@ public interface iOverlord {
 	
 	public double collideBalls(iBall b, double Current_Delta_T);
 	
-	public void notifyAllObservers();
-	
 	/*
 	 * Gizmo and Ball addition methods
 	 */

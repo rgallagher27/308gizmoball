@@ -29,7 +29,6 @@ public class Overlord extends Observable implements iOverlord {
 		this.canvasDimentions	= canvasDimentions;
 		this.cellWidth			= this.canvasDimentions.getWidth()  / this.gridDimentions.getWidth();
 		this.cellHeight			= this.canvasDimentions.getHeight() / this.gridDimentions.getHeight();
-		
 		this.gizmoObjects 		= new ArrayList<iGizmo>();
 		this.ballObjects		= new ArrayList<iBall>();
 		this.gizmoDownTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
@@ -232,18 +231,11 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void notifyAllObservers() {
-		// TODO Auto-generated method stub
-		this.setChanged();
-		this.notifyObservers();
-	}
-
-	@Override
 	public void moveAllGizmos() {
 		for(iGizmo g : this.getAllGizmos())
 			g.move();
 		
 		this.setChanged();
-		this.notifyAllObservers();
+		this.notifyObservers();
 	}
 }
