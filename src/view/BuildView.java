@@ -3,24 +3,25 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-public class BuildView extends JFrame implements WindowListener{
+import controller.GizmoListener;
+
+public class BuildView extends JFrame implements IFrame, IBuildView{
 
 	private static final long serialVersionUID = 1L;
 	
 	private GizmoCanvas canvas;
 	private JPanel rightPanel;
-	private JRadioButton gizmo1;
-	private JRadioButton gizmo2;
-	private JRadioButton gizmo3;
-	private JRadioButton gizmo4;
+	private JRadioButton square;
+	private JRadioButton triangle;
+	private JRadioButton leftFlipper;
+	private JRadioButton rightFlipper;
+	private JRadioButton absorber;
 	private JRadioButton remove;
 	private JRadioButton rotate;
 	private JRadioButton addTrigger;
@@ -36,36 +37,49 @@ public class BuildView extends JFrame implements WindowListener{
 	private void setup(){
 		//Build the components.
 		canvas = new GizmoCanvas();
+		canvas.drawGrid(true);
+		canvas.addMouseListener(new GizmoListener(GizmoListener.MOUSELISTENER, canvas));
 		rightPanel = new JPanel();
-		gizmo1 = new JRadioButton("Add Gizmo1");
-		gizmo2 = new JRadioButton("Add Gizmo2");
-		gizmo3 = new JRadioButton("Add Gizmo3");
-		gizmo4 = new JRadioButton("Add Gizmo4");
+		square = new JRadioButton("Add Square");
+		square.addActionListener(new GizmoListener(GizmoListener.BUILD_SQUARE, this));
+		triangle = new JRadioButton("Add Triangle");
+		triangle.addActionListener(new GizmoListener(GizmoListener.BUILD_TRIANGLE, this));
+		leftFlipper = new JRadioButton("Add L Flipper");
+		leftFlipper.addActionListener(new GizmoListener(GizmoListener.BUILD_LEFT_FLIPPER, this));
+		leftFlipper.setEnabled(false); //TODO Implement left flipper.
+		rightFlipper = new JRadioButton("Add R Flipper");
+		rightFlipper.addActionListener(new GizmoListener(GizmoListener.BUILD_RIGHT_FLIPPER, this));
+		rightFlipper.setEnabled(false); //TODO Implement right flipper.
+		absorber = new JRadioButton("Add Absorber");
+		absorber.addActionListener(new GizmoListener(GizmoListener.BUILD_ABSORBER, this));
+		absorber.setEnabled(false); //TODO Implement absorber.
 		remove = new JRadioButton("Remove Gizmo");
+		remove.addActionListener(new GizmoListener(GizmoListener.BUILD_REMOVE, this));
 		rotate = new JRadioButton("Rotate Gizmo");
+		rotate.addActionListener(new GizmoListener(GizmoListener.BUILD_ROTATE, this));
+		rotate.setEnabled(false); //TODO Implement rotate
 		addTrigger = new JRadioButton("Add Trigger");
+		addTrigger.addActionListener(new GizmoListener(GizmoListener.BUILD_ADD_TRIGGER, this));
+		addTrigger.setEnabled(false); //TODO Implement addTrigger.
 		removeTrigger = new JRadioButton("Remove Trigger");
+		removeTrigger.addActionListener(new GizmoListener(GizmoListener.BUILD_REMOVE_TRIGGER, this));
+		removeTrigger.setEnabled(false); //TODO Implement removeTrigger.
 		bottomPanel = new JPanel();
 		load = new JButton("Load Map");
-		load.addActionListener(new ButtonListener(ButtonListener.LOAD));
+		load.addActionListener(new GizmoListener(GizmoListener.LOAD));
 		save = new JButton("Save Map");
-		save.addActionListener(new ButtonListener(ButtonListener.SAVE));
+		save.addActionListener(new GizmoListener(GizmoListener.SAVE));
 		play = new JButton("Play Mode");
-		play.addActionListener(new ButtonListener(ButtonListener.PLAY));
+		play.addActionListener(new GizmoListener(GizmoListener.PLAY_MODE, this));
 		
 		//Build the window.
-		this.setTitle("Gizmoball Build View");
-		this.setSize(640, 480);
-		this.setVisible(true);
-		this.setLayout(new BorderLayout());
-		canvas.setSize(this.getWidth()-200, this.getHeight()-100);
-		this.add(canvas, BorderLayout.CENTER);
 		rightPanel.setLayout(new GridLayout(10,1));
-		rightPanel.add(gizmo1);
-		rightPanel.add(gizmo2);
-		rightPanel.add(gizmo3);
-		rightPanel.add(gizmo4);
-		rightPanel.add(new JPanel());
+		rightPanel.add(square);
+		rightPanel.add(triangle);
+		rightPanel.add(leftFlipper);
+		rightPanel.add(rightFlipper);
+		rightPanel.add(absorber);
+//		rightPanel.add(new JPanel());
 		rightPanel.add(remove);
 		rightPanel.add(rotate);
 		rightPanel.add(addTrigger);
@@ -76,33 +90,133 @@ public class BuildView extends JFrame implements WindowListener{
 		bottomPanel.add(save);
 		bottomPanel.add(play);
 		this.add(bottomPanel, BorderLayout.SOUTH);
+		this.add(canvas);
+		this.addSquares();
+		this.setTitle("Gizmoball Build Mode");
+		this.setSize(800, 600);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		canvas.repaint();
+	}
+	
+	public void addSquares(){
+		square.setSelected(true);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "square";
+	}
+	
+	public void addTriangles(){
+		square.setSelected(false);
+		triangle.setSelected(true);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);	
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "triangle";
+	}
+	
+	public void addLeftFlipper(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(true);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "left flipper";
+	}
+	
+	public void addRightFlipper(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(true);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "right flipper";
+	}
+	
+	public void addAbsorber(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(true);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "absorber";
+	}
+	
+	public void remove(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(true);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "remove";
+	}
+	
+	public void rotate(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(true);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "rotate";
+	}
+	
+	public void addTrigger(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(true);
+		removeTrigger.setSelected(false);
+		canvas.buildAction = "addTrigger";
+	}
+	
+	public void removeTrigger(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(true);
+		canvas.buildAction = "removeTrigger";
 	}
 	
 	public static void main(String[] args) {
 		new BuildView();
-	}
-
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		System.exit(0);	
-	}
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-	}
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-	}
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-	}
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-	}
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-	}
-	@Override
-	public void windowOpened(WindowEvent arg0) {
 	}
 }
