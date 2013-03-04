@@ -43,6 +43,8 @@ public class LeftFlipper extends Flipper {
 	
 	private void fillLineSegments()
 	{
+		this.lineSegments.clear();
+		
 		double topLX = (this.point.x * this.cellWidth) - (this.cellWidth / 2);
 		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
 		
