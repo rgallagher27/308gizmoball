@@ -19,6 +19,7 @@ import model.iGizmo;
 import model.iOverlord;
 import view.framework.G2DAbstractCanvas;
 import controller.AnimationEventListener;
+import controller.IController;
 
 public class PrototypeView extends JPanel implements Observer {
 
@@ -29,7 +30,7 @@ public class PrototypeView extends JPanel implements Observer {
 	private final Dimension gridSize   		= new Dimension(20, 20);
 	private final GizmoFactory gizmoFactory = new GizmoFactory();
 	
-	private AnimationEventListener eventListener;
+	private IController eventListener;
 	
 	private G2DAbstractCanvas abstractCanvas;
 	
@@ -39,10 +40,8 @@ public class PrototypeView extends JPanel implements Observer {
 		super();
 		this.setPreferredSize(this.windowSize);
 		
-		this.overlord			= new Overlord(this.gridSize, this.canvasSize);
+		this.overlord			= new Overlord(gridSize, canvasSize);
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
-		this.eventListener 		= new AnimationEventListener(this.overlord);
-		
 		((Observable)this.overlord).addObserver(this);
 		
 		/*
@@ -52,9 +51,22 @@ public class PrototypeView extends JPanel implements Observer {
 		 * 
 		 * Request window focus.
 		 */
-		this.addKeyListener(eventListener);
-		this.addMouseListener(eventListener);
-		this.requestFocus();
+		requestFocus();
+	}
+	
+	public void addController(IController ic){
+		eventListener = ic;
+		addKeyListener(eventListener);
+		addMouseListener(eventListener);
+		
+	}
+	
+	public Dimension getGridSize(){
+		return gridSize;
+	}
+	
+	public Dimension getCanvasSize(){
+		return canvasSize;
 	}
 	
 	private Image bufferImage;
