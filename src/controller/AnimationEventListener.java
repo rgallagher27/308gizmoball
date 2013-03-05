@@ -17,7 +17,7 @@ import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 
-public class AnimationEventListener implements KeyListener, ActionListener, MouseListener {
+public class AnimationEventListener implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
