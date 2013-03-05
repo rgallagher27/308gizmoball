@@ -14,37 +14,37 @@ public class Absorber extends Gizmo implements iGizmo {
 	protected List<iBall> capturedBalls;
 	protected boolean active;
 	
-	public Absorber( String identifier, Point p, double row, double column, double width, double height) {
-		super.point 		= p;
-		super.rowWidth 		= row;
-		super.columnHeight	= column;
-		super.identifier 	= identifier;
-		super.cellWidth		= width;
-		super.cellHeight	= height;
-		this.active 		= false;
+	public Absorber( String identifier, GizPoint p, double row, double column, double width, double height) {
+		point 		= p;
+		rowWidth 		= row;
+		columnHeight	= column;
+		this.identifier 	= identifier;
+		cellWidth		= width;
+		cellHeight	= height;
+		active 		= false;
 		
-		super.lineSegments 	= new ArrayList<LineSegment>();
-		super.circles		= new ArrayList<Circle>();
-		this.capturedBalls 	= new ArrayList<iBall>();
+		lineSegments 	= new ArrayList<LineSegment>();
+		circles		= new ArrayList<Circle>();
+		capturedBalls 	= new ArrayList<iBall>();
 		
-		this.fillLineSegments();
+		fillLineSegments();
 	}
 	
 	@Override
 	public void performAction(boolean a)
 	{
-		this.active = a;
+		active = a;
 	}
 
 	@Override
 	public void move() {
-		if(this.active){
-			if((!this.capturedBalls.isEmpty())){
-				iBall b = this.capturedBalls.get(0);
+		if(active){
+			if((!capturedBalls.isEmpty())){
+				iBall b = capturedBalls.get(0);
 					  b.setVelocity(new Vect(0, -2));
-					  b.setLocation(new Point2D.Double(19, 18));
+					  b.setLocation(new BallPoint(19, 18));
 					  b.setCaptured(false);
-				this.capturedBalls.remove(0);
+				capturedBalls.remove(0);
 			}
 		}
 		this.active = false;
@@ -52,32 +52,32 @@ public class Absorber extends Gizmo implements iGizmo {
 
 	private void fillLineSegments()
 	{
-		double topLX = (this.point.x * this.cellWidth) - (this.cellWidth / 2);
-		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
+		double topLX = (point.getX() * cellWidth) - (cellWidth / 2);
+		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
 		
-		double topRX = (this.point.x * this.cellWidth) + (this.rowWidth * this.cellWidth)- (this.cellWidth / 2);
+		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth)- (cellWidth / 2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.point.y * this.cellHeight) + (this.columnHeight * this.cellHeight) - (this.cellHeight / 2);
+		double bottomLY = (point.getY() * cellHeight) + (columnHeight * cellHeight) - (cellHeight / 2);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;
 		
-		this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
+		lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 		
-		this.lineSegments.add(new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY));
+		lineSegments.add(new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY));
 		
-		this.lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
+		lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
 		
-		this.lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
+		lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
 		
 		
 	}
 	
 	public void captureBall(iBall ball)
 	{
-		this.capturedBalls.add(ball);
+		capturedBalls.add(ball);
 	}
 
 }
