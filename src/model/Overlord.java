@@ -217,44 +217,70 @@ public class Overlord extends Observable implements iOverlord {
 	
 
 	@Override
-	public void addCircle(String id, int x, int y) {
-		this.gizmoObjects.add(new CircleBumper(id, new Point(x, y), 1, 1, this.cellWidth, this.cellHeight));
+	public boolean addCircle(String id, int x, int y) {
+		if(canPlace("", x, y, x, y)){
+		gizmos.put(id, new CircleBumper(id, new GizPoint(x, y), 1, 1, cellWidth, cellHeight));
+		setPlace(id, x, y, x, y);
+		if(!loadingFile){
+		setChanged();
+		notifyObservers(id);
+		}
+		return true;
+		}
+		return false;
 	}
 	
 	@Override
-	public void addFlipper(String id, String type, int x, int y)
+	public boolean addFlipper(String id, int x, int y, boolean orient)
     {
-    	if(type.equals("L")){
-    		this.gizmoObjects.add(
-        			new LeftFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight)
-        			);
-    	}else if(type.equals("R")){
-    		this.gizmoObjects.add(
-        			new RightFlipper(id, new Point(x, y),1, 2, this.cellWidth, this.cellHeight)
-        			);
+		if(canPlace("", x, y, x+1, y+1)){
+    	if(!orient){
+    		gizmos.put(id,
+        			new LeftFlipper(id, new GizPoint(x, y), 1, 2, cellWidth, cellHeight));
+    		setPlace(id, x, y, x+1, y+1);
+    	}else{
+    		gizmos.put(id,
+        			new RightFlipper(id, new GizPoint(x, y),1, 2, cellWidth, cellHeight));
+    		setPlace(id, x, y, x+1, y+1);
     	}
-    }
-    
-	@Override
-    public void addSquare(String id, int x, int y)
-    {
-    	this.gizmoObjects.add( new SquareBumper(id, new Point( x, y ), 1, 1, this.cellWidth, this.cellHeight));
-    }
-    
-	@Override
-    public void addTriangel(String id, int x, int y)
-    {
-    	this.gizmoObjects.add( new TriangleBumper(id, new Point( x, y ), 1, 1, this.cellWidth, this.cellHeight));
+    	if(!loadingFile){
+    		setChanged();
+    		notifyObservers(id);
+    	}
+    	return true;
+		}
+		return false;
     }
 	
 	@Override
-	public void delete(String name) 
-	{
-    	for(iGizmo g : gizmoObjects){
-    		if( g.getIdentifier().equals(name) ) this.gizmoObjects.remove(g);
+    public boolean addSquare(String id, int x, int y)
+    {
+		if(canPlace("", x, y, x, y)){
+    	gizmos.put(id, new SquareBumper(id, new GizPoint( x, y ), 1, 1, cellWidth, cellHeight));
+    	setPlace(id, x, y, x, y);
+    	if(!loadingFile){
+    		setChanged();
+    		notifyObservers(id);
     	}
+    	return true;
+		}
+		return false;
     }
-    
+	
+	@Override
+    public boolean addTriangle(String id, int x, int y)
+    {
+		if(canPlace("", x, y, x, y)){
+			gizmos.put(id, new TriangleBumper(id, new GizPoint( x, y ), 1, 1, cellWidth, cellHeight));
+			setPlace(id, x, y, x, y);
+			if(!loadingFile){
+				setChanged();
+				notifyObservers(id);
+			}
+			return true;
+		}
+		return false;
+	}
 	
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException {
 		iGizmo tmp = getGizmo(gizmoName);
