@@ -15,6 +15,9 @@ import java.util.Map.Entry;
 
 import javax.swing.Timer;
 
+import view.framework.G2DAbstractCanvas;
+import view.framework.G2DObject;
+
 import model.Absorber;
 import model.iBall;
 import model.iGizmo;
@@ -24,6 +27,7 @@ public class AnimationEventListener implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
+	private GizmoFactory gizFactory;
 
 	private iOverlord overlord;
 	
@@ -38,6 +42,7 @@ public class AnimationEventListener implements IController {
 		this.gameLoop 	= new Timer(1000/FPS, this);
 		
 		this.gameLoop.start();
+		gizFactory = new GizmoFactory(this);
 	}
 
 	public int getGizX(String name){
@@ -68,6 +73,16 @@ public class AnimationEventListener implements IController {
 		return overlord.getBall(name).getRadius();
 	}
 	
+	public G2DObject getGraphicsGizmo(String gizmo){
+		iGizmo giz = overlord.getGizmo(gizmo);
+		return gizFactory.draw(giz);
+	}
+	
+	public G2DObject getGraphicsBall(String ball){
+		iBall ballz = overlord.getBall(ball);
+		return gizFactory.drawBall(ballz);
+	}
+	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
 		for(iGizmo giz : overlord.getGizmos()){
@@ -75,6 +90,15 @@ public class AnimationEventListener implements IController {
 		}
 		return list;
 	}
+	
+	public List<String> getBalls(){
+		LinkedList<String> list = new LinkedList<String>();
+		for(iBall ball : overlord.getBalls()){
+			list.add(ball.getIdentifier());
+		}
+		return list;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
@@ -238,5 +262,12 @@ public class AnimationEventListener implements IController {
 		}else{
 			return Current_Delta_T;
 		}
+	}
+
+	@Override
+	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
+			double rowWidth, double columnHeight) {
+		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
+		
 	}
 }

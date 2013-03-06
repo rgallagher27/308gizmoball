@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.*;
 
+import controller.GUIController;
 import controller.GUIListener;
 import controller.IController;
 
@@ -14,7 +15,7 @@ public class CompleteViewContainer extends JFrame {
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
-	private IController guiListener;
+	private GUIController guiListener;
 	
 	
 	public CompleteViewContainer(){

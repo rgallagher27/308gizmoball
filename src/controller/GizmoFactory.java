@@ -2,10 +2,7 @@ package controller;
 
 import java.awt.Color;
 
-import model.LeftFlipper;
-import model.RightFlipper;
-import model.iBall;
-import model.iGizmo;
+import model.*;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
@@ -18,8 +15,10 @@ import view.framework.Matrix;
 
 public class GizmoFactory {
 
-	public GizmoFactory() {
-		// TODO Auto-generated constructor stub
+	private IController controller;
+	
+	public GizmoFactory(IController ic) {
+		controller = ic;
 	}
 	
 	public G2DObject drawBall(iBall ball)
@@ -33,7 +32,16 @@ public class GizmoFactory {
     	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
     }
 	
-	public G2DObject drawFlipper(String flipper)
+	public G2DObject draw(iGizmo giz){
+		if(giz instanceof Flipper) return drawFlipper(giz);
+		if(giz instanceof Absorber) return drawAbsorber(giz);
+		if(giz instanceof SquareBumper) return drawSquareBumper(giz);
+		if(giz instanceof TriangleBumper) return drawTriangleBumper(giz);
+		if(giz instanceof CircleBumper) return drawCircleBumper(giz);
+		return null;
+	}
+	
+	public G2DObject drawFlipper(iGizmo flipper)
 	{	
 		
 		double flipperX = 0;
@@ -63,7 +71,7 @@ public class GizmoFactory {
 		return flipperGroup;
 	}
 
-    public G2DObject drawAbsorber(String absorber)
+    public G2DObject drawAbsorber(iGizmo absorber)
     {
         double cellWidth 		= absorber.getCellWidth();
 		double cellheight 		= absorber.getCellHeight();
@@ -76,7 +84,7 @@ public class GizmoFactory {
     			                Color.red);
     }
 	
-	public G2DObject drawSquareBumper(String bumper)
+	public G2DObject drawSquareBumper(iGizmo bumper)
     {
         double cellWidth 		= bumper.getCellWidth();
 		double cellheight 		= bumper.getCellHeight();
@@ -91,7 +99,7 @@ public class GizmoFactory {
 				                Color.red);
     }
     
-    public G2DObject drawTriangleBumper(String triangle)
+    public G2DObject drawTriangleBumper(iGizmo triangle)
     {
         double cellWidth 		= triangle.getCellWidth();
 		double cellheight 		= triangle.getCellHeight();
@@ -113,7 +121,7 @@ public class GizmoFactory {
     	return newTriangle;
     }
 	
-	public G2DObject drawCircleBumper(String circle)
+	public G2DObject drawCircleBumper(iGizmo circle)
     {
         double cellWidth 		= circle.getCellWidth();
 		double cellheight 		= circle.getCellHeight();

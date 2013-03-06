@@ -3,10 +3,11 @@ package controller;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
 import java.util.List;
 
-import model.iGizmo;
+import view.framework.G2DAbstractCanvas;
+import view.framework.G2DObject;
+
 
 public interface IController extends KeyListener, ActionListener, MouseListener {
 	
@@ -23,4 +24,9 @@ public interface IController extends KeyListener, ActionListener, MouseListener 
 	public double getBallRadius(String name);
 	
 	public List<String> getGizmos();
+	public G2DObject getGraphicsBall(String ball);
+	public G2DObject getGraphicsGizmo(String gizmo);
+	public List<String> getBalls();
+	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight);
+	
 }

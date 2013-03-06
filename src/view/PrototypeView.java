@@ -29,7 +29,6 @@ public class PrototypeView extends JPanel implements Observer {
 	private final Dimension windowSize 		= new Dimension(1000, 800);
 	private final Dimension canvasSize 		= new Dimension(1000, 1000);
 	private final Dimension gridSize   		= new Dimension(20, 20);
-	private final GizmoFactory gizmoFactory = new GizmoFactory();
 	
 	private IController eventListener;
 	
@@ -79,17 +78,12 @@ public class PrototypeView extends JPanel implements Observer {
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
 		
-		gizmoFactory.drawGrid(abstractCanvas, 20, 20, 50, 50);
+		eventListener.factoryDraw(abstractCanvas, 20, 20, 50, 50);
 		
 		for(String gizmo : eventListener.getGizmos())
-			if(gizmo.contains("F")) gizmoFactory.drawFlipper(gizmo).draw(abstractCanvas);
-			else if(gizmo.contains("SQ"))gizmoFactory.drawSquareBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo.contains("C"))gizmoFactory.drawCircleBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo.contains("A"))gizmoFactory.drawAbsorber(gizmo).draw(abstractCanvas);
-			else if(gizmo.contains("T"))gizmoFactory.drawTriangleBumper(gizmo).draw(abstractCanvas);
-		
-		for(iBall ball : this.overlord.getAllballs())
-			this.gizmoFactory.drawBall(ball).draw(abstractCanvas);
+			eventListener.getGraphicsGizmo(gizmo).draw(abstractCanvas);
+		for(String ball : eventListener.getBalls())
+			eventListener.getGraphicsBall(ball).draw(abstractCanvas);
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
