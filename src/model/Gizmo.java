@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.physics.Circle;
@@ -15,9 +16,14 @@ public class Gizmo implements iGizmo {
 	protected List<LineSegment> lineSegments;
 	protected List<Circle> circles;
 	protected String identifier;
-
+	protected List<iGizmo> triggers;
+	protected int width, height;
+	
 	public Gizmo() {
 		rotation = 0;
+		triggers = new LinkedList<iGizmo>();
+		width = 0;
+		height = 0;
 	}
 
 	@Override
@@ -131,6 +137,10 @@ public class Gizmo implements iGizmo {
 		if(closestCircle != null)ball.setVelocity(
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
 				);
+		//trigger.
+		for(iGizmo giz: triggers){
+			giz.move();
+		}
 	}
 
 	@Override
@@ -141,5 +151,34 @@ public class Gizmo implements iGizmo {
 	@Override
 	public void move() {
 		
+	}
+
+	@Override
+	public void addTrigger(iGizmo giz) {
+		triggers.add(giz);
+		
+	}
+
+	@Override
+	public void removeTrigger(iGizmo giz) {
+		triggers.remove(giz);
+		
+	}
+
+	@Override
+	public int getWidth() {
+		return width;
+	}
+
+	@Override
+	public int getHeight() {
+		return height;
+	}
+	
+	public void rotate(){
+		rotation += 90;
+		if(rotation > 360){
+			rotation = 0;
+		}
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 
 import javax.swing.Timer;
 
+import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
@@ -69,7 +70,10 @@ public class AnimationEventListener implements IController {
 	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
-		//for(iGizmo giz : overlord.get)
+		for(iGizmo giz : overlord.getGizmos()){
+			list.add(giz.getIdentifier());
+		}
+		return list;
 	}
 	/*
 	 * (non-Javadoc)
@@ -83,7 +87,7 @@ public class AnimationEventListener implements IController {
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		Iterator<Entry<Integer, ArrayList<iGizmo>>> it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		Iterator<Entry<Integer, ArrayList<iGizmo>>> it = overlord.getGizmoDownKeytriggers().entrySet().iterator();
 		
 	    while (it.hasNext()) {
 	        Map.Entry pairs = it.next();
@@ -107,7 +111,7 @@ public class AnimationEventListener implements IController {
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		Iterator it = this.overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		Iterator it = overlord.getGizmoDownKeytriggers().entrySet().iterator();
 		
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
@@ -146,12 +150,12 @@ public class AnimationEventListener implements IController {
 				 * Move all the Balls while checking for possible
 				 * collisions with iGizmo  and iBall objects
 				 */
-				for(iBall b : overlord.getAllballs()){
+				for(iBall b : overlord.getBalls()){
 					if(b.isCaptured())continue;
 					for(int i = 0; i < 50; i++){
-						Current_Delta_T = overlord.collideBalls(b, Current_Delta_T);
-						Current_Delta_T = overlord.collideGizmos(b, Current_Delta_T);
-						b.move(Current_Delta_T);
+						Current_Delta_T = collideBalls(b, Current_Delta_T);
+						Current_Delta_T = collideGizmos(b, Current_Delta_T);
+						b.move((float)Current_Delta_T);
 					}
 				}
 				/*
@@ -189,5 +193,61 @@ public class AnimationEventListener implements IController {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private double collideGizmos(iBall b, double Current_Delta_T) {
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iGizmo closestGizmo = null;
+		
+		for(iGizmo g : overlord.getGizmos()){
+			double time = g.timeUntilCollision(b);
+			/*
+			 * Only deal with the closest object
+			 */
+			if(time < lowestTime){
+				lowestTime = time;
+				closestGizmo = g;
+			}
+		}
+		
+		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
+			
+			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
+			else{
+				((Absorber)closestGizmo).captureBall(b);
+				b.setCaptured(true);
+			}
+			b.move((float)Current_Delta_T);
+			Current_Delta_T -= lowestTime;
+			return Current_Delta_T;
+		}else{
+			return Current_Delta_T;
+		}
+	}
+
+	private double collideBalls(iBall b, double Current_Delta_T) {
+		double lowestTime = Double.POSITIVE_INFINITY;
+		iBall closestBall = null;
+		
+		for(iBall b2 : overlord.getBalls()){
+			if(b2.isCaptured())continue;
+			double time = b2.timeUntilCollision(b);
+			/*
+			 * Only deal with the closest object
+			 */
+			if(time < lowestTime){
+				lowestTime = time;
+				closestBall = b2;
+			}
+		}
+		
+		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
+			b.move((float)Current_Delta_T);
+			closestBall.collide(b);
+			Current_Delta_T -= lowestTime;
+			return Current_Delta_T;
+		}else{
+			return Current_Delta_T;
+		}
 	}
 }

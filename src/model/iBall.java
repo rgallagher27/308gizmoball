@@ -48,6 +48,8 @@ public interface iBall {
 	public double timeUntilCollision(iBall ball);
 	
 	public void collide(iBall ball);
+	
+	public double getRadius();
 
 
 

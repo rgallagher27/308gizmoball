@@ -18,6 +18,7 @@ public class Ball extends Observable implements iBall {
 	protected String identifier;
 	protected boolean isCaptured;
 	protected double i = 0;
+	protected double radius;
 
 	public Ball(String identifier, BallPoint p, double row, double column, double width, double height) {
 		point 			= p;
@@ -30,8 +31,12 @@ public class Ball extends Observable implements iBall {
 		gravity 		= (float)1/25;
 		velocity 		= new Vect(0, 0);
 		isCaptured		= false;
+		radius = 0.25;
 	}
 
+	public double getRadius(){
+		return radius;
+	}
 	@Override
 	public String getIdentifier() {
 		return identifier;

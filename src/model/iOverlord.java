@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,5 +34,8 @@ public interface iOverlord {
 	public boolean connect(String producerGizmo, String consumerGizmo);
 	public void loadGame(String mapName);
 	public void saveGame(String mapName);
+	public void moveAllGizmos();
+	public HashMap<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers();
+	public HashMap<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers();
 	
 }

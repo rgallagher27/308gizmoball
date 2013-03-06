@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import exception.CannotRotateException;
+
 public class FileParser {
     
 	private iOverlord overlord;
@@ -35,63 +37,76 @@ public class FileParser {
         
         generate(input);
     }
+     
     
     private void generate(ArrayList<String> input) {
         for(String s : input) {
             String[] tok = s.split("\\s");
             
             switch(tok[0]) {
-                case "":  //blank line in file
-                    break;
-                case "Absorber":
-                	this.overlord.addAbsorber(  tok[1], 
-		                						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
-		                						Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
-		                						Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])
-		                					);
-                    break;
-                case "Ball":
-                	this.overlord.addBall(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
-                    break;
-                case "Circle":
-                	this.overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
-                    break;
-                case "LeftFlipper":
-                	this.overlord.addFlipper(tok[1], "L", Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
-                    break;
-                case "RightFlipper":
-                	this.overlord.addFlipper(tok[1], "R", Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
-                    break;
-                case "Square":
-                	this.overlord.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
-                    break;
-                case "Triangle":
-                	this.overlord.addTriangel(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
-                    break;
-                case "Gravity":
-                    
-                    break;
-                case "Friction":
-                    
-                    break;
-                case "Move":
-                    this.overlord.move(tok[1], Double.parseDouble(tok[2]), Double.parseDouble(tok[3]));
-                    break;
-                case "Rotate":
-					this.overlord.rotate(tok[1]);
-                    break;
-                case "Connect":
-                    
-                    break;
-                case "KeyConnect":
-                    this.overlord.keyConnect(Integer.parseInt(tok[2]), tok[3], tok[4]);
-                    break;
-                case "Delete":
-                    this.overlord.delete(tok[1]);
-                    break;
-                default: //Error throw up error message dialog box
-                    break;
-            }
+            case "":  //blank line in file
+                break;
+            case "Absorber":
+                overlord.addAbsorber(  tok[1], 
+						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
+						Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
+						Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])
+					);
+                break;
+            case "Ball":
+                overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                break;
+            case "Circle":
+                overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                break;
+            case "LeftFlipper":
+                overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
+                break;
+            case "RightFlipper":
+                overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
+                break;
+            case "Square":
+                overlord.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                break;
+            case "Triangle":
+                overlord.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                break;
+            case "Gravity":
+                overlord.setGravity(Float.parseFloat(tok[1]));
+                break;
+            case "Friction":
+                overlord.setFriction(Float.parseFloat(tok[1]), Float.parseFloat(tok[2]));
+                break;
+            case "Move":
+                overlord.moveGizmo(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                break;
+            case "Rotate":
+			try {
+				overlord.rotateGizmo(tok[1]);
+			} catch (CannotRotateException e) {
+				System.err.println(tok[1] + " cannot be rotated, this is invalid input.");
+			}
+                break;
+            case "Connect":
+                overlord.connect(tok[1], tok[2]);
+                break;
+            case "KeyConnect":
+                boolean temp = false;
+                if(tok[3].equals("up")) {
+                    temp = true;
+                } else if(tok[3].equals("down")) {
+                    temp = false;
+                } else {
+                    //error
+                }
+                overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
+                break;
+            case "Delete":
+                overlord.removeGizmo(tok[1]);
+                break;
+            default: //Error throw up error message dialog box
+                break;
+        }
         }
     }
     

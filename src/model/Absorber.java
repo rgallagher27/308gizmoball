@@ -80,4 +80,15 @@ public class Absorber extends Gizmo implements iGizmo {
 		capturedBalls.add(ball);
 	}
 
+	public void removeStoredBall(String ballName) {
+		for(iBall balls : capturedBalls){
+			if(balls.getIdentifier().equals(ballName)){
+				capturedBalls.remove(balls);
+				break;
+			}
+		}
+		
+		
+	}
+
 }
