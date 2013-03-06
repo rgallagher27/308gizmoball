@@ -9,19 +9,19 @@ import model.physics.Vect;
 
 public class CircleBumper extends Gizmo implements iGizmo {
 	
-	public CircleBumper(String identifier, Point p, double row, double column, double width, double height) {
-		super.point 		= p;
-		super.rowWidth 		= row;
-		super.columnHeight	= column;
-		super.identifier 	= identifier;
-		super.cellWidth		= width;
-		super.cellHeight	= height;
+	public CircleBumper(String identifier, GizPoint p, double row, double column, double width, double height) {
+		point 		= p;
+		rowWidth 		= row;
+		columnHeight	= column;
+		this.identifier 	= identifier;
+		cellWidth		= width;
+		cellHeight	= height;
 		
-		super.lineSegments 	= new ArrayList<LineSegment>();
-		super.circles = new ArrayList<Circle>();
+		lineSegments 	= new ArrayList<LineSegment>();
+		circles = new ArrayList<Circle>();
 		
-		super.circles.add(
-				new Circle(new Vect(super.point.x * super.cellWidth, super.point.y * super.cellHeight), super.cellWidth / 2)
+		circles.add(
+				new Circle(new Vect(point.getX() * cellWidth, point.getY() * cellHeight), cellWidth / 2)
 				);
 	}
 

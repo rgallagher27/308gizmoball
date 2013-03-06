@@ -8,45 +8,44 @@ import model.physics.LineSegment;
 
 public class TriangleBumper extends Gizmo implements iGizmo {
 
-	public TriangleBumper( String identifier, Point p, double row, double column, double width, double height) {
+	public TriangleBumper( String identifier, GizPoint p, double row, double column, double width, double height) {
 		super();
-		super.point 		= p;
-		super.rowWidth 		= row;
-		super.columnHeight 	= column;
-		super.cellWidth		= width;
-		super.cellHeight    = height;
-		super.rotation		= height;
-		super.identifier 	= identifier;
-		super.rotation		= 0;
+		point 		= p;
+		rowWidth 		= row;
+		columnHeight 	= column;
+		cellWidth		= width;
+		cellHeight    = height;
+		this.identifier 	= identifier;
+		rotation		= 0;
 		
-		this.fillLineSegments();
+		fillLineSegments();
 	}
 	@Override
 	public void setRotation(double r) {
-		this.rotation = r;
-		this.fillLineSegments();
+		rotation = r;
+		fillLineSegments();
 	}
 	
 	private void fillLineSegments()
 	{
-		super.lineSegments   	= null;
-		super.circles  	= null;
-		super.lineSegments		= new ArrayList<LineSegment>();
-		super.circles 	= new ArrayList<Circle>();
+		lineSegments   	= null;
+		circles  	= null;
+		lineSegments		= new ArrayList<LineSegment>();
+		circles 	= new ArrayList<Circle>();
 		
-		double topLX = (this.point.x * this.cellWidth)  - ((this.rowWidth * this.cellWidth) / 2);
-		double topLY = (this.point.y * this.cellHeight) - ((this.columnHeight * this.cellHeight) / 2);
+		double topLX = (point.getX() * cellWidth)  - ((rowWidth * cellWidth) / 2);
+		double topLY = (point.getY() * cellHeight) - ((columnHeight * cellHeight) / 2);
 		
-		double topRX = topLX + (this.rowWidth * this.cellWidth);
+		double topRX = topLX + (rowWidth * cellWidth);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = topLY + (this.columnHeight * this.cellHeight);
+		double bottomLY = topLY + (columnHeight * cellHeight);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;
 	
-		switch ((int)super.rotation) {
+		switch ((int)rotation) {
 			case 0:
 				lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 				lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));

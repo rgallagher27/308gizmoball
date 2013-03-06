@@ -10,48 +10,48 @@ import model.physics.Vect;
 
 public class RightFlipper extends Flipper {
 
-	public RightFlipper(String identifier, Point p,  double row, double column, double width, double height) {
+	public RightFlipper(String identifier, GizPoint p,  double row, double column, double width, double height) {
 		super(identifier, p, row, column, width, height);
-		super.minRotation = 0;
-		super.maxRotation = 90;
+		minRotation = 0;
+		maxRotation = 90;
 		
-		this.fillLineSegments();
+		fillLineSegments();
 	}
 	
 	@Override
 	public void move()
 	{
-		if(super.active){
-			if(super.rotation < maxRotation){
-				super.rotation += super.rotationIncrement;
-				this.fillLineSegments();
+		if(active){
+			if(rotation < maxRotation){
+				rotation += rotationIncrement;
+				fillLineSegments();
 			}
 		}else{
-			if(super.rotation > minRotation){
-				super.rotation -= super.rotationIncrement;
-				this.fillLineSegments();
+			if(rotation > minRotation){
+				rotation -= rotationIncrement;
+				fillLineSegments();
 			}
 		}
 	}
 	
 	@Override
 	public void setRotation(double r) {
-		super.rotation     = r;
-		super.maxRotation += r;
-		super.minRotation += r;
+		rotation     = r;
+		maxRotation += r;
+		minRotation += r;
 	}
 	
 	private void fillLineSegments()
 	{
-		this.lineSegments.clear();
-		double topLX = ((this.point.x + this.rowWidth) * this.cellWidth) ;
-		double topLY = (this.point.y * this.cellHeight) - (this.cellHeight / 2);
+		lineSegments.clear();
+		double topLX = ((point.getX() + rowWidth) * cellWidth) ;
+		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
 		
-		double topRX = (this.point.x + this.rowWidth) * this.cellWidth;
+		double topRX = (point.getX() + rowWidth) * cellWidth;
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
-		double bottomLY = (this.point.y * this.cellHeight) + (this.columnHeight * this.cellHeight) - (this.cellHeight / 2);
+		double bottomLY = (point.getY() * cellHeight) + (columnHeight * cellHeight) - (cellHeight / 2);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;
@@ -66,28 +66,28 @@ public class RightFlipper extends Flipper {
 		
 		Geometry.rotateAround(line1, 
 				new Vect(centerX, centerY), 
-				new Angle(Math.toRadians(this.rotation))
+				new Angle(Math.toRadians(rotation))
 			 );
 
 		Geometry.rotateAround(line2, 
 		new Vect(centerX, centerY), 
-		new Angle(Math.toRadians(this.rotation))
+		new Angle(Math.toRadians(rotation))
 		);
 		
 		Geometry.rotateAround(line3, 
 		new Vect(centerX, centerY), 
-		new Angle(Math.toRadians(this.rotation))
+		new Angle(Math.toRadians(rotation))
 		);
 		
 		Geometry.rotateAround(line4, 
 		new Vect(centerX, centerY), 
-		new Angle(Math.toRadians(this.rotation))
+		new Angle(Math.toRadians(rotation))
 		);
 		
-		this.lineSegments.add(line1);
-		this.lineSegments.add(line2);
-		this.lineSegments.add(line3);
-		this.lineSegments.add(line4);
+		lineSegments.add(line1);
+		lineSegments.add(line2);
+		lineSegments.add(line3);
+		lineSegments.add(line4);
 		
 		/*this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
 		

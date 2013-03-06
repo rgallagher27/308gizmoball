@@ -1,6 +1,6 @@
 package model;
 
-import java.awt.Point;
+
 import java.util.ArrayList;
 
 import model.physics.Circle;
@@ -11,24 +11,24 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected double maxRotation, minRotation;
 	protected boolean active;
 
-	public Flipper(String identifier, Point p, double row, double column, double width, double height) {
-		super.point 			= p;
-		super.columnHeight		= column;
-		super.cellWidth			= width;
-		super.cellHeight		= height;
-		super.rowWidth			= row;
-		super.rotation 			= 0;
-		super.rotationIncrement = 10;
-		super.identifier 		= identifier;
+	public Flipper(String identifier, GizPoint p, double row, double column, double width, double height) {
+		point 			= p;
+		columnHeight		= column;
+		cellWidth			= width;
+		cellHeight		= height;
+		rowWidth			= row;
+		rotation 			= 0;
+		rotationIncrement = 10;
+		this.identifier 		= identifier;
 		
-		super.lineSegments 		= new ArrayList<LineSegment>();
-		super.circles			= new ArrayList<Circle>();
+		lineSegments 		= new ArrayList<LineSegment>();
+		circles			= new ArrayList<Circle>();
 		
-		this.active 			= false;
+		active 			= false;
 	}
 
 	@Override
 	public void performAction(boolean a) {
-		this.active = a;
+		active = a;
 	}
 }
