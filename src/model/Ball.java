@@ -8,7 +8,7 @@ import model.physics.Geometry;
 import model.physics.Geometry.VectPair;
 import model.physics.Vect;
 
-public class Ball extends Observable implements iBall {
+public class Ball implements iBall {
 
 	protected BallPoint point;
 	protected double row, column, cellWidth, cellHeight;
@@ -84,26 +84,25 @@ public class Ball extends Observable implements iBall {
 	}
 
 	@Override
-	public void move(float deltaT) {
+	public void move(double deltaT) {
 		if(!isCaptured){	
 			deltaT /= 2;
-			float mu  = 0.015F;
-			float mu2 = 0.015F;
+			double mu  = 0.015F;
+			double mu2 = 0.015F;
 			
-			float friction = (float) (1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT);
+			double friction = (1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT);
 			
 			Vect newVelocity = new Vect(velocity.x() * friction, velocity.y() * friction + gravity * deltaT);
 			velocity = newVelocity;
 			
-			point.setX(point.getX() + (deltaT * (float)velocity.x()));
-			point.setY(point.getY() + (deltaT * (float)velocity.y()));
+			point.setX((float)(point.getX() + (deltaT * velocity.x())));
+			point.setY((float)(point.getY() + (deltaT * velocity.y())));
 			
-			BallPoint newCirclePoint = new BallPoint(point.getX() * (float)cellWidth, point.getY() * (float)cellHeight);
+			BallPoint newCirclePoint = new BallPoint((float)(point.getX() * cellWidth), (float)(point.getY() * cellHeight));
 			
 			physicsCircle = new Circle(newCirclePoint.getX(),newCirclePoint.getY(), getCellWidth() / 4);
 		}
-			setChanged();
-			notifyObservers();
+			
 	}
 
 	@Override

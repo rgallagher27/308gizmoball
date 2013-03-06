@@ -111,6 +111,7 @@ public class AnimationEventListener implements IController {
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
+		
 		int keyPressed = event.getKeyCode();
 		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
@@ -133,7 +134,7 @@ public class AnimationEventListener implements IController {
 		int keyPressed = event.getKeyCode();
 		
 		for(iGizmo giz : overlord.getGizmoUpKeytriggers(keyPressed)){
-			giz.performAction(true);
+			giz.performAction(false);
 		}
 	}
 
@@ -168,7 +169,7 @@ public class AnimationEventListener implements IController {
 					for(int i = 0; i < 50; i++){
 						Current_Delta_T = collideBalls(b, Current_Delta_T);
 						Current_Delta_T = collideGizmos(b, Current_Delta_T);
-						b.move((float)Current_Delta_T);
+						b.move(Current_Delta_T);
 					}
 				}
 				/*
@@ -229,8 +230,9 @@ public class AnimationEventListener implements IController {
 			else{
 				((Absorber)closestGizmo).captureBall(b);
 				b.setCaptured(true);
+				closestGizmo.collide(b);
 			}
-			b.move((float)Current_Delta_T);
+			b.move(Current_Delta_T);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
 		}else{
@@ -255,7 +257,7 @@ public class AnimationEventListener implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
-			b.move((float)Current_Delta_T);
+			b.move(Current_Delta_T);
 			closestBall.collide(b);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -17,7 +18,7 @@ import model.TriangleBumper;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
-import view.framework.G2DAbstractCanvas;
+import view.framework.*;
 import controller.AnimationEventListener;
 import controller.GizmoFactory;
 import controller.IController;
@@ -36,9 +37,8 @@ public class PrototypeView extends JPanel implements Observer {
 
 	public PrototypeView() {
 		super();
-		this.setPreferredSize(this.windowSize);
-		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
-		
+		setPreferredSize(this.windowSize);
+		abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
 		/*
 		 * Add event listener to key presses.
 		 * 
@@ -65,6 +65,8 @@ public class PrototypeView extends JPanel implements Observer {
 	}
 	
 	private Image bufferImage;
+
+	private Object G2DObject;
 	
 	@Override 
 	public void paint(Graphics g)
@@ -77,13 +79,20 @@ public class PrototypeView extends JPanel implements Observer {
 		abstractCanvas.setPhysicalDisplay(getWidth(), getHeight(), buffer);
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
+		buffer.setColor(Color.BLACK);
+		buffer.fillRect(0, 0, getWidth(), getHeight());
 		
 		eventListener.factoryDraw(abstractCanvas, 20, 20, 50, 50);
 		
-		for(String gizmo : eventListener.getGizmos())
+		for(String gizmo : eventListener.getGizmos()){
+			if(eventListener.getGraphicsGizmo(gizmo) != null){
 			eventListener.getGraphicsGizmo(gizmo).draw(abstractCanvas);
-		for(String ball : eventListener.getBalls())
+			}
+		}
+		for(String ball : eventListener.getBalls()){
 			eventListener.getGraphicsBall(ball).draw(abstractCanvas);
+			
+		}
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}
@@ -91,7 +100,7 @@ public class PrototypeView extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) 
 	{
-		this.repaint();
+		repaint();
 	}
     
     

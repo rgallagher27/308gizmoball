@@ -17,7 +17,8 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		cellHeight    = height;
 		this.identifier 	= identifier;
 		rotation		= 0;
-		
+		this.height = 1;
+		this.width = 1;
 		fillLineSegments();
 	}
 	@Override

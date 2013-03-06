@@ -26,7 +26,8 @@ public class Absorber extends Gizmo implements iGizmo {
 		lineSegments 	= new ArrayList<LineSegment>();
 		circles		= new ArrayList<Circle>();
 		capturedBalls 	= new ArrayList<iBall>();
-		
+		this.width = (int) width;
+		this.height = (int) height;
 		fillLineSegments();
 	}
 	
@@ -47,7 +48,7 @@ public class Absorber extends Gizmo implements iGizmo {
 				capturedBalls.remove(0);
 			}
 		}
-		this.active = false;
+		active = false;
 	}
 
 	private void fillLineSegments()

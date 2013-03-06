@@ -139,6 +139,8 @@ public class Gizmo implements iGizmo {
 				);
 		//trigger.
 		for(iGizmo giz: triggers){
+			System.out.println(this.getIdentifier() + " has triggered " + giz.getIdentifier());
+			giz.performAction(true);
 			giz.move();
 		}
 	}
@@ -180,5 +182,6 @@ public class Gizmo implements iGizmo {
 		if(rotation > 360){
 			rotation = 0;
 		}
+		setRotation(rotation);
 	}
 }

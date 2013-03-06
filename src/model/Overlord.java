@@ -49,7 +49,7 @@ public class Overlord extends Observable implements iOverlord {
 			}
 		}
 
-		gizmos.put("GizmoWall", new Wall(cellWidth, cellHeight));
+		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
 
 	}
 
@@ -168,10 +168,10 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int width, int height) {
 
-		if (canPlace("", x, y, (x + height), (y + width))) {
+		if (canPlace("", x, y, (x + height-1), (y + width-1))) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + height), (y + width));
+			setPlace(id, x, y, (x + height-1), (y + width-1));
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -185,6 +185,7 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public boolean addBall(String ballName, String absorberName, float x,
 			float y, double vx, double vy) {
+		
 		iGizmo absorb = null;
 		if (absorberName.length() > 0) {
 			absorb = getGizmo(absorberName);
@@ -204,6 +205,7 @@ public class Overlord extends Observable implements iOverlord {
 					cellWidth, cellHeight);
 			newBall.setVelocity(new Vect(vx, vy));
 			newBall.setCaptured(false);
+			balls.put(ballName, newBall);
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(ballName);
@@ -302,6 +304,7 @@ public class Overlord extends Observable implements iOverlord {
 		if (tmp != null) {
 			if ((tmp.getWidth() == 1 && tmp.getHeight() == 1)
 					|| (tmp.getWidth() == 2 && tmp.getHeight() == 2)) {
+			
 				tmp.rotate(); // 90
 				setChanged();
 				notifyObservers(gizmoName);
@@ -319,11 +322,17 @@ public class Overlord extends Observable implements iOverlord {
 			return false;
 		if (direction) {
 			tmp = (ArrayList<iGizmo>) keyTriggersUp.get(keyNum);
+			if(tmp == null){
+				tmp = new ArrayList<iGizmo>();
+			}
 			tmp.add(con);
 			keyTriggersUp.put(keyNum, tmp);
 			return true;
 		} else {
 			tmp = (ArrayList<iGizmo>) keyTriggersDown.get(keyNum);
+			if(tmp == null){
+				tmp = new ArrayList<iGizmo>();
+			}
 			tmp.add(con);
 			keyTriggersDown.put(keyNum, tmp);
 			return true;
@@ -427,18 +436,27 @@ public class Overlord extends Observable implements iOverlord {
 		for (iGizmo giz : getGizmos()) {
 			giz.move();
 		}
+		setChanged();
+		notifyObservers();
 
 	}
 	
 	@Override
 	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode) {
-		
-		return keyTriggersDown.get(keyCode);
+		ArrayList<iGizmo> tmp = new ArrayList<iGizmo>();
+		if(keyTriggersDown.get(keyCode) != null){
+			return keyTriggersDown.get(keyCode);
+		}
+		return tmp;
 	}
 
 	@Override
 	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode)  {
-		return keyTriggersUp.get(keyCode);
+		ArrayList<iGizmo> tmp = new ArrayList<iGizmo>();
+		if(keyTriggersUp.get(keyCode) != null){
+			return keyTriggersUp.get(keyCode);
+		}
+		return tmp;
 	}
 
 }

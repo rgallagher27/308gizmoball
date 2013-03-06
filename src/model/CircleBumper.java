@@ -16,7 +16,8 @@ public class CircleBumper extends Gizmo implements iGizmo {
 		this.identifier 	= identifier;
 		cellWidth		= width;
 		cellHeight	= height;
-		
+		height = 1;
+		width = 1;
 		lineSegments 	= new ArrayList<LineSegment>();
 		circles = new ArrayList<Circle>();
 		

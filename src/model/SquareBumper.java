@@ -16,6 +16,8 @@ public class SquareBumper extends Gizmo implements iGizmo {
 		this.cellWidth		= cellWidth;
 		this.cellHeight 	= cellHeight;
 		this.identifier 	= identifier;
+		height = 1;
+		width = 1;
 		
 		lineSegments = new ArrayList<LineSegment>();
 		circles = new ArrayList<Circle>();

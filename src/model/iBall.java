@@ -43,7 +43,7 @@ public interface iBall {
 	
 	public boolean isCaptured();
 	
-	public void move(float deltaT);
+	public void move(double deltaT);
 	
 	public double timeUntilCollision(iBall ball);
 	

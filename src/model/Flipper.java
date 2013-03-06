@@ -25,6 +25,8 @@ public class Flipper extends Gizmo implements iGizmo {
 		circles			= new ArrayList<Circle>();
 		
 		active 			= false;
+		this.width = 2;
+		this.height = 2;
 	}
 
 	@Override
