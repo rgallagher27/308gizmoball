@@ -10,61 +10,61 @@ import model.physics.Vect;
 
 public class Ball extends Observable implements iBall {
 
-	protected Point2D.Double point;
+	protected BallPoint point;
 	protected double row, column, cellWidth, cellHeight;
-	protected double gravity;
+	protected float gravity;
 	protected Vect velocity;
 	protected Circle physicsCircle;
 	protected String identifier;
 	protected boolean isCaptured;
 	protected double i = 0;
 
-	public Ball(String identifier, Point2D.Double p, double row, double column, double width, double height) {
-		this.point 			= p;
+	public Ball(String identifier, BallPoint p, double row, double column, double width, double height) {
+		point 			= p;
 		this.row 			= row;
 		this.column 		= column;
 		this.identifier 	= identifier;
-		this.cellWidth		= width;
-		this.cellHeight		= height;
-		this.physicsCircle	= new Circle(this.point, this.cellWidth/4);
-		this.gravity 		= (double)1/25;
-		this.velocity 		= new Vect(0, 0);
-		this.isCaptured		= false;
+		cellWidth		= width;
+		cellHeight		= height;
+		physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
+		gravity 		= (float)1/25;
+		velocity 		= new Vect(0, 0);
+		isCaptured		= false;
 	}
 
 	@Override
 	public String getIdentifier() {
-		return this.identifier;
+		return identifier;
 	}
 
 	@Override
-	public Point2D.Double getLocation() {
-		return this.point;
+	public BallPoint getLocation() {
+		return point;
 	}
 
 	@Override
-	public void setLocation(Point2D.Double p) {
-		this.point = p;
+	public void setLocation(BallPoint p) {
+		point = p;
 	}
 
 	@Override
 	public double getRowWidth() {
-		return this.row;
+		return row;
 	}
 
 	@Override
 	public void setRowWidth(double w) {
-		this.row = w;
+		row = w;
 	}
 
 	@Override
 	public double getColumnHeight() {
-		return this.column;
+		return column;
 	}
 
 	@Override
 	public void setColumnHeight(double h) {
-		this.column = h;
+		column = h;
 	}
 
 	@Override
@@ -79,94 +79,94 @@ public class Ball extends Observable implements iBall {
 	}
 
 	@Override
-	public void move(double deltaT) {
-		if(!this.isCaptured){	
+	public void move(float deltaT) {
+		if(!isCaptured){	
 			deltaT /= 2;
-			double mu  = 0.015;
-			double mu2 = 0.015;
+			float mu  = 0.015F;
+			float mu2 = 0.015F;
 			
-			double friction = 1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT;
+			float friction = (float) (1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT);
 			
-			Vect newVelocity = new Vect(this.velocity.x() * friction, this.velocity.y() * friction + gravity * deltaT);
-			this.velocity = newVelocity;
+			Vect newVelocity = new Vect(velocity.x() * friction, velocity.y() * friction + gravity * deltaT);
+			velocity = newVelocity;
 			
-			this.point.x  	= this.point.x + (deltaT * this.velocity.x());
-			this.point.y	= this.point.y + (deltaT * this.velocity.y());
+			point.setX(point.getX() + (deltaT * (float)velocity.x()));
+			point.setY(point.getY() + (deltaT * (float)velocity.y()));
 			
-			Point2D.Double newCirclePoint = new Point2D.Double(this.point.x * this.cellWidth, this.point.y * cellHeight);
+			BallPoint newCirclePoint = new BallPoint(point.getX() * (float)cellWidth, point.getY() * (float)cellHeight);
 			
-			this.physicsCircle = new Circle(newCirclePoint, this.getCellWidth() / 4);
+			physicsCircle = new Circle(newCirclePoint.getX(),newCirclePoint.getY(), getCellWidth() / 4);
 		}
-			this.setChanged();
-			this.notifyObservers();
+			setChanged();
+			notifyObservers();
 	}
 
 	@Override
 	public double getCellWidth() {
-		return this.cellWidth;
+		return cellWidth;
 	}
 
 	@Override
 	public void setCellWidth(double w) {
-		this.cellWidth = w;
+		cellWidth = w;
 	}
 
 	@Override
 	public double getCellHeight() {
-		return this.cellHeight;
+		return cellHeight;
 	}
 
 	@Override
 	public void setCellHeight(double h) {
-		this.cellHeight = h;
+		cellHeight = h;
 	}
 
 	@Override
 	public Circle returnBounds() {
-		return this.physicsCircle;
+		return physicsCircle;
 	}
 
 	@Override
 	public Vect getVelocity() {
-		return this.velocity;
+		return velocity;
 	}
 
 	@Override
 	public void setVelocity(Vect v) {
-		this.velocity = v;
+		velocity = v;
 	}
 
 	@Override
 	public boolean isCaptured() {
-		return this.isCaptured;
+		return isCaptured;
 	}
 
 	@Override
 	public void setCaptured(boolean update) {
 		if(update){
-			double newX = 19;
-			double newY = 19;
+			float newX = 19;
+			float newY = 19;
 			
-			this.point = new Point2D.Double(newX, newY);
+			point = new BallPoint(newX, newY);
 
-			this.isCaptured = update;
+			isCaptured = update;
 		}else{
-			this.isCaptured = update;
+			isCaptured = update;
 		}
 	}
 
 	@Override
 	public double timeUntilCollision(iBall ball)
 	{
-		return Geometry.timeUntilBallBallCollision(this.physicsCircle, this.velocity, ball.returnBounds(), ball.getVelocity());
+		return Geometry.timeUntilBallBallCollision(physicsCircle, velocity, ball.returnBounds(), ball.getVelocity());
 	}
 
 	@Override
 	public void collide(iBall ball)
 	{
 		if(ball.equals(null))return;
-		VectPair velPer = Geometry.reflectBalls(this.physicsCircle.getCenter(), 1, this.getVelocity(), ball.returnBounds().getCenter(), 1, ball.getVelocity());
-		this.setVelocity(velPer.v1);
+		VectPair velPer = Geometry.reflectBalls(physicsCircle.getCenter(), 1, getVelocity(), ball.returnBounds().getCenter(), 1, ball.getVelocity());
+		setVelocity(velPer.v1);
 		ball.setVelocity(velPer.v2);
 	}
 
