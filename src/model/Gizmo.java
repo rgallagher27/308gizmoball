@@ -9,7 +9,7 @@ import model.physics.LineSegment;
 
 public class Gizmo implements iGizmo {
 	
-	protected Point point;
+	protected GizPoint point;
 	protected double rowWidth, columnHeight, cellWidth, cellHeight;
 	protected double rotation, rotationIncrement;
 	protected List<LineSegment> lineSegments;
@@ -17,72 +17,72 @@ public class Gizmo implements iGizmo {
 	protected String identifier;
 
 	public Gizmo() {
-		this.rotation = 0;
+		rotation = 0;
 	}
 
 	@Override
 	public String getIdentifier() {
-		return this.identifier;
+		return identifier;
 	}
 
 	@Override
-	public Point getLocation() {
-		return this.point;
+	public GizPoint getLocation() {
+		return point;
 	}
 
 	@Override
-	public void setLocation(Point p) {
-		this.point = p;
+	public void setLocation(GizPoint p) {
+		point = p;
 	}
 
 	@Override
 	public double getRowWidth() {
-		return this.rowWidth;
+		return rowWidth;
 	}
 
 	@Override
 	public void setRowWidth(double w) {
-		this.rowWidth = w;
+		rowWidth = w;
 	}
 
 	@Override
 	public double getColumnHeight() {
-		return this.columnHeight;
+		return columnHeight;
 	}
 
 	@Override
 	public void setColumnHeight(double h) {
-		this.columnHeight = h;
+		columnHeight = h;
 	}
 
 	@Override
 	public double getCellWidth() {
-		return this.cellWidth;
+		return cellWidth;
 	}
 
 	@Override
 	public void setCellWidth(double w) {
-		this.cellWidth = w;
+		cellWidth = w;
 	}
 
 	@Override
 	public double getCellHeight() {
-		return this.cellHeight;
+		return cellHeight;
 	}
 
 	@Override
 	public void setCellHeight(double h) {
-		this.cellHeight = h;
+		cellHeight = h;
 	}
 
 	@Override
 	public double getRotation() {
-		return this.rotation;
+		return rotation;
 	}
 
 	@Override
 	public void setRotation(double r) {
-		this.rotation = r;
+		rotation = r;
 	}
 
 	@Override
@@ -90,12 +90,12 @@ public class Gizmo implements iGizmo {
 		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		
-		for(LineSegment l : this.lineSegments){
+		for(LineSegment l : lineSegments){
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
 		
-		for(Circle c : this.circles){
+		for(Circle c : circles){
 			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
@@ -111,14 +111,14 @@ public class Gizmo implements iGizmo {
 		LineSegment closestLine = null;
 		Circle closestCircle = null;
 		
-		for(LineSegment l : this.lineSegments){
+		for(LineSegment l : lineSegments){
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
 				closestLine = l;
 			}
 		}
-		for(Circle c : this.circles){
+		for(Circle c : circles){
 			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
@@ -140,6 +140,6 @@ public class Gizmo implements iGizmo {
 
 	@Override
 	public void move() {
-		// TODO Auto-generated method stub
+		
 	}
 }

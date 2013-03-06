@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,6 +39,38 @@ public class AnimationEventListener implements IController {
 		this.gameLoop.start();
 	}
 
+	public int getGizX(String name){
+		return overlord.getGizmo(name).getLocation().getX();
+	}
+
+	public int getGizY(String name){
+		return overlord.getGizmo(name).getLocation().getY();
+	}
+	
+	public int getGizWidth(String name){
+		return overlord.getGizmo(name).getWidth();
+	}
+	
+	public int getGizHeight(String name){
+		return overlord.getGizmo(name).getHeight();
+	}
+	
+	public float getBallX(String name){
+		return overlord.getBall(name).getLocation().getX();
+	}
+
+	public float getBallY(String name){
+		return overlord.getBall(name).getLocation().getY();
+	}
+	
+	public double getBallRadius(String name){
+		return overlord.getBall(name).getRadius();
+	}
+	
+	public List<String> getGizmos(){
+		LinkedList<String> list = new LinkedList<String>();
+		//for(iGizmo giz : overlord.get)
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)

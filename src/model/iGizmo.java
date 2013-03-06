@@ -6,9 +6,9 @@ public interface iGizmo {
 	
 	public String getIdentifier();
 	
-	public Point getLocation();
+	public GizPoint getLocation();
 	
-	public void setLocation(Point p);
+	public void setLocation(GizPoint p);
 	
 	public double getRowWidth();
 	
@@ -21,6 +21,10 @@ public interface iGizmo {
 	public double getCellWidth();
 	
 	public void setCellWidth(double w);
+	
+	public void addTrigger(iGizmo giz);
+	
+	public void removeTrigger(iGizmo giz);
 	
 	public double getCellHeight();
 	
@@ -37,5 +41,9 @@ public interface iGizmo {
 	public void performAction(boolean a);
 	
 	public void move();
+
+	public int getWidth();
+
+	public int getHeight();
 
 }

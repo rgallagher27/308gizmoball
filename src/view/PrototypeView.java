@@ -33,16 +33,11 @@ public class PrototypeView extends JPanel implements Observer {
 	private IController eventListener;
 	
 	private G2DAbstractCanvas abstractCanvas;
-	
-	private iOverlord overlord;
 
 	public PrototypeView() {
 		super();
 		this.setPreferredSize(this.windowSize);
-		
-		this.overlord			= new Overlord(gridSize, canvasSize);
 		this.abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
-		((Observable)this.overlord).addObserver(this);
 		
 		/*
 		 * Add event listener to key presses.

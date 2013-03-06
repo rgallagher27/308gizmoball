@@ -9,84 +9,212 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import exception.CannotRotateException;
+
 import model.physics.Vect;
 
 public class Overlord extends Observable implements iOverlord {
 	
 	private Dimension gridDimentions, canvasDimentions;
 	
-	private List<iGizmo> gizmoObjects;
-	private List<iBall> ballObjects;
-	private Map<Integer, ArrayList<iGizmo>> gizmoDownTriggers;
-	private Map<Integer, ArrayList<iGizmo>> gizmoUpTriggers;
-	private FileParser fileParser;
-	
+	private HashMap<String, iGizmo> gizmos;
+	private HashMap<Integer, List<iGizmo>> keyTriggersDown;
+	private HashMap<Integer, List<iGizmo>> keyTriggersUp;
+	private HashMap<String, iBall> balls;
+	private FileParser fileParse;
+	private String[][] board;
 	private double cellWidth, cellHeight;
+	private float gravity;
+	private float mu, mu2;
+	private boolean loadingFile;
 
 	public Overlord(Dimension gridDimentions, Dimension canvasDimentions) {
 		
 		this.gridDimentions	 	= gridDimentions;
 		this.canvasDimentions	= canvasDimentions;
-		this.cellWidth			= this.canvasDimentions.getWidth()  / this.gridDimentions.getWidth();
-		this.cellHeight			= this.canvasDimentions.getHeight() / this.gridDimentions.getHeight();
-		this.gizmoObjects 		= new ArrayList<iGizmo>();
-		this.ballObjects		= new ArrayList<iBall>();
-		this.gizmoDownTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
-		this.gizmoUpTriggers	= new HashMap<Integer, ArrayList<iGizmo>>();
-		this.fileParser			= new FileParser(this);
+		cellWidth			= canvasDimentions.getWidth()  / gridDimentions.getWidth();
+		cellHeight			= canvasDimentions.getHeight() / gridDimentions.getHeight();
+		gizmos = new HashMap<String, iGizmo>();
+		balls = new HashMap<String, iBall>();
+		keyTriggersDown = new HashMap<Integer, List<iGizmo>>();
+		keyTriggersUp = new HashMap<Integer, List<iGizmo>>();
+		board = new String[gridDimentions.width][gridDimentions.height]; // x along, y up
 		
-		this.gizmoObjects.add(new Wall(cellWidth, cellHeight));
+		for(int x = 0; x < gridDimentions.width; x++){
+			for(int y = 0; y < gridDimentions.height; y++){
+				board[y][x] = "";
+			}
+		}
 		
-		this.fileParser.loadFile("Input");
+		gizmos.put("GizmoWall", new Wall(cellWidth, cellHeight));
+		
 	}
 
 	@Override
-	public List<iGizmo> getAllGizmos() {
-		return this.gizmoObjects;
+	public void removeGizmo(String gizmoName) {
+		iGizmo gizRem = getGizmo(gizmoName);
+		for(iGizmo giz : getGizmos()){
+			giz.removeTrigger(gizRem);
+		}
+		for(Integer keyVal : keyTriggersDown.keySet()){
+			keyTriggersDown.get(keyVal).remove(gizRem);
+			
+		}
+		for(Integer keyVal : keyTriggersUp.keySet()){
+			keyTriggersUp.get(keyVal).remove(gizRem);
+		}
+		gizmos.remove(gizmoName);
+		removeFromBoard(gizmoName);
+		setChanged();
+		notifyObservers(gizmoName);
+	}
+	
+	@Override
+	public List<iGizmo> getGizmos() {
+		return new ArrayList<iGizmo>(gizmos.values());
+	}
+	
+	@Override
+	public iGizmo getGizmo(String gizmoName) {
+		return gizmos.get(gizmoName);
 	}
 
 	@Override
-	public List<iBall> getAllballs() {
-		return this.ballObjects;
-	}
-
-	@Override
-	public iGizmo getGizmo(String identifier) {
-		for(iGizmo g : this.gizmoObjects)
-			if(g.getIdentifier().equals(identifier))return g;
-		
-		return null;
+	public List<iBall> getBalls() {
+		return new ArrayList<iBall>(balls.values());
 	}
 
 	@Override
 	public iBall getBall(String identifier) {
-		for(iBall b : this.ballObjects)
+		for(iBall b : getBalls())
 			if(b.getIdentifier().equals(identifier))return b;
-		
 		return null;
-	}
-
-	public Map<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers()
-	{
-		return this.gizmoDownTriggers;
-	}
-
-	@Override
-	public Map<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers() {
-		return this.gizmoUpTriggers;
 	}
 	
 	@Override
-	public void addAbsorber(String id, int x, int y, int width, int height) {
-		this.gizmoObjects.add(new Absorber(id, new Point(x, y), width, height, this.cellWidth, this.cellHeight));
+	public void setGravity(float newGrav) {
+		gravity = newGrav;
+		
 	}
 
 	@Override
-	public void addBall(String id, double x, double y, double xV, double yV) {
-		iBall newBall = new Ball(id, new Point2D.Double( x, y ), 1, 1, this.cellWidth, this.cellHeight);
-		newBall.setVelocity(new Vect(xV, yV));
-		this.ballObjects.add(newBall);
+	public void saveGame(String mapName) {
+		
+		
 	}
+	
+	
+	@Override
+	public void setFriction(float mu, float mu2) {
+		this.mu = mu;
+		this.mu2 = mu2;
+		
+	}
+	
+	private boolean canPlace(String ex, int startX, int startY, int endX, int endY){
+		for(int y = startY; y < endY; y++){
+			for(int x = startX; x < endX; x++){
+				if(ex.length() > 0){
+					if(!board[y][x].equals("") && !board[y][x].equals(ex)) return false;
+				}else{
+					if(!board[y][x].equals("")) return false;
+				}
+			}
+		}
+		return true;
+	}
+	private boolean canPlaceBall(String ex, float startX, float startY, float endX, float endY){
+		for(int y = (int) Math.floor(startY); y < (int) Math.ceil(endY); y++){
+			for(int x = (int) Math.floor(startX); x < (int) Math.ceil(endX); x++){
+				if(ex.length() > 0){
+					if(!board[y][x].equals("") && !board[y][x].substring(0, 1).equals(ex)) return false;
+				}else{
+					if(!board[y][x].equals("")) return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	private void setPlace(String place, int startX, int startY, int endX, int endY){
+		for(int y = startY; y < endY; y++){
+			for(int x = startX; x < endX; x++){
+				board[y][x] = place;
+			}
+		}
+	}
+	
+	private void removeFromBoard(String toRemove){
+		for(int x = 0; x < board[0].length; x++){
+			for(int y = 0; y < board.length; y++){
+				if(board[y][x].equals(toRemove)){
+					board[y][x] = "";
+				}
+			}
+		}
+	}
+	
+	@Override
+	public boolean addAbsorber(String id, int x, int y, int width, int height) {
+		
+		if(canPlace("", x, y, (x + height), (y + width))){
+			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height, cellWidth, cellHeight));
+			setPlace(id, x, y, (x + height), (y + width));
+			if(!loadingFile){
+				setChanged();
+				notifyObservers(id);
+			}
+			return true;
+		}
+		return false;
+	
+	}
+
+	@Override
+	public boolean addBall(String ballName, String absorberName, float x, float y, double vx,
+			double vy) {
+		iGizmo absorb = null;
+		if(absorberName.length() > 0){
+			absorb = getGizmo(absorberName);
+		}
+		if(vx == 0.0 && vy == 0.0 && absorb != null){
+			if(canPlaceBall("A", x, y, x, y)){
+				iBall newBall = new Ball(ballName, new BallPoint(x,y), 1, 1, cellWidth, cellHeight);
+				newBall.setVelocity(new Vect(vx, vy));
+				newBall.setCaptured(true);
+				balls.put(ballName, newBall);
+				return true;
+			}
+		}
+		if(canPlaceBall("", x, y, x, y)){
+			iBall newBall = new Ball(ballName, new BallPoint(x,y), 1, 1, cellWidth, cellHeight);
+			newBall.setVelocity(new Vect(vx, vy));
+			newBall.setCaptured(false);
+			if(!loadingFile){
+			setChanged();
+			notifyObservers(ballName);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean moveGizmo(String gizmoName, int x, int y) {
+			iGizmo temp = getGizmo(gizmoName);
+
+			if(canPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1))){
+				temp.setLocation(new GizPoint(x, y));
+				removeFromBoard(gizmoName);
+				setPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1));
+				setChanged();
+				notifyObservers(gizmoName);
+				return true;
+			}
+			return false;
+		
+	}
+	
 
 	@Override
 	public void addCircle(String id, int x, int y) {
@@ -127,48 +255,56 @@ public class Overlord extends Observable implements iOverlord {
     	}
     }
     
-	@Override
-	public void move(String name, double x, double y) 
-	{
-    	for(iGizmo g : gizmoObjects){
-    		if(g.getIdentifier().equals(name))g.setLocation( new Point((int)x, (int)y) );
-    	}
-    }
-    
-	@Override
-	public void rotate(String name) 
-	{
-    	for(iGizmo g : gizmoObjects){
-    		if(g.getIdentifier().equals(name))g.setRotation(90);
-    	}
-    }
-    
-    public void keyConnect(int keyCode, String type, String consumer )
-    {
-    	switch (type) {
-		case "down":
-			if(this.gizmoDownTriggers.containsKey(keyCode)){
-				this.gizmoDownTriggers.get(keyCode).add(this.getGizmo(consumer));
-			}else {
-				ArrayList<iGizmo> newList  = new ArrayList<iGizmo>();
-								  newList.add(this.getGizmo(consumer));
-				this.gizmoDownTriggers.put(keyCode, newList);
+	
+	public boolean rotateGizmo(String gizmoName) throws CannotRotateException {
+		iGizmo tmp = getGizmo(gizmoName);
+		if(tmp != null){
+			if((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)){
+				tmp.rotate();  //90
+				setChanged();
+				notifyObservers(gizmoName);
+				return true;
 			}
-			break;
-
-		case "up":
-			if(this.gizmoUpTriggers.containsKey(keyCode)){
-				this.gizmoUpTriggers.get(keyCode).add(this.getGizmo(consumer));
-			}else {
-				ArrayList<iGizmo> newList  = new ArrayList<iGizmo>();
-								  newList.add(this.getGizmo(consumer));
-				this.gizmoUpTriggers.put(keyCode, newList);
-			}
-			break;
-		default:
-			break;
 		}
-    }
+		return false;
+	}
+    
+	@Override
+	public boolean keyConnect(int keyNum, boolean direction, String consumer) {
+		ArrayList<iGizmo> tmp;
+		iGizmo con = getGizmo(consumer);
+		if(con == null) return false;
+		if(direction) {
+			tmp = (ArrayList<iGizmo>) keyTriggersUp.get(keyNum);
+			tmp.add(con);
+			keyTriggersUp.put(keyNum, tmp);
+			return true;
+		}else{
+			tmp = (ArrayList<iGizmo>) keyTriggersDown.get(keyNum);
+			tmp.add(con);
+			keyTriggersDown.put(keyNum, tmp);
+			return true;
+		}
+		
+	}
+	
+	@Override
+	public boolean connect(String producerGizmo, String consumerGizmo) {
+		iGizmo producer = getGizmo(producerGizmo);
+		iGizmo consumer = getGizmo(consumerGizmo);
+		if(producer == null || consumer == null) return false;
+		producer.addTrigger(consumer);
+		return true;
+	}
+	
+	@Override
+	public void loadGame(String mapName) {
+		loadingFile = true;
+		fileParse = new FileParser(this);
+		fileParse.loadFile(mapName);
+		fileParse = null;
+		loadingFile = false;
+	}
 
 	@Override
 	public double collideGizmos(iBall b, double Current_Delta_T) {

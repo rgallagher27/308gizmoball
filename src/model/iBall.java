@@ -9,9 +9,9 @@ public interface iBall {
 	
 	public String getIdentifier();
 	
-	public Point2D.Double getLocation();
+	public BallPoint getLocation();
 	
-	public void setLocation(Point2D.Double p);
+	public void setLocation(BallPoint p);
 	
 	public Circle returnBounds();
 	
@@ -43,9 +43,12 @@ public interface iBall {
 	
 	public boolean isCaptured();
 	
-	public void move(double deltaT);
+	public void move(float deltaT);
 	
 	public double timeUntilCollision(iBall ball);
 	
 	public void collide(iBall ball);
+
+
+
 }
