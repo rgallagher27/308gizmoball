@@ -87,17 +87,11 @@ public class AnimationEventListener implements IController {
 	public void keyPressed(KeyEvent event) 
 	{	
 		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
-		Iterator<Entry<Integer, ArrayList<iGizmo>>> it = overlord.getGizmoDownKeytriggers().entrySet().iterator();
+		int keyPressed = event.getKeyCode();
 		
-	    while (it.hasNext()) {
-	        Map.Entry pairs = it.next();
-	        
-	        for(iGizmo gizmo : (ArrayList<iGizmo>)pairs.getValue()){
-	        	if((int)pairs.getKey() == event.getKeyCode()){
-		        	gizmo.performAction(true);
-		        }
-	        }
-	    }
+		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
+			giz.performAction(true);
+		}
 	}
 
 	/*
@@ -111,17 +105,12 @@ public class AnimationEventListener implements IController {
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		Iterator it = overlord.getGizmoDownKeytriggers().entrySet().iterator();
 		
-	    while (it.hasNext()) {
-	        Map.Entry pairs = (Map.Entry)it.next();
-	        
-	        for(iGizmo gizmo : (ArrayList<iGizmo>)pairs.getValue()){
-	        	if((int)pairs.getKey() == event.getKeyCode()){
-		        	gizmo.performAction(false);
-		        }
-	        }
-	    }
+		int keyPressed = event.getKeyCode();
+		
+		for(iGizmo giz : overlord.getGizmoUpKeytriggers(keyPressed)){
+			giz.performAction(true);
+		}
 	}
 
 	@Override

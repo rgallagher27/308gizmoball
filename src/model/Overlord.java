@@ -431,13 +431,14 @@ public class Overlord extends Observable implements iOverlord {
 	}
 	
 	@Override
-	public HashMap<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers() {
-		return keyTriggersDown;
+	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode) {
+		
+		return keyTriggersDown.get(keyCode);
 	}
 
 	@Override
-	public HashMap<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers() {
-		return keyTriggersUp;
+	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode)  {
+		return keyTriggersUp.get(keyCode);
 	}
 
 }

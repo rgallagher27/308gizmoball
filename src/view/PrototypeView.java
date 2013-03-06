@@ -19,6 +19,7 @@ import model.iGizmo;
 import model.iOverlord;
 import view.framework.G2DAbstractCanvas;
 import controller.AnimationEventListener;
+import controller.GizmoFactory;
 import controller.IController;
 
 public class PrototypeView extends JPanel implements Observer {
@@ -71,21 +72,21 @@ public class PrototypeView extends JPanel implements Observer {
 	{
 		super.paint(g);
 		
-		this.bufferImage = createImage(getWidth(), getHeight());
+		bufferImage = createImage(getWidth(), getHeight());
 		
 		Graphics buffer = bufferImage.getGraphics();
-		this.abstractCanvas.setPhysicalDisplay(getWidth(), getHeight(), buffer);
+		abstractCanvas.setPhysicalDisplay(getWidth(), getHeight(), buffer);
 		
 		buffer.clearRect(0, 0, getWidth(), getHeight());
 		
-		this.gizmoFactory.drawGrid(this.abstractCanvas, 20, 20, 50, 50);
+		gizmoFactory.drawGrid(abstractCanvas, 20, 20, 50, 50);
 		
-		for(iGizmo gizmo : this.overlord.getAllGizmos())
-			if(gizmo instanceof Flipper) this.gizmoFactory.drawFlipper(gizmo).draw(this.abstractCanvas);
-			else if(gizmo instanceof SquareBumper)this.gizmoFactory.drawSquareBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof CircleBumper)this.gizmoFactory.drawCircleBumper(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof Absorber)this.gizmoFactory.drawAbsorber(gizmo).draw(abstractCanvas);
-			else if(gizmo instanceof TriangleBumper)this.gizmoFactory.drawTriangleBumper(gizmo).draw(abstractCanvas);
+		for(String gizmo : eventListener.getGizmos())
+			if(gizmo.contains("F")) gizmoFactory.drawFlipper(gizmo).draw(abstractCanvas);
+			else if(gizmo.contains("SQ"))gizmoFactory.drawSquareBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo.contains("C"))gizmoFactory.drawCircleBumper(gizmo).draw(abstractCanvas);
+			else if(gizmo.contains("A"))gizmoFactory.drawAbsorber(gizmo).draw(abstractCanvas);
+			else if(gizmo.contains("T"))gizmoFactory.drawTriangleBumper(gizmo).draw(abstractCanvas);
 		
 		for(iBall ball : this.overlord.getAllballs())
 			this.gizmoFactory.drawBall(ball).draw(abstractCanvas);

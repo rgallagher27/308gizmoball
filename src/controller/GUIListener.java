@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class GUIListener implements IController {
+public class GUIListener implements GUIController {
 
 	@Override
 	public void keyPressed(KeyEvent e) {

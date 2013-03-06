@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import java.awt.Color;
 
@@ -33,15 +33,15 @@ public class GizmoFactory {
     	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
     }
 	
-	public G2DObject drawFlipper(iGizmo flipper)
+	public G2DObject drawFlipper(String flipper)
 	{	
 		
 		double flipperX = 0;
 		double flipperY = 0;
 		double cellWidth 			= flipper.getCellWidth();
 		double cellheight 			= flipper.getCellHeight();
-		double flipperGridX			= flipper.getLocation().x;
-		double flipperGridY        	= flipper.getLocation().y;
+		double flipperGridX			= flipper.getLocation().getX();
+		double flipperGridY        	= flipper.getLocation().getY();
 		double flipperGridWidth 	= flipper.getRowWidth();
 		double flipperGridHeight	= flipper.getColumnHeight();
 		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
@@ -63,7 +63,7 @@ public class GizmoFactory {
 		return flipperGroup;
 	}
 
-    public G2DObject drawAbsorber(iGizmo absorber)
+    public G2DObject drawAbsorber(String absorber)
     {
         double cellWidth 		= absorber.getCellWidth();
 		double cellheight 		= absorber.getCellHeight();
@@ -76,7 +76,7 @@ public class GizmoFactory {
     			                Color.red);
     }
 	
-	public G2DObject drawSquareBumper(iGizmo bumper)
+	public G2DObject drawSquareBumper(String bumper)
     {
         double cellWidth 		= bumper.getCellWidth();
 		double cellheight 		= bumper.getCellHeight();
@@ -91,7 +91,7 @@ public class GizmoFactory {
 				                Color.red);
     }
     
-    public G2DObject drawTriangleBumper(iGizmo triangle)
+    public G2DObject drawTriangleBumper(String triangle)
     {
         double cellWidth 		= triangle.getCellWidth();
 		double cellheight 		= triangle.getCellHeight();
@@ -113,7 +113,7 @@ public class GizmoFactory {
     	return newTriangle;
     }
 	
-	public G2DObject drawCircleBumper(iGizmo circle)
+	public G2DObject drawCircleBumper(String circle)
     {
         double cellWidth 		= circle.getCellWidth();
 		double cellheight 		= circle.getCellHeight();

@@ -35,7 +35,7 @@ public interface iOverlord {
 	public void loadGame(String mapName);
 	public void saveGame(String mapName);
 	public void moveAllGizmos();
-	public HashMap<Integer, ArrayList<iGizmo>> getGizmoDownKeytriggers();
-	public HashMap<Integer, ArrayList<iGizmo>> getGizmoUpKeytriggers();
+	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode);
+	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode);
 	
 }
