@@ -102,8 +102,17 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void saveGame(String mapName) {
-
+	public void saveGame(String fileName) {
+		fileParse.saveFile(fileName);
+		for(iGizmo ig : getGizmos()) {
+			fileParse.saveGizmo(ig.toString());
+			if(ig instanceof TriangleBumper) {
+				for(int i = (int)ig.getRotation(); i > 0; i = (i - 90)) {
+				fileParse.saveGizmo("Rotate " + ig.getIdentifier());
+				}
+			}
+		}
+		fileParse.closeSaveFile();
 	}
 
 	@Override
