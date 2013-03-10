@@ -140,6 +140,7 @@ public class FileParser {
 
     public void saveGizmo(String gizmoString) {
         bw.write(gizmoString);
+        bw.newLine();
     }
 
     public void closeSaveFile() {
