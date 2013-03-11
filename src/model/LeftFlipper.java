@@ -14,7 +14,6 @@ public class LeftFlipper extends Flipper {
 		super(identifier, p, row, column, width, height);
 		minRotation = 0;
 		maxRotation = -90;
-		
 		fillLineSegments();
 	}
 
@@ -24,11 +23,19 @@ public class LeftFlipper extends Flipper {
 		if(active){
 			if(rotation > maxRotation){
 				rotation -= rotationIncrement;
+				if(rotation > maxRotation){
+					rotation = maxRotation;
+				}
+				angularVel = -angularVel;  // these may be wrong
 				fillLineSegments();
 			}
 		}else{
 			if(rotation < minRotation){
 				rotation += rotationIncrement;
+				if(rotation < minRotation){
+					rotation = minRotation;
+				}
+				angularVel = +angularVel; // these may be wrong + / - dependant on direction.
 				fillLineSegments();
 			}
 		}
@@ -75,13 +82,14 @@ public class LeftFlipper extends Flipper {
 		
 		double centerXTop = (topLX + cellWidth/4);
 		double centerYTop = topLY + 1;
+		rotationCenter = new Vect(centerXTop, centerYTop);
 		
 		double centerXBot = (bottomLX + cellWidth/4);
 		double centerYBot = bottomLY + 1;
 		
 		Vect centerTop = new Vect(centerXTop, centerYTop);  // center point of rotation
 		
-		Circle top = new Circle(centerXTop, centerYTop, cellWidth/4);
+		nonRotationalCircle = new Circle(centerXTop, centerYTop, cellWidth/4);
 		Circle bot = new Circle(centerXBot, centerYBot, cellWidth/4);
 		
 		
@@ -120,7 +128,7 @@ public class LeftFlipper extends Flipper {
 		lineSegments.add(line3);
 		lineSegments.add(line4);
 		
-		circles.add(top);
+		//circles.add(top);
 		circles.add(bot);
 		
 		/*this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
