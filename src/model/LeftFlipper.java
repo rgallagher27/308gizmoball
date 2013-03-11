@@ -44,6 +44,7 @@ public class LeftFlipper extends Flipper {
 	private void fillLineSegments()
 	{
 		lineSegments.clear();
+		circles.clear();
 		
 		/*double topLX = (point.getX() * cellWidth) - (cellWidth / 2);
 		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
@@ -109,8 +110,10 @@ public class LeftFlipper extends Flipper {
 				new Angle(Math.toRadians(rotation))
 			);
 		*/
-		
-		Geometry.rotateAround(line3, cor, a)
+		Angle rotationA = new Angle(Math.toRadians(rotation));
+		line3 = Geometry.rotateAround(line3, centerTop, rotationA);
+		line4 = Geometry.rotateAround(line4, centerTop, rotationA);
+		bot = Geometry.rotateAround(bot, centerTop, rotationA);
 		
 		//lineSegments.add(line1);  -- remove top line
 		//lineSegments.add(line2);  -- remove bot line, inside circle.
