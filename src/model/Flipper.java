@@ -13,7 +13,7 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected double maxRotation, minRotation;
 	protected boolean active;
 	protected Vect rotationCenter;
-	protected double angularVel;
+	protected double angularVel, angularVelMs;
 	protected Circle nonRotationalCircle;
 	protected final double DELTA_T = ((double)1) /30;
 
@@ -24,8 +24,8 @@ public class Flipper extends Gizmo implements iGizmo {
 		cellHeight		= height;
 		rowWidth			= row;
 		rotation 			= 0;
-		rotationIncrement = (1080/1000) * (1000/30);
-		angularVel = (1080/1000) * (1000/30);
+		rotationIncrement = (1080.0/1000.0) * (1000.0/30.0);
+		angularVel = 1080L;
 		this.identifier 		= identifier;
 		
 		lineSegments 		= new ArrayList<LineSegment>();
@@ -49,7 +49,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		double newMin;
 		
 		for(LineSegment l : lineSegments){
-			newMin = Geometry.timeUntilRotatingWallCollision(l, rotationCenter, angularVel,ball.returnBounds(), ball.getVelocity());
+			newMin = Geometry.timeUntilRotatingWallCollision(l, rotationCenter, Math.toRadians(angularVel),ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
 		
@@ -59,7 +59,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		
 		
 		for(Circle c : circles){
-			newMin = Geometry.timeUntilRotatingCircleCollision(c, rotationCenter, angularVel, ball.returnBounds(), ball.getVelocity());
+			newMin = Geometry.timeUntilRotatingCircleCollision(c, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
 		
@@ -75,8 +75,14 @@ public class Flipper extends Gizmo implements iGizmo {
 		Circle closestCircle = null;
 		boolean stationaryCircle = false;
 		
+		if(rotation == minRotation || rotation == maxRotation){
+			angularVel = 0;
+		}else{
+			angularVel = 1080L;
+		}
+		
 		for(LineSegment l : lineSegments){
-			newMin = Geometry.timeUntilRotatingWallCollision(l, rotationCenter, angularVel,ball.returnBounds(), ball.getVelocity());
+			newMin = Geometry.timeUntilRotatingWallCollision(l, rotationCenter, Math.toRadians(angularVel),ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
 				closestLine = l;
@@ -94,7 +100,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		
 		
 		for(Circle c : circles){
-			newMin = Geometry.timeUntilRotatingCircleCollision(c, rotationCenter, angularVel, ball.returnBounds(), ball.getVelocity());
+			newMin = Geometry.timeUntilRotatingCircleCollision(c, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
 				closestLine = null;
@@ -105,14 +111,14 @@ public class Flipper extends Gizmo implements iGizmo {
 		 
 		//0.95 reflection coeff
 		if(closestLine != null){
-			ball.setVelocity(Geometry.reflectRotatingWall(closestLine, rotationCenter, angularVel, ball.returnBounds(), ball.getVelocity(), 1));
+			ball.setVelocity(Geometry.reflectRotatingWall(closestLine, rotationCenter,Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity(), 1));
 			System.out.println("hit wall");
 		}
 		if(closestCircle != null && stationaryCircle)ball.setVelocity(
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity(), 1));
-		if(closestCircle != null){
+		if(closestCircle != null && !stationaryCircle){
 			ball.setVelocity(
-					Geometry.reflectRotatingCircle(closestCircle, rotationCenter, angularVel, ball.returnBounds(), ball.getVelocity(), 1)
+					Geometry.reflectRotatingCircle(closestCircle, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity(), 1)
 				);
 		}
 		//trigger.
