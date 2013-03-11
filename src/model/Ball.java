@@ -27,11 +27,13 @@ public class Ball implements iBall {
 		this.identifier 	= identifier;
 		cellWidth		= width;
 		cellHeight		= height;
-		physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
+		
 		gravity 		= (float)1/25;
 		velocity 		= new Vect(0, 0);
 		isCaptured		= false;
-		radius = 0.25;
+		radius = 0.25F;
+		//physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
+		physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
 	}
 
 	public double getRadius(){
@@ -100,7 +102,10 @@ public class Ball implements iBall {
 			
 			BallPoint newCirclePoint = new BallPoint((float)(point.getX() * cellWidth), (float)(point.getY() * cellHeight));
 			
-			physicsCircle = new Circle(newCirclePoint.getX(),newCirclePoint.getY(), getCellWidth() / 4);
+			//physicsCircle = new Circle(newCirclePoint.getX(),newCirclePoint.getY(), getCellWidth() / 4);
+			physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
+			
+			
 		}
 			
 	}

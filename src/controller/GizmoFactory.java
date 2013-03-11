@@ -3,6 +3,9 @@ package controller;
 import java.awt.Color;
 
 import model.*;
+import model.physics.Circle;
+import model.physics.LineSegment;
+import model.physics.Vect;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
@@ -19,6 +22,20 @@ public class GizmoFactory {
 	
 	public GizmoFactory(IController ic) {
 		controller = ic;
+	}
+	
+	
+	public G2DObject drawSegment(LineSegment ls){
+		Vect point1 = ls.p1();
+		Vect point2 = ls.p2();
+		return new G2DLine(point1.x(), point1.y(), point2.x(), point2.y(), Color.WHITE);
+	}
+	
+	public G2DObject drawCircle(Circle c){
+		double r = c.getRadius();
+		Vect cent = c.getCenter();
+		if(r == 0) r = 1;
+		return new G2DCircle(new G2DPoint(cent.x(), cent.y()), r, Color.CYAN);
 	}
 	
 	public G2DObject drawBall(iBall ball)

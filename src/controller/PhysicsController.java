@@ -6,12 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.*;
 
 import javax.swing.Timer;
 
@@ -22,8 +17,10 @@ import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
+import model.physics.Circle;
+import model.physics.LineSegment;
 
-public class AnimationEventListener implements IController {
+public class PhysicsController implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
@@ -34,7 +31,7 @@ public class AnimationEventListener implements IController {
 	private Timer gameLoop;
 			
 
-	public AnimationEventListener(iOverlord ov) 
+	public PhysicsController(iOverlord ov) 
 	{
 		super();
 		this.overlord 	= ov;
@@ -82,6 +79,31 @@ public class AnimationEventListener implements IController {
 		iBall ballz = overlord.getBall(ball);
 		return gizFactory.drawBall(ballz);
 	}
+	
+	public List<G2DObject> getGraphicsSegments(String gizmo){
+		
+		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
+		
+		for(LineSegment ls : overlord.getGizmo(gizmo).getSegments()){
+			tmp.add(gizFactory.drawSegment(ls));
+		}
+		return tmp;
+		
+	}
+	
+	public List<G2DObject> getCircleSegments(String gizmo){
+		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
+		
+		for(Circle c : overlord.getGizmo(gizmo).getCircles()){
+			tmp.add(gizFactory.drawCircle(c));
+		}
+		return tmp;
+	}
+	
+	public G2DObject getCircleSegmentsBall(String ball){
+		return gizFactory.drawCircle(overlord.getBall(ball).returnBounds());
+	}
+	
 	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();

@@ -3,7 +3,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import controller.AnimationEventListener;
+import controller.PhysicsController;
 import controller.IController;
 
 import model.Overlord;
@@ -20,7 +20,7 @@ public class Driver {
 		iOverlord ov = new Overlord(cvc.getPlayView().getGridSize(), cvc.getPlayView().getCanvasSize());
 		ov.loadGame("Input");
 		((Overlord) ov).addObserver(cvc.getPlayView());
-		IController controller = new AnimationEventListener(ov);
+		IController controller = new PhysicsController(ov);
 		cvc.addController(controller);
 	}
 	

@@ -1,6 +1,9 @@
 package model;
 
 import java.awt.Point;
+import java.util.List;
+
+import model.physics.*;
 
 public interface iGizmo {
 	
@@ -47,5 +50,11 @@ public interface iGizmo {
 	public int getHeight();
 	
 	public void rotate();
+	
+	/* Segment test code */
+	public List<LineSegment> getSegments();
+	
+	public List<Circle> getCircles();
+	
 
 }

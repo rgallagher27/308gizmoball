@@ -19,7 +19,7 @@ import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 import view.framework.*;
-import controller.AnimationEventListener;
+import controller.PhysicsController;
 import controller.GizmoFactory;
 import controller.IController;
 
@@ -87,12 +87,22 @@ public class PrototypeView extends JPanel implements Observer {
 		for(String gizmo : eventListener.getGizmos()){
 			if(eventListener.getGraphicsGizmo(gizmo) != null){
 			eventListener.getGraphicsGizmo(gizmo).draw(abstractCanvas);
+			/* draw segments */
+			for(G2DObject obj : eventListener.getGraphicsSegments(gizmo)){
+				obj.draw(abstractCanvas);
+			}
+			for(G2DObject obj : eventListener.getCircleSegments(gizmo)){
+				obj.draw(abstractCanvas);
+			}
+			
 			}
 		}
 		for(String ball : eventListener.getBalls()){
 			eventListener.getGraphicsBall(ball).draw(abstractCanvas);
-			
+			/* draw segments */
+			eventListener.getCircleSegmentsBall(ball).draw(abstractCanvas);
 		}
+		
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}

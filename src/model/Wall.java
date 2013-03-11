@@ -21,7 +21,7 @@ public class Wall extends Gizmo implements iGizmo {
 	
 	private void fillLineSegments()
 	{
-		double topLX = 0 - (this.cellWidth / 2);
+		/*double topLX = 0 - (this.cellWidth / 2);
 		double topLY = 0 - (this.cellHeight / 2);
 		
 		double topRX = (20 * this.cellWidth) - (this.cellWidth / 2);
@@ -29,6 +29,18 @@ public class Wall extends Gizmo implements iGizmo {
 		
 		double bottomLX = topLX;
 		double bottomLY = (20 * this.cellHeight) - (this.cellHeight / 2);
+		
+		double bottomRX = topRX;
+		double bottomRY = bottomLY;*/
+		
+		double topLX = 0;
+		double topLY = 0;
+		
+		double topRX = (20 * cellWidth);
+		double topRY = topLY;
+		
+		double bottomLX = topLX;
+		double bottomLY = (20 * cellHeight);
 		
 		double bottomRX = topRX;
 		double bottomRY = bottomLY;

@@ -28,8 +28,20 @@ public class SquareBumper extends Gizmo implements iGizmo {
 
 	private void fillLineSegments()
 	{
-		double topLX = (point.getX() * cellWidth)  - ((rowWidth * cellWidth) / 2);
+		/*double topLX = (point.getX() * cellWidth)  - ((rowWidth * cellWidth) / 2);
 		double topLY = (point.getY() * cellHeight) - ((columnHeight * cellHeight) / 2);
+		
+		double topRX = topLX + (rowWidth * cellWidth);
+		double topRY = topLY;
+		
+		double bottomLX = topLX;
+		double bottomLY = topLY + (columnHeight * cellHeight);
+		
+		double bottomRX = topRX;
+		double bottomRY = bottomLY;*/
+		
+		double topLX = point.getX() * cellWidth;
+		double topLY = point.getY() * cellHeight;
 		
 		double topRX = topLX + (rowWidth * cellWidth);
 		double topRY = topLY;

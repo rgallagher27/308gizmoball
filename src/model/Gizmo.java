@@ -184,4 +184,16 @@ public class Gizmo implements iGizmo {
 		}
 		setRotation(rotation);
 	}
+
+	@Override
+	public List<LineSegment> getSegments() {
+		// TODO Auto-generated method stub
+		return lineSegments;
+	}
+
+	@Override
+	public List<Circle> getCircles() {
+		// TODO Auto-generated method stub
+		return circles;
+	}
 }
