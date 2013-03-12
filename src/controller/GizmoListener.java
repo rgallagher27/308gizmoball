@@ -33,7 +33,7 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 	
 	private final int type; 
 	private view.IBuildView buildView;
-	private view.GizmoCanvas canvas;
+	private view.ICanvas canvas;
 	private view.IFrame frame;
 	
 	public GizmoListener(final int type){
@@ -49,7 +49,7 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 		}
 	}
 	
-	public GizmoListener(final int type, view.GizmoCanvas canvas){
+	public GizmoListener(final int type, view.ICanvas canvas){
 		this.type = type;
 		this.canvas = canvas;
 	}
@@ -109,31 +109,26 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 

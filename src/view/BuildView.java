@@ -15,7 +15,7 @@ public class BuildView extends JFrame implements IFrame, IBuildView{
 
 	private static final long serialVersionUID = 1L;
 	
-	private GizmoCanvas canvas;
+	private BuildCanvas canvas;
 	private JPanel rightPanel;
 	private JRadioButton square;
 	private JRadioButton triangle;
@@ -36,8 +36,7 @@ public class BuildView extends JFrame implements IFrame, IBuildView{
 	}
 	private void setup(){
 		//Build the components.
-		canvas = new GizmoCanvas();
-		canvas.drawGrid(true);
+		canvas = new BuildCanvas();
 		canvas.addMouseListener(new GizmoListener(GizmoListener.MOUSELISTENER, canvas));
 		rightPanel = new JPanel();
 		square = new JRadioButton("Add Square");

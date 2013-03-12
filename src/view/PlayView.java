@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import controller.GizmoListener;
 
 public class PlayView extends JFrame implements IFrame{
-	private GizmoCanvas canvas;
+	private PlayCanvas canvas;
 	private JPanel panel;
 	private JButton load;
 	private JButton start;
@@ -82,7 +82,7 @@ public class PlayView extends JFrame implements IFrame{
 		poly.addPoint(200, 10);
 		c.add(poly);
 				//TODO Remove everything above here.
-		canvas = new GizmoCanvas(c);
+		canvas = new PlayCanvas(c);
 		canvas.addKeyListener(new GizmoListener(GizmoListener.KEYLISTENER));
 		panel = new JPanel();
 		load = new JButton("Load");

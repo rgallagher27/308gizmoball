@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Shape;
+import java.awt.Polygon;
 import java.util.Collection;
 
 public interface ICanvas {
@@ -11,7 +11,15 @@ public interface ICanvas {
 	 * method when this is done.
 	 * @param shapes
 	 */
-	void replaceShapes(Collection<Shape> shapes);
+	void replaceShapes(Collection<Polygon> polygons);
+	
+	/**
+	 * Used to add a new gizmo with the top-left corner
+	 * at the given x and y coordinates.
+	 * @param x
+	 * @param y
+	 */
+	void addShape(int x, int y);
 	
 	/**
 	 * The repaint method from java.awt.Canvas. 
