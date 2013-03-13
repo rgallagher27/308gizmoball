@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 public interface iGizmo {
 	
@@ -23,6 +24,8 @@ public interface iGizmo {
 	public void setCellWidth(double w);
 	
 	public void addTrigger(iGizmo giz);
+	
+	public ArrayList<iGizmo> getTriggers();
 	
 	public void removeTrigger(iGizmo giz);
 	

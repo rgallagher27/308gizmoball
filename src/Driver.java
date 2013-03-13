@@ -19,6 +19,7 @@ public class Driver {
 		CompleteViewContainer cvc = new CompleteViewContainer();
 		iOverlord ov = new Overlord(cvc.getPlayView().getGridSize(), cvc.getPlayView().getCanvasSize());
 		ov.loadGame("Input");
+		ov.saveGame("Test");
 		((Overlord) ov).addObserver(cvc.getPlayView());
 		IController controller = new AnimationEventListener(ov);
 		cvc.addController(controller);

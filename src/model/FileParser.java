@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import exception.CannotRotateException;
@@ -139,11 +140,19 @@ public class FileParser {
     }
 
     public void saveGizmo(String gizmoString) {
-        bw.write(gizmoString);
-        bw.newLine();
+        try {
+            bw.write(gizmoString);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void closeSaveFile() {
-        bw.close();
+        try {
+            bw.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }

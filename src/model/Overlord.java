@@ -20,6 +20,7 @@ public class Overlord extends Observable implements iOverlord {
 	private HashMap<String, iGizmo> gizmos;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersDown;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersUp;
+	private ArrayList<String[]> connects;
 	private HashMap<String, iBall> balls;
 	private FileParser fileParse;
 	private String[][] board;
@@ -38,6 +39,7 @@ public class Overlord extends Observable implements iOverlord {
 		balls = new HashMap<String, iBall>();
 		keyTriggersDown = new HashMap<Integer, ArrayList<iGizmo>>();
 		keyTriggersUp = new HashMap<Integer, ArrayList<iGizmo>>();
+		connects = new ArrayList<String[]>();
 		board = new String[gridDimentions.width][gridDimentions.height]; // x
 																			// along,
 																			// y
@@ -103,6 +105,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public void saveGame(String fileName) {
+		fileParse = new FileParser(this);
 		fileParse.saveFile(fileName);
 		for(iGizmo ig : getGizmos()) {
 			fileParse.saveGizmo(ig.toString());
@@ -112,7 +115,11 @@ public class Overlord extends Observable implements iOverlord {
 				}
 			}
 		}
+		for(String[] s : connects) {
+			fileParse.saveGizmo("Connect " + s[0] + " " + s[1]);
+		}
 		fileParse.closeSaveFile();
+		fileParse = null;
 	}
 
 	@Override
@@ -351,11 +358,15 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean connect(String producerGizmo, String consumerGizmo) {
+		String[] tmp = new String[2];
 		iGizmo producer = getGizmo(producerGizmo);
 		iGizmo consumer = getGizmo(consumerGizmo);
+		tmp[0] = producerGizmo;
+		tmp[1] = consumerGizmo;
 		if (producer == null || consumer == null)
 			return false;
 		producer.addTrigger(consumer);
+		connects.add(tmp);
 		return true;
 	}
 

@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -159,6 +160,10 @@ public class Gizmo implements iGizmo {
 	public void addTrigger(iGizmo giz) {
 		triggers.add(giz);
 		
+	}
+	
+	public ArrayList<iGizmo> getTriggers() {
+		return new ArrayList<iGizmo>(triggers);
 	}
 
 	@Override
