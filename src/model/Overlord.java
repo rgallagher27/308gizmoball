@@ -5,9 +5,11 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Set;
 
 import exception.CannotRotateException;
 
@@ -20,7 +22,7 @@ public class Overlord extends Observable implements iOverlord {
 	private HashMap<String, iGizmo> gizmos;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersDown;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersUp;
-	private ArrayList<String[]> connects;
+	private ArrayList<String> connects;
 	private HashMap<String, iBall> balls;
 	private FileParser fileParse;
 	private String[][] board;
@@ -39,7 +41,7 @@ public class Overlord extends Observable implements iOverlord {
 		balls = new HashMap<String, iBall>();
 		keyTriggersDown = new HashMap<Integer, ArrayList<iGizmo>>();
 		keyTriggersUp = new HashMap<Integer, ArrayList<iGizmo>>();
-		connects = new ArrayList<String[]>();
+		connects = new ArrayList<String>();
 		board = new String[gridDimentions.width][gridDimentions.height]; // x
 																			// along,
 																			// y
@@ -69,6 +71,7 @@ public class Overlord extends Observable implements iOverlord {
 			keyTriggersUp.get(keyVal).remove(gizRem);
 		}
 		gizmos.remove(gizmoName);
+		connects.remove(gizmoName);
 		removeFromBoard(gizmoName);
 		setChanged();
 		notifyObservers(gizmoName);
@@ -108,15 +111,39 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse = new FileParser(this);
 		fileParse.saveFile(fileName);
 		for(iGizmo ig : getGizmos()) {
-			fileParse.saveGizmo(ig.toString());
-			if(ig instanceof TriangleBumper) {
-				for(int i = (int)ig.getRotation(); i > 0; i = (i - 90)) {
-				fileParse.saveGizmo("Rotate " + ig.getIdentifier());
+			if(!(ig instanceof Wall)) {
+				fileParse.saveGizmo(ig.toString());
+				if(ig instanceof TriangleBumper) {
+					for(int i = (int)ig.getRotation(); i > 0; i = (i - 90)) {
+					fileParse.saveGizmo("Rotate " + ig.getIdentifier());
+					}
 				}
 			}
 		}
-		for(String[] s : connects) {
-			fileParse.saveGizmo("Connect " + s[0] + " " + s[1]);
+		for(String s : connects) {
+			for(iGizmo g : getGizmo(s).getTriggers()) {
+				fileParse.saveGizmo("Connect " + s + " " + g.getIdentifier());
+			}
+		}
+		// map iterator code from http://www.devmanuals.com/tutorials/java/corejava/Collection/Map/HashMap/GetKeyAndValue.html
+		Set mapSet = (Set) keyTriggersDown.entrySet();
+		Iterator mapIterator = mapSet.iterator();
+		while (mapIterator.hasNext()) {
+			Map.Entry mapEntry = (Map.Entry) mapIterator.next();
+			for(iGizmo g : (ArrayList<iGizmo>)mapEntry.getValue()) {
+				fileParse.saveGizmo("KeyConnect Key " + mapEntry.getKey() + " down " + g.getIdentifier());
+			}
+		}
+		mapSet = (Set) keyTriggersUp.entrySet();
+		mapIterator = mapSet.iterator();
+		while (mapIterator.hasNext()) {
+			Map.Entry mapEntry = (Map.Entry) mapIterator.next();
+			for(iGizmo g : (ArrayList<iGizmo>)mapEntry.getValue()) {
+				fileParse.saveGizmo("KeyConnect Key " + mapEntry.getKey() + " up " + g.getIdentifier());
+			}
+		}
+		for(iBall b : getBalls()) {
+			fileParse.saveGizmo(b.toString());
 		}
 		fileParse.closeSaveFile();
 		fileParse = null;
@@ -366,7 +393,7 @@ public class Overlord extends Observable implements iOverlord {
 		if (producer == null || consumer == null)
 			return false;
 		producer.addTrigger(consumer);
-		connects.add(tmp);
+		connects.add(producerGizmo);
 		return true;
 	}
 
