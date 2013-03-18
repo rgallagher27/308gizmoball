@@ -3,16 +3,20 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Polygon;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controller.GizmoListener;
 
-public class PlayView extends JFrame implements IFrame{
+public class PlayView extends JFrame implements IPlayView{
+
 	private PlayCanvas canvas;
 	private JPanel panel;
 	private JButton load;
@@ -83,12 +87,12 @@ public class PlayView extends JFrame implements IFrame{
 		c.add(poly);
 				//TODO Remove everything above here.
 		canvas = new PlayCanvas(c);
-		canvas.addKeyListener(new GizmoListener(GizmoListener.KEYLISTENER));
+		canvas.addKeyListener(new GizmoListener(GizmoListener.KEYLISTENER, this));
 		panel = new JPanel();
 		load = new JButton("Load");
-		load.addActionListener(new GizmoListener(GizmoListener.LOAD));
+		load.addActionListener(new GizmoListener(GizmoListener.LOAD, this));
 		start = new JButton("Start Game");
-		start.addActionListener(new GizmoListener(GizmoListener.START));
+		start.addActionListener(new GizmoListener(GizmoListener.START, this));
 		build = new JButton("Build Mode");
 		build.addActionListener(new GizmoListener(GizmoListener.BUILD_MODE, this));
 		
@@ -105,5 +109,25 @@ public class PlayView extends JFrame implements IFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		canvas.repaint();
+	}
+	
+	@Override
+	public File askForMapFile() {
+		JFileChooser chooser = new JFileChooser();
+		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+			return chooser.getSelectedFile();
+		} else{
+			return null;
+		}
+	}
+	
+	@Override
+	public void information(String message){
+		JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	@Override
+	public void error(String message){
+		JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE);
 	}
 }
