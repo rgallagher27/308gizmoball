@@ -26,8 +26,6 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton absorber;
 	private JRadioButton remove;
 	private JRadioButton rotate;
-	private JRadioButton addTrigger;
-	private JRadioButton removeTrigger;
 
 	private JPanel canvasPanel;
 	private JPanel playCanvas;
@@ -36,6 +34,8 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel buildPanel;
 	private JPanel rightPanel;
 
+	private JButton addTrigger;
+	private JButton removeTrigger;
 	private JButton addBall;
 	private JButton load;
 	private JButton save;
@@ -87,9 +87,9 @@ public class CompleteViewContainer extends JFrame {
 		rightFlipper = new JRadioButton("Add Right Flipper");
 		remove = new JRadioButton("Remove Gizmo");
 		rotate = new JRadioButton("Rotate Gizmo");
-		addTrigger = new JRadioButton("Add Trigger");
-		removeTrigger = new JRadioButton("Remove Trigger");
 
+		addTrigger = new JButton("Add Trigger");
+		removeTrigger = new JButton("Remove Trigger");
 		addBall = new JButton("Add Button");
 		load = new JButton("Load");
 		load.addActionListener(new GUIListener(1, this));
@@ -118,8 +118,9 @@ public class CompleteViewContainer extends JFrame {
 		buildPanel.add(remove);
 		buildPanel.add(rotate);
 		buildPanel.add(addTrigger);
-		buildPanel.add(removeTrigger);
 		buildPanel.add(addBall);
+		buildPanel.add(addTrigger);
+		buildPanel.add(removeTrigger);
 
 		playPanel.add(load);
 		playPanel.add(save);
