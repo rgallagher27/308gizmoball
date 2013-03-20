@@ -13,7 +13,8 @@ import controller.IController;
 public class CompleteViewContainer extends JFrame {
 	
 	private IController control;
-	private PrototypeView playView;
+	private PlayView playView;
+	private BuildView buildView;
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -29,6 +30,8 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton removeTrigger;
 
 	private JPanel canvasPanel;
+	private JPanel playCanvas;
+	private JPanel buildCanvas;
 	private JPanel playPanel;
 	private JPanel buildPanel;
 	private JPanel rightPanel;
@@ -40,7 +43,8 @@ public class CompleteViewContainer extends JFrame {
 	
 	
 	public CompleteViewContainer(){
-		playView = new PrototypeView();
+		playView = new PlayView();
+		buildView = new BuildView();
 		mode = true; //true = play, false = build
 		buildInitial();
 	}
@@ -50,8 +54,12 @@ public class CompleteViewContainer extends JFrame {
 		playView.addController(ic);
 	}
 	
-	public PrototypeView getPlayView(){
+	public PlayView getPlayView() {
 		return playView;
+	}
+
+	public BuildView getBuildView() {
+		return buildView;
 	}
 	
 	private void buildInitial(){
@@ -91,13 +99,17 @@ public class CompleteViewContainer extends JFrame {
 		play.addActionListener(new GUIListener(5, this));
 		
 		canvasPanel = new JPanel();
+		playCanvas = new JPanel();
+		buildCanvas = new JPanel();
 		buildPanel = new JPanel();
 		buildPanel.setLayout(new GridLayout(10,1));
 		playPanel = new JPanel();
 		playPanel.setLayout(new GridLayout(3,1));
 		
 		/* setup content area */
-		canvasPanel.add(playView);
+		playCanvas.add(playView);
+		buildCanvas.add(buildView);
+		canvasPanel = playCanvas;
 		buildPanel.add(absorber);
 		buildPanel.add(square);
 		buildPanel.add(triangle);
@@ -143,6 +155,10 @@ public class CompleteViewContainer extends JFrame {
 	public void switchBuild() {
 		playPanel.setVisible(false);
 		buildPanel.setVisible(true);
+		playCanvas.setVisible(false);
+		buildCanvas.setVisible(true);
+		canvasPanel = buildCanvas;
+		mode = false;
 		rightPanel = buildPanel;
 		getContentPane().add(rightPanel, BorderLayout.EAST);
 		pack();
@@ -153,6 +169,10 @@ public class CompleteViewContainer extends JFrame {
 	public void switchPlay() {
 		buildPanel.setVisible(false);
 		playPanel.setVisible(true);
+		buildCanvas.setVisible(false);
+		playCanvas.setVisible(true);
+		canvasPanel = playCanvas;
+		mode = true;
 		rightPanel = playPanel;
 		getContentPane().add(rightPanel, BorderLayout.EAST);
 		pack();

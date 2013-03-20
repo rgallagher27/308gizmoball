@@ -23,7 +23,7 @@ import controller.PhysicsController;
 import controller.GizmoFactory;
 import controller.IController;
 
-public class PrototypeView extends JPanel implements Observer {
+public class PlayView extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public class PrototypeView extends JPanel implements Observer {
 	
 	private G2DAbstractCanvas abstractCanvas;
 
-	public PrototypeView() {
+	public PlayView() {
 		super();
 		setPreferredSize(this.windowSize);
 		abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
