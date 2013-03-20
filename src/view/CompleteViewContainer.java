@@ -2,9 +2,11 @@ package view;
 
 import java.awt.*;
 
+import java.io.File;
+
 import javax.swing.*;
 
-import controller.GUIController;
+// import controller.GUIController;
 import controller.GUIListener;
 import controller.IController;
 
@@ -29,17 +31,15 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel canvasPanel;
 	private JPanel playPanel;
 	private JPanel buildPanel;
+	private JPanel rightPanel;
 
 	private JButton addBall;
 	private JButton load;
 	private JButton save;
 	private JButton play;
-
-	private GUIController guiListener;
 	
 	
 	public CompleteViewContainer(){
-		guiListener = new GUIListener();
 		playView = new PrototypeView();
 		mode = true; //true = play, false = build
 		buildInitial();
@@ -60,13 +60,13 @@ public class CompleteViewContainer extends JFrame {
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		JMenuItem item = new JMenuItem("Build Mode");
-		item.addActionListener(guiListener);
+		item.addActionListener(new GUIListener(3, this));
 		menu.add(item);
 		item = new JMenuItem("Play Mode");
-		item.addActionListener(guiListener);
+		item.addActionListener(new GUIListener(4, this));
 		menu.add(item);
 		item = new JMenuItem("Exit");
-		item.addActionListener(guiListener);
+		// item.addActionListener(guiListener);
 		menu.add(item);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
@@ -84,8 +84,11 @@ public class CompleteViewContainer extends JFrame {
 
 		addBall = new JButton("Add Button");
 		load = new JButton("Load");
+		load.addActionListener(new GUIListener(1, this));
 		save = new JButton("Save");
+		save.addActionListener(new GUIListener(2, this));
 		play = new JButton("Play");
+		play.addActionListener(new GUIListener(5, this));
 		
 		canvasPanel = new JPanel();
 		buildPanel = new JPanel();
@@ -110,17 +113,55 @@ public class CompleteViewContainer extends JFrame {
 		playPanel.add(save);
 		playPanel.add(play);
 
+		rightPanel = playPanel;
+
 		getContentPane().add(canvasPanel);
-		getContentPane().add(playPanel, BorderLayout.EAST);
+		getContentPane().add(rightPanel, BorderLayout.EAST);
 		
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 	
-
+	public File askForMapFile() {
+		JFileChooser chooser = new JFileChooser();
+		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+			return chooser.getSelectedFile();
+		} else{
+			return null;
+		}
+	}
 	
+	public void information(String message){
+		JOptionPane.showMessageDialog(this, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public void error(String message){
+		JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void switchBuild() {
+		playPanel.setVisible(false);
+		buildPanel.setVisible(true);
+		rightPanel = buildPanel;
+		getContentPane().add(rightPanel, BorderLayout.EAST);
+		pack();
+		revalidate();
+		repaint();
+	}
+
+	public void switchPlay() {
+		buildPanel.setVisible(false);
+		playPanel.setVisible(true);
+		rightPanel = playPanel;
+		getContentPane().add(rightPanel, BorderLayout.EAST);
+		pack();
+		revalidate();
+		repaint();
+	}
+
 	private static final long serialVersionUID = 1L;
 	
+
 
 }
