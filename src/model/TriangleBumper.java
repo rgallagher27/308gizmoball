@@ -96,4 +96,9 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		
 	}
 
+	@Override
+	public String toString() {
+		return ("Triangle " + identifier + " " + point.getX() + " " + point.getY());
+	}
+
 }

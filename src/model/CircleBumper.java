@@ -34,4 +34,9 @@ public class CircleBumper extends Gizmo implements iGizmo {
 		
 	}
 
+	@Override
+	public String toString() {
+		return ("Circle " + identifier + " " + point.getX() + " " + point.getY());
+	}
+
 }

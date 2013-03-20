@@ -11,6 +11,7 @@ import model.physics.Vect;
 public class Ball implements iBall {
 
 	protected BallPoint point;
+	protected BallPoint startPoint;
 	protected double row, column, cellWidth, cellHeight;
 	protected float gravity;
 	protected Vect velocity;
@@ -22,6 +23,7 @@ public class Ball implements iBall {
 
 	public Ball(String identifier, BallPoint p, double row, double column, double width, double height) {
 		point 			= p;
+		startPoint		= p;
 		this.row 			= row;
 		this.column 		= column;
 		this.identifier 	= identifier;
@@ -179,4 +181,7 @@ public class Ball implements iBall {
 		ball.setVelocity(velPer.v2);
 	}
 
+	public String toString() {
+		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " 0.0 0.0");
+	}
 }

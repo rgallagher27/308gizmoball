@@ -147,4 +147,9 @@ public class LeftFlipper extends Flipper {
 		
 		this.circles.add(new Circle(bottomRX, bottomRY, 0));*/
 	}
+
+	@Override
+	public String toString() {
+		return ("LeftFlipper " + identifier + " " + point.getX() + " " + point.getY() + " false");
+	}
 }

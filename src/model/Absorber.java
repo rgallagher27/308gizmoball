@@ -105,4 +105,9 @@ public class Absorber extends Gizmo implements iGizmo {
 		
 	}
 
+	@Override
+	public String toString() {
+		return ("Absorber " + identifier + " " + point.getX() + " " + point.getY() + " " + (int)(rowWidth + point.getX()) + " " + (int)(columnHeight + point.getY()));
+	}
+
 }

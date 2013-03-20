@@ -92,4 +92,9 @@ public class RightFlipper extends Flipper {
 		circles.add(bot);
 		
 	}
+
+	@Override
+	public String toString() {
+		return ("RightFlipper " + identifier + " " + point.getX() + " " + point.getY() + " true");
+	}
 }

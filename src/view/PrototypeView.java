@@ -82,7 +82,7 @@ public class PrototypeView extends JPanel implements Observer {
 		buffer.setColor(Color.BLACK);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
 		
-		eventListener.factoryDraw(abstractCanvas, 20, 20, 50, 50);
+		eventListener.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
 		
 		for(String gizmo : eventListener.getGizmos()){
 			if(eventListener.getGraphicsGizmo(gizmo) != null){
