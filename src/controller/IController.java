@@ -29,10 +29,5 @@ public interface IController extends KeyListener, ActionListener, MouseListener 
 	public List<String> getBalls();
 	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight);
 	
-	public List<G2DObject> getGraphicsSegments(String gizmo);
-	
-	public List<G2DObject> getCircleSegments(String gizmo);
-	
-	public G2DObject getCircleSegmentsBall(String ball);
 	
 }

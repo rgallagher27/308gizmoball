@@ -80,31 +80,6 @@ public class PhysicsController implements IController {
 		return gizFactory.drawBall(ballz);
 	}
 	
-	public List<G2DObject> getGraphicsSegments(String gizmo){
-		
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(LineSegment ls : overlord.getGizmo(gizmo).getSegments()){
-			tmp.add(gizFactory.drawSegment(ls));
-		}
-		return tmp;
-		
-	}
-	
-	public List<G2DObject> getCircleSegments(String gizmo){
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(Circle c : overlord.getGizmo(gizmo).getCircles()){
-			tmp.add(gizFactory.drawCircle(c));
-		}
-		return tmp;
-	}
-	
-	public G2DObject getCircleSegmentsBall(String ball){
-		return gizFactory.drawCircle(overlord.getBall(ball).returnBounds());
-	}
-	
-	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
 		for(iGizmo giz : overlord.getGizmos()){
