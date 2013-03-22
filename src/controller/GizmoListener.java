@@ -31,6 +31,7 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 	public static final int BUILD_ADD_TRIGGER = 13;
 	public static final int BUILD_REMOVE_TRIGGER = 14;
 	public static final int ADD_BALL = 15;
+	public static final int SET_GRAVITY = 16;
 
 	private final int type;
 	private view.IBuildView buildView;
@@ -116,9 +117,22 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 			while(velocity < 0 || velocity > 200){
 				String input = buildView.ask("Please give the initial velocity (0 - 200).");
 				if(input == null) return;
-				velocity = Integer.parseInt(input);
+				try{
+					velocity = Integer.parseInt(input);
+				}catch(NumberFormatException e){}
 			}
 			buildView.information("Initial velocity = " + velocity); //TODO Implement with model
+			break;
+		case SET_GRAVITY:
+			int gravity = -1;
+			while(gravity < 0 || gravity > 20){
+				String input = buildView.ask("Please give the gravity (0 - 20).");
+				if(input == null) return;
+				try{
+					gravity = Integer.parseInt(input);	
+				}catch(NumberFormatException e){}
+			}
+			buildView.information("Gravity = " + gravity); //TODO Implement with model
 			break;
 		case BUILD_SQUARE: //TODO Implement with model
 			buildView.addSquares();

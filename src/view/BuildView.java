@@ -34,6 +34,7 @@ public class BuildView extends JFrame implements IBuildView{
 	private JRadioButton addTrigger;
 	private JRadioButton removeTrigger;
 	private JButton addBall;
+	private JButton setGravity;
 	private JPanel bottomPanel;
 	private JButton load;
 	private JButton save;
@@ -79,6 +80,9 @@ public class BuildView extends JFrame implements IBuildView{
 		addBall = new JButton("Add Ball");
 		addBall.addActionListener(new GizmoListener(GizmoListener.ADD_BALL, this));
 		buttons.add(addBall);
+		setGravity = new JButton("Set Gravity");
+		setGravity.addActionListener(new GizmoListener(GizmoListener.SET_GRAVITY, this));
+		buttons.add(setGravity);
 		bottomPanel = new JPanel();
 		load = new JButton("Load Map");
 		load.addActionListener(new GizmoListener(GizmoListener.LOAD, this));
@@ -88,7 +92,7 @@ public class BuildView extends JFrame implements IBuildView{
 		play.addActionListener(new GizmoListener(GizmoListener.PLAY_MODE, this));
 		
 		//Build the window.
-		rightPanel.setLayout(new GridLayout(10,1));
+		rightPanel.setLayout(new GridLayout(11,1));
 		for(AbstractButton b : buttons){
 			rightPanel.add(b);
 		}
