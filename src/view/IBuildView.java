@@ -37,4 +37,11 @@ public interface IBuildView extends IPlayView{
 	 * @return The user's answer.
 	 */
 	String ask(String question);
+
+	/**
+	 * Asks the user to confirm a yes/no question.
+	 * @param question
+	 * @return The user's answer.
+	 */
+	int confirmYesNo(String question);
 }

@@ -205,4 +205,9 @@ public class BuildView extends JFrame implements IBuildView{
 	public String ask(String question){
 		return JOptionPane.showInputDialog(this, question);
 	}
+	
+	@Override
+	public int confirmYesNo(String question){
+		return JOptionPane.showConfirmDialog(this, question, "Please confirm!", JOptionPane.YES_NO_OPTION);
+	}
 }

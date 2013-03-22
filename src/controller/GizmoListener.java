@@ -96,9 +96,14 @@ public class GizmoListener implements ActionListener, KeyListener, MouseListener
 		case SAVE:
 			java.io.File f = buildView.askForSaveFile();
 			if(f != null && !f.exists()) {
-				buildView.information(f.getPath()); //TODO Implement with model
+				buildView.information("Save " + f.getPath()); //TODO Implement with model
 			} else if(f != null){ 
-				buildView.error("I can't overwrite an existing file.");
+				int overwrite = buildView.confirmYesNo("Do you wish to overwrite " + f.getPath() + "?");
+				if(overwrite == JOptionPane.YES_OPTION){
+					buildView.information("Save " + f.getPath());  //TODO Implement with model
+				}else{
+					actionPerformed(arg0);
+				}
 			}
 			break;
 		case BUILD_MODE:
