@@ -14,8 +14,7 @@ import controller.IController;
 public class CompleteViewContainer extends JFrame {
 	
 	private IController control;
-	private PlayView playView;
-	private BuildView buildView;
+	private ViewCanvas playView;
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -44,8 +43,7 @@ public class CompleteViewContainer extends JFrame {
 	
 	
 	public CompleteViewContainer(){
-		playView = new PlayView();
-		buildView = new BuildView();
+		playView = new ViewCanvas();
 		mode = true; //true = play, false = build
 		buildInitial();
 	}
@@ -55,12 +53,8 @@ public class CompleteViewContainer extends JFrame {
 		playView.addController(ic, gc);
 	}
 	
-	public PlayView getPlayView() {
+	public ViewCanvas getPlayView() {
 		return playView;
-	}
-
-	public BuildView getBuildView() {
-		return buildView;
 	}
 	
 	private void buildInitial(){
@@ -109,7 +103,7 @@ public class CompleteViewContainer extends JFrame {
 		
 		/* setup content area */
 		playCanvas.add(playView);
-		buildCanvas.add(buildView);
+		buildCanvas.add(playView);
 		canvasPanel = playCanvas;
 		buildPanel.add(absorber);
 		buildPanel.add(square);

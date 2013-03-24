@@ -23,7 +23,7 @@ import controller.GraphicsController;
 import controller.PhysicsController;
 import controller.IController;
 
-public class BuildView extends JPanel implements Observer {
+public class ViewCanvas extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
@@ -35,9 +35,8 @@ public class BuildView extends JPanel implements Observer {
 	private GraphicsController graphics;
 	
 	private G2DAbstractCanvas abstractCanvas;
-	
 
-	public BuildView() {
+	public ViewCanvas() {
 		super();
 		setPreferredSize(this.windowSize);
 		abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
@@ -90,13 +89,11 @@ public class BuildView extends JPanel implements Observer {
 		for(String gizmo : eventListener.getGizmos()){
 			if(graphics.getGraphicsGizmo(gizmo) != null){
 				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
-	
-			
 			}
 		}
 		for(String ball : eventListener.getBalls()){
 			graphics.getGraphicsBall(ball).draw(abstractCanvas);
-			
+		
 		}
 		
             
