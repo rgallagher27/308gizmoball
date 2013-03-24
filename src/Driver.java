@@ -3,6 +3,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import controller.GraphicsController;
 import controller.PhysicsController;
 import controller.IController;
 
@@ -22,7 +23,8 @@ public class Driver {
 		ov.saveGame("Test");
 		((Overlord) ov).addObserver(cvc.getPlayView());
 		IController controller = new PhysicsController(ov);
-		cvc.addController(controller);
+		GraphicsController graphicsController = new GraphicsController(ov);
+		cvc.addController(controller, graphicsController);
 	}
 	
 	

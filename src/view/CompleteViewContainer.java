@@ -8,6 +8,7 @@ import javax.swing.*;
 
 // import controller.GUIController;
 import controller.GUIListener;
+import controller.GraphicsController;
 import controller.IController;
 
 public class CompleteViewContainer extends JFrame {
@@ -49,9 +50,9 @@ public class CompleteViewContainer extends JFrame {
 		buildInitial();
 	}
 	
-	public void addController(IController ic){
+	public void addController(IController ic, GraphicsController gc){
 		control = ic;
-		playView.addController(ic);
+		playView.addController(ic, gc);
 	}
 	
 	public PlayView getPlayView() {

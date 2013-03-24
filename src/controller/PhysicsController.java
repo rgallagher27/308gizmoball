@@ -10,6 +10,7 @@ import java.util.*;
 
 import javax.swing.Timer;
 
+import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DObject;
 
@@ -24,7 +25,6 @@ public class PhysicsController implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
-	private GizmoFactory gizFactory;
 
 	private iOverlord overlord;
 	
@@ -39,46 +39,9 @@ public class PhysicsController implements IController {
 		this.gameLoop 	= new Timer(1000/FPS, this);
 		
 		this.gameLoop.start();
-		gizFactory = new GizmoFactory(this);
 	}
 
-	public int getGizX(String name){
-		return overlord.getGizmo(name).getLocation().getX();
-	}
-
-	public int getGizY(String name){
-		return overlord.getGizmo(name).getLocation().getY();
-	}
 	
-	public int getGizWidth(String name){
-		return overlord.getGizmo(name).getWidth();
-	}
-	
-	public int getGizHeight(String name){
-		return overlord.getGizmo(name).getHeight();
-	}
-	
-	public float getBallX(String name){
-		return overlord.getBall(name).getLocation().getX();
-	}
-
-	public float getBallY(String name){
-		return overlord.getBall(name).getLocation().getY();
-	}
-	
-	public double getBallRadius(String name){
-		return overlord.getBall(name).getRadius();
-	}
-	
-	public G2DObject getGraphicsGizmo(String gizmo){
-		iGizmo giz = overlord.getGizmo(gizmo);
-		return gizFactory.draw(giz);
-	}
-	
-	public G2DObject getGraphicsBall(String ball){
-		iBall ballz = overlord.getBall(ball);
-		return gizFactory.drawBall(ballz);
-	}
 	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
@@ -263,10 +226,4 @@ public class PhysicsController implements IController {
 		}
 	}
 
-	@Override
-	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
-			double rowWidth, double columnHeight) {
-		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
-		
-	}
 }

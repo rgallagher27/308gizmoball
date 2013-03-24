@@ -19,8 +19,8 @@ import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 import view.framework.*;
+import controller.GraphicsController;
 import controller.PhysicsController;
-import controller.GizmoFactory;
 import controller.IController;
 
 public class PlayView extends JPanel implements Observer {
@@ -32,6 +32,7 @@ public class PlayView extends JPanel implements Observer {
 	private final Dimension gridSize   		= new Dimension(20, 20);
 	
 	private IController eventListener;
+	private GraphicsController graphics;
 	
 	private G2DAbstractCanvas abstractCanvas;
 
@@ -49,8 +50,9 @@ public class PlayView extends JPanel implements Observer {
 		requestFocus();
 	}
 	
-	public void addController(IController ic){
+	public void addController(IController ic, GraphicsController gc){
 		eventListener = ic;
+		graphics = gc;
 		addKeyListener(eventListener);
 		addMouseListener(eventListener);
 		
@@ -82,17 +84,15 @@ public class PlayView extends JPanel implements Observer {
 		buffer.setColor(Color.BLACK);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
 		
-		eventListener.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
+		graphics.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
 		
 		for(String gizmo : eventListener.getGizmos()){
-			if(eventListener.getGraphicsGizmo(gizmo) != null){
-			eventListener.getGraphicsGizmo(gizmo).draw(abstractCanvas);
-			
-			
+			if(graphics.getGraphicsGizmo(gizmo) != null){
+				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
 		}
 		for(String ball : eventListener.getBalls()){
-			eventListener.getGraphicsBall(ball).draw(abstractCanvas);
+			graphics.getGraphicsBall(ball).draw(abstractCanvas);
 		
 		}
 		
