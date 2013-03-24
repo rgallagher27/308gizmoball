@@ -38,9 +38,16 @@ public class PhysicsController implements IController {
 		
 		this.gameLoop 	= new Timer(1000/FPS, this);
 		
-		this.gameLoop.start();
+		//this.gameLoop.start();
 	}
 
+	public void start(){
+		gameLoop.start();
+	}
+	
+	public void stop(){
+		gameLoop.stop();
+	}
 	
 	
 	public List<String> getGizmos(){
@@ -70,7 +77,6 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
 		
 		int keyPressed = event.getKeyCode();
 		

@@ -13,7 +13,8 @@ public interface IController extends KeyListener, ActionListener, MouseListener 
 	
 	public List<String> getGizmos();
 	public List<String> getBalls();
-	
+	public void start();
+	public void stop();
 	
 	
 }

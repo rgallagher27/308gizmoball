@@ -59,6 +59,14 @@ public class ViewCanvas extends JPanel implements Observer {
 		
 	}
 	
+	public void setMode(boolean running){
+		if(running){
+			eventListener.start();
+		}else{
+			eventListener.stop();
+		}
+	}
+	
 	public Dimension getGridSize(){
 		return gridSize;
 	}

@@ -50,6 +50,7 @@ public class CompleteViewContainer extends JFrame {
 	public void addController(IController ic, GraphicsController gc){
 		control = ic;
 		view.addController(ic, gc);
+		switchPlay();
 	}
 	
 	public ViewCanvas getPlayView() {
@@ -129,7 +130,6 @@ public class CompleteViewContainer extends JFrame {
 
 		getContentPane().add(view, BorderLayout.WEST);
 		getContentPane().add(buttonsPanel, BorderLayout.EAST);
-		switchPlay();
 		setVisible(true);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -158,6 +158,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.setVisible(true);
 		playButtonsPanel.setVisible(false);
 		mode = false;
+		view.setMode(false);
 		pack();
 		revalidate();
 		repaint();
@@ -167,6 +168,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.setVisible(false);
 		playButtonsPanel.setVisible(true);
 		mode = false;
+		view.setMode(true);
 		pack();
 		revalidate();
 		repaint();
