@@ -19,6 +19,7 @@ import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 import view.framework.*;
+import controller.BuildController;
 import controller.GraphicsController;
 import controller.PhysicsController;
 import controller.IController;
@@ -30,9 +31,11 @@ public class ViewCanvas extends JPanel implements Observer {
 	private final Dimension windowSize 		= new Dimension(1000, 800);
 	private final Dimension canvasSize 		= new Dimension(1000, 1000);
 	private final Dimension gridSize   		= new Dimension(20, 20);
+	private boolean runningMode;
 	
 	private IController eventListener;
 	private GraphicsController graphics;
+	private BuildController buildCont;
 	
 	private G2DAbstractCanvas abstractCanvas;
 
@@ -50,16 +53,27 @@ public class ViewCanvas extends JPanel implements Observer {
 		requestFocus();
 		setVisible(true);
 	}
+
 	
-	public void addController(IController ic, GraphicsController gc){
+	public int mouseX(int x){
+		return (int) (abstractCanvas.abstractX(x) / (canvasSize.getWidth() / gridSize.getWidth()));
+	}
+	
+	public int mouseY(int y){
+		return (int) (abstractCanvas.abstractY(y) / (canvasSize.getWidth() / gridSize.getWidth()));
+	}
+	
+	public void addController(IController ic, GraphicsController gc, BuildController bc){
 		eventListener = ic;
 		graphics = gc;
+		buildCont = bc;
 		addKeyListener(eventListener);
-		addMouseListener(eventListener);
+		addMouseListener(bc);
 		
 	}
 	
 	public void setMode(boolean running){
+		runningMode = running;
 		if(running){
 			eventListener.start();
 		}else{
@@ -93,16 +107,18 @@ public class ViewCanvas extends JPanel implements Observer {
 		buffer.setColor(Color.BLACK);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
 		
-		graphics.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
+		if(!runningMode){
+			graphics.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
+		}
 		
 		for(String gizmo : eventListener.getGizmos()){
 			if(graphics.getGraphicsGizmo(gizmo) != null){
 				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
 		}
+		
 		for(String ball : eventListener.getBalls()){
 			graphics.getGraphicsBall(ball).draw(abstractCanvas);
-		
 		}
 		
             

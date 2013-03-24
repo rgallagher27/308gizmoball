@@ -25,11 +25,11 @@ public class PhysicsController implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
-
 	private iOverlord overlord;
 	
 	private Timer gameLoop;
 			
+	private boolean runningMode;
 
 	public PhysicsController(iOverlord ov) 
 	{
@@ -43,11 +43,13 @@ public class PhysicsController implements IController {
 
 	public void start(){
 		gameLoop.start();
+		runningMode = true;
 	}
 	
 	public void stop(){
 		gameLoop.stop();
 		overlord.resetGame();
+		runningMode = false;
 	}
 	
 	
@@ -84,6 +86,7 @@ public class PhysicsController implements IController {
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
+		
 	}
 
 	/*
@@ -147,34 +150,6 @@ public class PhysicsController implements IController {
 		}.run();
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent event) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	private double collideGizmos(iBall b, double Current_Delta_T) {
 		double lowestTime = Double.POSITIVE_INFINITY;

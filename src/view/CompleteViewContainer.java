@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.swing.*;
 
+import controller.BuildController;
 // import controller.GUIController;
 import controller.GUIListener;
 import controller.GraphicsController;
@@ -15,6 +16,7 @@ public class CompleteViewContainer extends JFrame {
 	
 	private IController control;
 	private ViewCanvas view;
+	private BuildController buildCont;
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -47,9 +49,10 @@ public class CompleteViewContainer extends JFrame {
 		buildInitial();
 	}
 	
-	public void addController(IController ic, GraphicsController gc){
+	public void addController(IController ic, GraphicsController gc, BuildController bc){
 		control = ic;
-		view.addController(ic, gc);
+		buildCont = bc;
+		view.addController(ic, gc, bc);
 		switchPlay();
 	}
 	
