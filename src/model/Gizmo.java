@@ -26,6 +26,8 @@ public class Gizmo implements iGizmo {
 		width = 0;
 		height = 0;
 	}
+	
+	
 
 	@Override
 	public String getIdentifier() {

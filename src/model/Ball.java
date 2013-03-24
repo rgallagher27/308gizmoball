@@ -184,4 +184,10 @@ public class Ball implements iBall {
 	public String toString() {
 		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " 0.0 0.0");
 	}
+
+	@Override
+	public BallPoint getOrigLocation() {
+
+		return startPoint;
+	}
 }
