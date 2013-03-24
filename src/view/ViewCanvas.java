@@ -48,6 +48,7 @@ public class ViewCanvas extends JPanel implements Observer {
 		 * Request window focus.
 		 */
 		requestFocus();
+		setVisible(true);
 	}
 	
 	public void addController(IController ic, GraphicsController gc){

@@ -14,7 +14,7 @@ import controller.IController;
 public class CompleteViewContainer extends JFrame {
 	
 	private IController control;
-	private ViewCanvas playView;
+	private ViewCanvas view;
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
@@ -27,13 +27,12 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton remove;
 	private JRadioButton rotate;
 
-	private JPanel canvasPanel;
-	private JPanel playCanvas;
-	private JPanel buildCanvas;
-	private JPanel playPanel;
-	private JPanel buildPanel;
-	private JPanel rightPanel;
-
+	private JPanel buildButtonsPanel;
+	private JPanel playButtonsPanel;
+	private JPanel buttonsPanel;
+	private JPanel content;
+	
+	
 	private JButton addTrigger;
 	private JButton removeTrigger;
 	private JButton addBall;
@@ -43,20 +42,60 @@ public class CompleteViewContainer extends JFrame {
 	
 	
 	public CompleteViewContainer(){
-		playView = new ViewCanvas();
+		view = new ViewCanvas();
 		mode = true; //true = play, false = build
 		buildInitial();
 	}
 	
 	public void addController(IController ic, GraphicsController gc){
 		control = ic;
-		playView.addController(ic, gc);
+		view.addController(ic, gc);
 	}
 	
 	public ViewCanvas getPlayView() {
-		return playView;
+		return view;
 	}
 	
+	private void playButtons(){
+		playButtonsPanel = new JPanel();
+		load = new JButton("Load");
+		load.addActionListener(new GUIListener(1, this));
+		save = new JButton("Save");
+		save.addActionListener(new GUIListener(2, this));
+		play = new JButton("Play");
+		play.addActionListener(new GUIListener(5, this));
+		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.Y_AXIS));
+		playButtonsPanel.add(load);
+		playButtonsPanel.add(save);
+		playButtonsPanel.add(play);
+		
+	}
+	
+	private void buildButtons(){
+		buildButtonsPanel = new JPanel();
+		absorber = new JRadioButton("Add Absorber");
+		square = new JRadioButton("Add Square");
+		triangle = new JRadioButton("Add Triangle");
+		leftFlipper = new JRadioButton("Add Left Flipper");
+		rightFlipper = new JRadioButton("Add Right Flipper");
+		remove = new JRadioButton("Remove Gizmo");
+		rotate = new JRadioButton("Rotate Gizmo");
+		addTrigger = new JButton("Add Trigger");
+		removeTrigger = new JButton("Remove Trigger");
+		addBall = new JButton("Add Ball");
+		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
+		buildButtonsPanel.add(absorber);
+		buildButtonsPanel.add(square);
+		buildButtonsPanel.add(triangle);
+		buildButtonsPanel.add(leftFlipper);
+		buildButtonsPanel.add(rightFlipper);
+		buildButtonsPanel.add(remove);
+		buildButtonsPanel.add(rotate);
+		buildButtonsPanel.add(addTrigger);
+		buildButtonsPanel.add(removeTrigger);
+		buildButtonsPanel.add(addBall);
+		
+	}
 	private void buildInitial(){
 		
 		/* menu bar setup */
@@ -75,60 +114,27 @@ public class CompleteViewContainer extends JFrame {
 		setJMenuBar(menuBar);
 		/* menu bar setup */
 
-		absorber = new JRadioButton("Add Absorber");
-		square = new JRadioButton("Add Square");
-		triangle = new JRadioButton("Add Triangle");
-		leftFlipper = new JRadioButton("Add Left Flipper");
-		rightFlipper = new JRadioButton("Add Right Flipper");
-		remove = new JRadioButton("Remove Gizmo");
-		rotate = new JRadioButton("Rotate Gizmo");
-
-		addTrigger = new JButton("Add Trigger");
-		removeTrigger = new JButton("Remove Trigger");
-		addBall = new JButton("Add Button");
-		load = new JButton("Load");
-		load.addActionListener(new GUIListener(1, this));
-		save = new JButton("Save");
-		save.addActionListener(new GUIListener(2, this));
-		play = new JButton("Play");
-		play.addActionListener(new GUIListener(5, this));
-		
-		canvasPanel = new JPanel();
-		playCanvas = new JPanel();
-		buildCanvas = new JPanel();
-		buildPanel = new JPanel();
-		buildPanel.setLayout(new GridLayout(10,1));
-		playPanel = new JPanel();
-		playPanel.setLayout(new GridLayout(3,1));
+		playButtons();
+		buildButtons();
+		buttonsPanel = new JPanel();
+		content = new JPanel();
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+		buttonsPanel.add(playButtonsPanel);
+		buttonsPanel.add(buildButtonsPanel);
+		setContentPane(content);
+		content.setLayout(new BorderLayout());
 		
 		/* setup content area */
-		playCanvas.add(playView);
-		buildCanvas.add(playView);
-		canvasPanel = playCanvas;
-		buildPanel.add(absorber);
-		buildPanel.add(square);
-		buildPanel.add(triangle);
-		buildPanel.add(leftFlipper);
-		buildPanel.add(rightFlipper);
-		buildPanel.add(remove);
-		buildPanel.add(rotate);
-		buildPanel.add(addTrigger);
-		buildPanel.add(addBall);
-		buildPanel.add(addTrigger);
-		buildPanel.add(removeTrigger);
 
-		playPanel.add(load);
-		playPanel.add(save);
-		playPanel.add(play);
 
-		rightPanel = playPanel;
-
-		getContentPane().add(canvasPanel);
-		getContentPane().add(rightPanel, BorderLayout.EAST);
-		
+		getContentPane().add(view, BorderLayout.WEST);
+		getContentPane().add(buttonsPanel, BorderLayout.EAST);
+		switchPlay();
+		setVisible(true);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+		
+		
 	}
 	
 	public File askForMapFile() {
@@ -149,28 +155,18 @@ public class CompleteViewContainer extends JFrame {
 	}
 
 	public void switchBuild() {
-		playPanel.setVisible(false);
-		buildPanel.setVisible(true);
-		playCanvas.setVisible(false);
-		buildCanvas.setVisible(true);
-		canvasPanel = buildCanvas;
+		buildButtonsPanel.setVisible(true);
+		playButtonsPanel.setVisible(false);
 		mode = false;
-		rightPanel = buildPanel;
-		getContentPane().add(rightPanel, BorderLayout.EAST);
 		pack();
 		revalidate();
 		repaint();
 	}
 
 	public void switchPlay() {
-		buildPanel.setVisible(false);
-		playPanel.setVisible(true);
-		buildCanvas.setVisible(false);
-		playCanvas.setVisible(true);
-		canvasPanel = playCanvas;
-		mode = true;
-		rightPanel = playPanel;
-		getContentPane().add(rightPanel, BorderLayout.EAST);
+		buildButtonsPanel.setVisible(false);
+		playButtonsPanel.setVisible(true);
+		mode = false;
 		pack();
 		revalidate();
 		repaint();
