@@ -37,5 +37,6 @@ public interface iOverlord {
 	public void moveAllGizmos();
 	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode);
 	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode);
+	public void resetGame();
 	
 }

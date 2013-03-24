@@ -236,8 +236,8 @@ public class Overlord extends Observable implements iOverlord {
 		if (vx == 0.0 && vy == 0.0 && absorb != null) {
 			if (canPlaceBall("A", x, y, x, y)) {
 				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-						cellWidth, cellHeight);
-				newBall.setVelocity(new Vect(vx, vy));
+						cellWidth, cellHeight, vx, vy);
+				
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
 				return true;
@@ -245,8 +245,8 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		if (canPlaceBall("", x, y, x, y)) {
 			iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-					cellWidth, cellHeight);
-			newBall.setVelocity(new Vect(vx, vy));
+					cellWidth, cellHeight, vx, vy);
+
 			newBall.setCaptured(false);
 			balls.put(ballName, newBall);
 			if (!loadingFile) {
@@ -504,6 +504,20 @@ public class Overlord extends Observable implements iOverlord {
 			return keyTriggersUp.get(keyCode);
 		}
 		return tmp;
+	}
+	
+	public void resetGame(){
+		for(iBall ball: getBalls()){
+			ball.setLocation(ball.getOrigLocation());
+			ball.setVelocity(ball.getOrigVelocity());
+		}
+		for(iGizmo giz : getGizmos()){
+			if(giz instanceof Flipper){
+				giz.setRotation(0);
+			}
+		}
+		setChanged();
+		notifyObservers();
 	}
 
 }
