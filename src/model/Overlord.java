@@ -591,8 +591,10 @@ public class Overlord extends Observable implements iOverlord {
 			
 			for(iGizmo giz: getGizmos()){
 				if(giz.getIdentifier().contains(name)){
+					if(giz.getIdentifier().length() != 1){
 					no = Integer.parseInt(giz.getIdentifier().substring(1));
 					if(no > maxNo) maxNo = no;
+					}
 				}
 			}
 			return name + (maxNo+1);

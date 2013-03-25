@@ -71,14 +71,14 @@ public class BuildController implements MouseListener, ActionListener {
 				success = overlord.addSquare(overlord.getNextName("S"), x, y);
 				currentSelectedMode = 0;
 				break;
-			case BUILD_TRIANGLE:
-				type = "triangle";
-				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
-				currentSelectedMode = 0;
-				break;
 			case BUILD_CIRCLE:
 				type = "circle";
 				success = overlord.addCircle(overlord.getNextName("C"), x, y);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_TRIANGLE:
+				type = "triangle";
+				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
 				currentSelectedMode = 0;
 				break;
 	
