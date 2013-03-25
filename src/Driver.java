@@ -24,7 +24,7 @@ public class Driver {
 		ov.saveGame("Test");
 		((Overlord) ov).addObserver(cvc.getPlayView());
 		IController controller = new PhysicsController(ov);
-		BuildController buildCont = new BuildController(ov, cvc.getPlayView());
+		BuildController buildCont = new BuildController(ov, cvc.getPlayView(), cvc);
 		GraphicsController graphicsController = new GraphicsController(ov);
 		cvc.addController(controller, graphicsController, buildCont);
 	}

@@ -63,11 +63,14 @@ public class CompleteViewContainer extends JFrame {
 	private void playButtons(){
 		playButtonsPanel = new JPanel();
 		load = new JButton("Load");
-		load.addActionListener(new GUIListener(1, this));
+		load.addActionListener(buildCont);
+		load.setActionCommand("Load");
 		save = new JButton("Save");
-		save.addActionListener(new GUIListener(2, this));
+		save.addActionListener(buildCont);
+		save.setActionCommand("Save");
 		play = new JButton("Play");
-		play.addActionListener(new GUIListener(5, this));
+		play.addActionListener(buildCont);
+		play.setActionCommand("Play");
 		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.Y_AXIS));
 		playButtonsPanel.add(load);
 		playButtonsPanel.add(save);
@@ -78,15 +81,45 @@ public class CompleteViewContainer extends JFrame {
 	private void buildButtons(){
 		buildButtonsPanel = new JPanel();
 		absorber = new JRadioButton("Add Absorber");
+		absorber.addActionListener(buildCont);
+		absorber.setActionCommand("Absorber");
+		
 		square = new JRadioButton("Add Square");
+		square.addActionListener(buildCont);
+		square.setActionCommand("Square");
+		
 		triangle = new JRadioButton("Add Triangle");
+		triangle.addActionListener(buildCont);
+		triangle.setActionCommand("Triangle");
+		
 		leftFlipper = new JRadioButton("Add Left Flipper");
+		leftFlipper.addActionListener(buildCont);
+		leftFlipper.setActionCommand("LeftFlipper");
+		
 		rightFlipper = new JRadioButton("Add Right Flipper");
+		rightFlipper.addActionListener(buildCont);
+		rightFlipper.setActionCommand("RightFlipper");
+		
 		remove = new JRadioButton("Remove Gizmo");
+		remove.addActionListener(buildCont);
+		remove.setActionCommand("Remove");
+		
 		rotate = new JRadioButton("Rotate Gizmo");
+		rotate.addActionListener(buildCont);
+		rotate.setActionCommand("Rotate");
+		
 		addTrigger = new JButton("Add Trigger");
+		addTrigger.addActionListener(buildCont);
+		addTrigger.setActionCommand("AddTrigger");
+		
 		removeTrigger = new JButton("Remove Trigger");
+		removeTrigger.addActionListener(buildCont);
+		removeTrigger.setActionCommand("RemoveTrigger");
+		
 		addBall = new JButton("Add Ball");
+		addBall.addActionListener(buildCont);
+		addBall.setActionCommand("AddBall");
+		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
 		buildButtonsPanel.add(square);
@@ -106,13 +139,16 @@ public class CompleteViewContainer extends JFrame {
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		JMenuItem item = new JMenuItem("Build Mode");
-		item.addActionListener(new GUIListener(3, this));
+		item.addActionListener(buildCont);
+		item.setActionCommand("Build");
 		menu.add(item);
 		item = new JMenuItem("Play Mode");
-		item.addActionListener(new GUIListener(4, this));
+		item.addActionListener(buildCont);
+		item.setActionCommand("Play");
 		menu.add(item);
 		item = new JMenuItem("Exit");
-		// item.addActionListener(guiListener);
+		item.addActionListener(buildCont);
+		item.setActionCommand("Exit");
 		menu.add(item);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
