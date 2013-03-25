@@ -55,6 +55,6 @@ public interface iBall {
 	
 	public double getRadius();
 
-
+	public boolean getOrigCapture();
 
 }

@@ -42,7 +42,7 @@ public class Overlord extends Observable implements iOverlord {
 		keyTriggersDown = new HashMap<Integer, ArrayList<iGizmo>>();
 		keyTriggersUp = new HashMap<Integer, ArrayList<iGizmo>>();
 		connects = new ArrayList<String>();
-		board = new String[gridDimentions.width][gridDimentions.height]; // x
+		board = new String[gridDimentions.height][gridDimentions.width]; // x
 																			// along,
 																			// y
 																			// up
@@ -89,7 +89,12 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public List<iBall> getBalls() {
-		return new ArrayList<iBall>(balls.values());
+		ArrayList<iBall> tmp = new ArrayList<iBall>(balls.values());
+		ArrayList<iBall> returned = new ArrayList<iBall>();
+		for(iBall b: tmp){
+			if(!b.isCaptured()) returned.add(b);
+		}
+		return returned;
 	}
 
 	@Override
@@ -174,23 +179,36 @@ public class Overlord extends Observable implements iOverlord {
 
 	private boolean canPlaceBall(String ex, float startX, float startY,
 			float endX, float endY) {
-		for (int y = (int) Math.floor(startY); y < (int) Math.ceil(endY); y++) {
-			for (int x = (int) Math.floor(startX); x < (int) Math.ceil(endX); x++) {
+		
+			int x = (int) Math.floor(startX);
+			int y = (int) Math.floor(startY);
+			System.out.println("x: " + x + " y: " + y);
+			
 				if (ex.length() > 0) {
-					if (!board[y][x].equals("")
-							&& !board[y][x].substring(0, 1).equals(ex))
+					System.out.println("t : " + !board[y][x].equals(""));
+					System.out.println("t2: " + !board[y][x].equals(ex));
+					if (!board[y][x].equals("") && !board[y][x].equals(ex)){
+						System.out.println("returning false");
 						return false;
+					}
 				} else {
+					System.out.println("t : " + !board[y][x].equals(""));
+					System.out.println("t2: " + !board[y][x].equals(ex));
 					if (!board[y][x].equals(""))
 						return false;
 				}
-			}
-		}
+		
 		return true;
 	}
 
 	private void setPlace(String place, int startX, int startY, int endX,
 			int endY) {
+		
+		if(startY == endY && endX == startX){
+			board[startY][startX] = place;
+			System.out.println("placed " + place);
+		}else{
+		
 		if(startY != endY){
 		for (int y = startY; y < endY; y++) {
 			for (int x = startX; x < endX; x++) {
@@ -201,6 +219,8 @@ public class Overlord extends Observable implements iOverlord {
 			for (int x = startX; x < endX; x++) {
 				board[startY][x] = place;
 			}
+			System.out.println("placed " + place);
+		}
 		}
 	}
 
@@ -220,7 +240,8 @@ public class Overlord extends Observable implements iOverlord {
 		if (canPlace("", x, y, (x + height-1), (y + width-1))) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + (height-1)), (y + (width-1)));
+			setPlace(id, x, y, (x + (width-1)), (y + (height-1)));
+			
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -239,28 +260,32 @@ public class Overlord extends Observable implements iOverlord {
 		if (absorberName.length() > 0) {
 			absorb = getGizmo(absorberName);
 		}
-		if (vx == 0.0 && vy == 0.0 && absorb != null) {
-			if (canPlaceBall("A", x, y, x, y)) {
+		System.out.println("vx : " + vx + " vy: " + vy);
+		if ((int)vx == 0 && (int)vy == 0 && absorb != null) {
+			if (canPlaceBall(absorberName, x, y, x, y)) {
+				System.out.println("placing in absorber");
 				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-						cellWidth, cellHeight, vx, vy);
+						cellWidth, cellHeight, vx, vy, true);
 				
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
 				((Absorber) absorb).captureBall(newBall);
 				return true;
 			}
-		}
+		}else{
 		if (canPlaceBall("", x, y, x, y)) {
 			iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-					cellWidth, cellHeight, vx, vy);
+					cellWidth, cellHeight, vx, vy, false);
 
 			newBall.setCaptured(false);
 			balls.put(ballName, newBall);
+			setPlace(ballName, (int)x, (int)y, (int)x, (int)y);
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(ballName);
 			}
 			return true;
+		}
 		}
 	
 		return false;
@@ -515,10 +540,11 @@ public class Overlord extends Observable implements iOverlord {
 	}
 	
 	public void resetGame(){
-		for(iBall ball: getBalls()){
+		for(iBall ball: balls.values()){
 			ball.setLocation(ball.getOrigLocation());
 			System.out.println(ball.getIdentifier() + " : " + ball.getOrigLocation().getX() + " - " +  ball.getOrigLocation().getY());
 			ball.setVelocity(ball.getOrigVelocity());
+			ball.setCaptured(ball.getOrigCapture());
 		}
 		for(iGizmo giz : getGizmos()){
 			if(giz instanceof Flipper){
@@ -537,17 +563,14 @@ public class Overlord extends Observable implements iOverlord {
 	}
 	
 	public String getGizName(int x, int y){
-		for(iGizmo giz: getGizmos()){
-			if(giz.getIdentifier().equals("WALL")) continue;
-			if(giz.getLocation().getX() == x && giz.getLocation().getY() == y){
-				return giz.getIdentifier();
-			}
-		}
+		if(board[y][x].equals("") || board[y][x].contains("B"))
 		return "";
+		
+		return board[y][x];
 	}
 	
 	public String getBallName(int x, int y){
-		for(iBall ball: getBalls()){
+		for(iBall ball: balls.values()){
 			if(ball.getLocation().getX() == (float) x && ball.getLocation().getY() == (float) y){
 				return ball.getIdentifier();
 			}
@@ -559,7 +582,7 @@ public class Overlord extends Observable implements iOverlord {
 		int maxNo = 0;
 		int no;
 		if(name.contains("B")){
-			for(iBall ball: getBalls()){
+			for(iBall ball: balls.values()){
 				no = Integer.parseInt(ball.getIdentifier().substring(1));
 				if(no > maxNo) maxNo = no;
 			}

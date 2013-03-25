@@ -45,17 +45,21 @@ public class BuildController implements MouseListener, ActionListener {
 		
 		String gizName = overlord.getGizName(x, y);
 		String ballName = overlord.getBallName(x, y);
+		System.out.println("gizName: " + gizName);
+		String type = "";
+		boolean success = false;
 
 		if (x < 20 && y < 20) {
 			switch (currentSelectedMode) {
 			case ADD_BALL:
+				type = "ball";
 				if(gizName.contains("A")){
-					overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
+					success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
 					frame.showBallInfo(false);
 					currentSelectedMode = 0;
 				}else{
 					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
-					overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
+					success = overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
 					frame.showBallInfo(false);
 					currentSelectedMode = 0;
 					}
@@ -65,6 +69,11 @@ public class BuildController implements MouseListener, ActionListener {
 				
 			}
 			frame.unselectAll();
+			if(!success){
+				frame.error("The " + type + " gizmo could not be added at that location!");
+			}
+			success = false;
+			type = "";
 
 		}
 

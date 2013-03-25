@@ -45,6 +45,7 @@ public class Absorber extends Gizmo implements iGizmo {
 					  b.setVelocity(new Vect(0, -2));
 					  b.setLocation(new BallPoint(19, 18));
 					  b.setCaptured(false);
+					  System.out.println("firing " + b.getIdentifier());
 				capturedBalls.remove(0);
 			}
 		}
