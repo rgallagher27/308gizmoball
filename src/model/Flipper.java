@@ -13,8 +13,7 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected double maxRotation, minRotation;
 	protected boolean active;
 	protected Vect rotationCenter;
-	protected double flipperVelocity;
-	protected double angularVel, angularVelMs;
+	protected double flipperVelocity, angularVel;
 	protected Circle nonRotationalCircle;
 	protected final double DELTA_T = ((double)1) /30;
 
@@ -25,8 +24,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		cellHeight				= height;
 		rowWidth				= row;
 		rotation 				= 0;
-		rotationVelocity 		= 600;
-		angularVel 				= 1080L;
+		rotationVelocity 		= 900;
 		lineSegments 			= new ArrayList<LineSegment>();
 		circles					= new ArrayList<Circle>();
 		active 					= false;
@@ -39,6 +37,7 @@ public class Flipper extends Gizmo implements iGizmo {
 	@Override
 	public void performAction(boolean a) {
 		active = a;
+		super.setColour();
 	}
 	
 	
@@ -69,11 +68,12 @@ public class Flipper extends Gizmo implements iGizmo {
 	@Override
 	public void collide(iBall ball) {
 		if(ball.equals(null))return;
-		double newMin;
 		double min 					= Double.POSITIVE_INFINITY;
 		LineSegment closestLine 	= null;
 		Circle closestCircle 		= null;
 		boolean stationaryCircle 	= false;
+		
+		double newMin;
 		
 		if(rotation == minRotation || rotation == maxRotation){
 			angularVel = 0;
@@ -120,12 +120,16 @@ public class Flipper extends Gizmo implements iGizmo {
 					Geometry.reflectRotatingCircle(closestCircle, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity())
 				);
 		}
+		
 		//trigger.
 		for(iGizmo giz: triggers){
 			giz.performAction(true);
 			giz.move(min);
 		}
 		
+		if(closestLine != null) System.out.println("Line Hit");
+		if(closestCircle != null && stationaryCircle) System.out.println("Stat Circle Hit");
+		if(closestCircle != null && !stationaryCircle) System.out.println("Moving Circle Hit");
 		System.err.println("Ball Velocity after Flipper Collision: " + ball.getVelocity().toString());
 		System.out.println("Flipper.collide()");
 	}

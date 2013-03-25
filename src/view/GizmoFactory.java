@@ -2,12 +2,6 @@ package view;
 
 import java.awt.Color;
 
-import controller.GraphicsController;
-
-import model.*;
-import model.physics.Circle;
-import model.physics.LineSegment;
-import model.physics.Vect;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
@@ -17,6 +11,7 @@ import view.framework.G2DPoint;
 import view.framework.G2DRectangle;
 import view.framework.G2DTriangle;
 import view.framework.Matrix;
+import controller.GraphicsController;
 
 public class GizmoFactory {
 
@@ -68,7 +63,7 @@ public class GizmoFactory {
 			flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
 			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
 		}
-		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight);
+		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
         
 		rotateObjectAroundSelf(controller.getGizRotation(flipper),
 									flipperGroup,
@@ -95,6 +90,8 @@ public class GizmoFactory {
 	
 	public G2DObject drawSquareBumper(String bumper)
     {
+		Color colour = controller.getGizColour(bumper);
+		
         double cellWidth 		= controller.getGizWidth(bumper);
 		double cellheight 		= controller.getGizHeight(bumper);
 		
@@ -105,11 +102,13 @@ public class GizmoFactory {
 				                y*cellheight,
 				                (x*cellWidth)+(cellWidth),
 				                (y*cellheight)+(cellheight),
-				                Color.red);
+				                colour);
     }
     
     public G2DObject drawTriangleBumper(String triangle)
     {
+		Color colour = controller.getGizColour(triangle);
+		
         double cellWidth 		= controller.getGizWidth(triangle);
 		double cellheight 		= controller.getGizHeight(triangle);
 		
@@ -120,7 +119,7 @@ public class GizmoFactory {
 					                (int)(y*cellheight),
 					                (int)cellWidth,
 					                (int)cellheight,
-					                Color.blue);
+					                colour);
 		
 		this.rotateObjectAroundSelf( controller.getGizRotation(triangle), newTriangle, 
 									 (x * cellWidth) + (cellWidth / 2), 
@@ -132,6 +131,8 @@ public class GizmoFactory {
 	
 	public G2DObject drawCircleBumper(String circle)
     {
+		Color colour = controller.getGizColour(circle);
+		
         double cellWidth 		= controller.getGizWidth(circle);
 		double cellheight 		= controller.getGizHeight(circle);
 		
@@ -140,7 +141,7 @@ public class GizmoFactory {
 		
 		return new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
 							controller.getGizRowWidth(circle) * (cellWidth / 2),
-							Color.green);
+							colour);
     }
 	
 	public void drawGrid(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight)

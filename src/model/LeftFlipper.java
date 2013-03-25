@@ -81,18 +81,35 @@ public class LeftFlipper extends Flipper {
 		
 		
 		LineSegment line3 = new LineSegment(topLX, topLY, bottomLX, bottomLY);
+
+		Circle topL = new Circle(topLX, topLY, 0);
+		
+		Circle botL = new Circle(bottomLX, bottomLY, 0);
+		
 		LineSegment line4 = new LineSegment(topRX, topRY, bottomRX, bottomRY);
+		
+		Circle topR = new Circle(topRX,topRY, 0);
+		
+		Circle botR = new Circle(bottomRX,bottomRY, 0);
 		
 		
 		Angle rotationA = new Angle(Math.toRadians(rotation));
 		line3 = Geometry.rotateAround(line3, centerTop, rotationA);
 		line4 = Geometry.rotateAround(line4, centerTop, rotationA);
 		bot = Geometry.rotateAround(bot, centerTop, rotationA);
+		topL = Geometry.rotateAround(topL, centerTop, rotationA);
+		topR = Geometry.rotateAround(topR, centerTop, rotationA);
+		botL = Geometry.rotateAround(botL, centerTop, rotationA);
+		botR = Geometry.rotateAround(botR, centerTop, rotationA);
 		
 		lineSegments.add(line3);
 		lineSegments.add(line4);
 
 		circles.add(bot);
+		circles.add(topR);
+		circles.add(topL);
+		circles.add(botR);
+		circles.add(botL);
 		
 	}
 

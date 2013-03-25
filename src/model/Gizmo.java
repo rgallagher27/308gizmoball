@@ -1,8 +1,10 @@
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -18,12 +20,14 @@ public class Gizmo implements iGizmo {
 	protected String identifier;
 	protected List<iGizmo> triggers;
 	protected int width, height;
+	protected Color colour;
 	
 	public Gizmo() {
 		rotation = 0;
 		triggers = new LinkedList<iGizmo>();
 		width = 0;
 		height = 0;
+		colour = this.setColour();
 	}
 	
 	
@@ -123,6 +127,7 @@ public class Gizmo implements iGizmo {
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
+				closestCircle = null;
 				closestLine = l;
 			}
 		}
@@ -140,6 +145,7 @@ public class Gizmo implements iGizmo {
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
 				);
 		//trigger.
+		this.performAction(false);
 		for(iGizmo giz: triggers){
 			giz.performAction(true);
 			giz.move(min);
@@ -148,7 +154,7 @@ public class Gizmo implements iGizmo {
 
 	@Override
 	public void performAction(boolean a) {
-		
+		this.setColour();
 	}
 
 	@Override
@@ -198,5 +204,18 @@ public class Gizmo implements iGizmo {
 	@Override
 	public List<Circle> getCircles() {
 		return circles;
+	}
+
+
+
+	@Override
+	public Color getColour() {
+		return this.colour;
+	}
+	
+	protected Color setColour()
+	{
+		Random rand = new Random();
+		return this.colour = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
 	}
 }

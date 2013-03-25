@@ -1,17 +1,12 @@
-import java.awt.Color;
-
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import controller.BuildController;
-import controller.GraphicsController;
-import controller.PhysicsController;
-import controller.IController;
 
 import model.Overlord;
 import model.iOverlord;
-
 import view.CompleteViewContainer;
+import controller.BuildController;
+import controller.GraphicsController;
+import controller.IController;
+import controller.PhysicsController;
 
 
 public class Driver {

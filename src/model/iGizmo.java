@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,8 @@ public interface iGizmo {
 	public int getHeight();
 	
 	public void rotate();
+	
+	public Color getColour();
 	
 	/* Segment test code */
 	public List<LineSegment> getSegments();

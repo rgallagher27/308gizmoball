@@ -1,5 +1,7 @@
 package controller;
 
+import java.awt.Color;
+
 import model.iOverlord;
 import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
@@ -33,6 +35,10 @@ public class GraphicsController {
 	
 	public double getGizHeight(String name){
 		return overlord.getGizmo(name).getCellHeight();
+	}
+	
+	public Color getGizColour(String name){
+		return overlord.getGizmo(name).getColour();
 	}
 	
 	public float getBallX(String name){

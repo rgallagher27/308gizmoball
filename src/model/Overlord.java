@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -566,5 +567,4 @@ public class Overlord extends Observable implements iOverlord {
 			return name + (maxNo+1);
 		}
 	}
-
 }

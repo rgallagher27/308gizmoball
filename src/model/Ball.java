@@ -90,6 +90,7 @@ public class Ball implements iBall {
 
 	@Override
 	public void move(double deltaT) {
+		if(this.velocity.equals(new Vect(0, 0)))velocity = new Vect(0, -0.1);
 		if(!isCaptured){	
 			deltaT /= 2;
 			double mu  = 0.015F;
@@ -103,9 +104,6 @@ public class Ball implements iBall {
 			point.setX((float)(point.getX() + (deltaT * velocity.x())));
 			point.setY((float)(point.getY() + (deltaT * velocity.y())));
 			
-			BallPoint newCirclePoint = new BallPoint((float)(point.getX() * cellWidth), (float)(point.getY() * cellHeight));
-			
-			//physicsCircle = new Circle(newCirclePoint.getX(),newCirclePoint.getY(), getCellWidth() / 4);
 			physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
 			
 			
