@@ -1,16 +1,30 @@
 package view;
 
-import java.awt.*;
-
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.TextField;
 import java.io.File;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.LayoutStyle;
 
 import controller.BuildController;
-// import controller.GUIController;
-import controller.GUIListener;
 import controller.GraphicsController;
 import controller.IController;
+// import controller.GUIController;
 
 public class CompleteViewContainer extends JFrame {
 	
@@ -37,8 +51,6 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel buttonsPanel;
 	private JPanel content;
 	private JPanel ballInfo;
-	
-	
 	
 	private JButton load;
 	private JButton save;
@@ -183,8 +195,6 @@ public class CompleteViewContainer extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		/* setup content area */
-
-
 		getContentPane().add(view, BorderLayout.WEST);
 		getContentPane().add(buttonsPanel, BorderLayout.EAST);
 		setVisible(true);

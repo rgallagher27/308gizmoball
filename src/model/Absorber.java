@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,20 +13,22 @@ public class Absorber extends Gizmo implements iGizmo {
 	protected boolean active;
 	
 	public Absorber( String identifier, GizPoint p, double row, double column, double width, double height) {
-		point 		= p;
-		rowWidth 		= row;
-		columnHeight	= column;
-		this.identifier 	= identifier;
-		cellWidth		= width;
-		cellHeight	= height;
-		active 		= false;
+		lineSegments 		= new ArrayList<LineSegment>();
+		circles				= new ArrayList<Circle>();
+		capturedBalls 		= new ArrayList<iBall>();
 		
-		lineSegments 	= new ArrayList<LineSegment>();
-		circles		= new ArrayList<Circle>();
-		capturedBalls 	= new ArrayList<iBall>();
-		this.width = (int) width;
-		this.height = (int) height;
-		fillLineSegments();
+		point 				= p;
+		rowWidth 			= row;
+		columnHeight		= column;
+		cellWidth			= width;
+		cellHeight			= height;
+		active 				= false;
+		
+		this.identifier 	= identifier;
+		this.width 			= (int) width;
+		this.height 		= (int) height;
+		
+		this.fillLineSegments();
 	}
 	
 	@Override
@@ -42,8 +42,8 @@ public class Absorber extends Gizmo implements iGizmo {
 		if(active){
 			if((!capturedBalls.isEmpty())){
 				iBall b = capturedBalls.get(0);
-					  b.setVelocity(new Vect(0, 0));
-					  b.setLocation(new BallPoint(10, 0));
+					  b.setVelocity(new Vect(0, -2));
+					  b.setLocation(new BallPoint(19, 18));
 					  b.setCaptured(false);
 				capturedBalls.remove(0);
 			}

@@ -25,9 +25,9 @@ public class Gizmo implements iGizmo {
 	public Gizmo() {
 		rotation = 0;
 		triggers = new LinkedList<iGizmo>();
-		width = 0;
-		height = 0;
-		colour = this.setColour();
+		width    = 0;
+		height   = 0;
+		colour   = this.setColour();
 	}
 	
 	

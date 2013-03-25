@@ -78,7 +78,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		if(rotation == minRotation || rotation == maxRotation){
 			angularVel = 0;
 		}else{
-			angularVel = (flipperVelocity / 60);
+			angularVel = (flipperVelocity / 100);
 		}
 		
 		for(LineSegment l : lineSegments){

@@ -14,22 +14,19 @@ import model.iOverlord;
 
 public class PhysicsController implements IController {
 	
-	private final int FPS = 80;
-	private final double DELTA_T = ((double)1) / FPS;
-	private iOverlord overlord;
+	private final int FPS 			= 60;
+	private final double DELTA_T 	= ((double)1) / FPS;
 	
+	private iOverlord overlord;
 	private Timer gameLoop;
-			
 	private boolean runningMode;
 
 	public PhysicsController(iOverlord ov) 
 	{
 		super();
+		
 		this.overlord 	= ov;
-		
 		this.gameLoop 	= new Timer(1000/FPS, this);
-		
-		//this.gameLoop.start();
 	}
 
 	public void start(){
@@ -38,8 +35,9 @@ public class PhysicsController implements IController {
 	}
 	
 	public void stop(){
-		gameLoop.stop();
 		runningMode = false;
+		
+		gameLoop.stop();
 		overlord.resetGame();
 	}
 	
@@ -126,7 +124,7 @@ public class PhysicsController implements IController {
 		 * Move all the Balls while checking for possible
 		 * collisions with iGizmo  and iBall objects
 		 */
-		for(int i = 0; i < 75; i++){
+		for(int i = 0; i < 100; i++){
 		for(iBall b : overlord.getBalls()){
 			if(b.isCaptured())continue;
 				Current_Delta_T = collideBalls(b, Current_Delta_T);
