@@ -38,5 +38,8 @@ public interface iOverlord {
 	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode);
 	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode);
 	public void resetGame();
+	public String getGizName(int x, int y);
+	public String getBallName(int x, int y);
+	public String getNextName(String name);
 	
 }

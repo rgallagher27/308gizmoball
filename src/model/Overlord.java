@@ -519,5 +519,44 @@ public class Overlord extends Observable implements iOverlord {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public String getGizName(int x, int y){
+		for(iGizmo giz: getGizmos()){
+			if(giz.getLocation().getX() == x && giz.getLocation().getY() == y){
+				return giz.getIdentifier();
+			}
+		}
+		return "";
+	}
+	
+	public String getBallName(int x, int y){
+		for(iBall ball: getBalls()){
+			if(ball.getLocation().getX() == (float) x && ball.getLocation().getY() == (float) y){
+				return ball.getIdentifier();
+			}
+		}
+		return "";
+	}
+	
+	public String getNextName(String name){
+		int maxNo = 0;
+		int no;
+		if(name.contains("B")){
+			for(iBall ball: getBalls()){
+				no = Integer.parseInt(ball.getIdentifier().substring(1));
+				if(no > maxNo) maxNo = no;
+			}
+			return "B" + (maxNo+1);
+		}else{
+			
+			for(iGizmo giz: getGizmos()){
+				if(giz.getIdentifier().contains(name)){
+					no = Integer.parseInt(giz.getIdentifier().substring(1));
+					if(no > maxNo) maxNo = no;
+				}
+			}
+			return name + (maxNo+1);
+		}
+	}
 
 }
