@@ -1,8 +1,11 @@
 package controller;
 
 import java.awt.Color;
+import java.util.List;
 
 import model.iOverlord;
+import model.physics.Circle;
+import model.physics.LineSegment;
 import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DObject;
@@ -65,7 +68,15 @@ public class GraphicsController {
 		return overlord.getGizmo(name).getColumnHeight();
 	}
 	
+	public List<LineSegment> getLines(String name)
+	{
+		return overlord.getGizmo(name).getSegments();
+	}
 	
+	public List<Circle> getCircles(String name)
+	{
+		return overlord.getGizmo(name).getCircles();
+	}
 	
 	public double getBallCellHeight(String name){
 		return overlord.getBall(name).getCellHeight();

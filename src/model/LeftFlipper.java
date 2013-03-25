@@ -58,7 +58,7 @@ public class LeftFlipper extends Flipper {
 		double topLX = point.getX() * cellWidth;
 		double topLY = (point.getY() * cellHeight) + (cellWidth/4);
 		
-		double topRX = topLX + (cellWidth/4);
+		double topRX = topLX + (cellWidth/2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
