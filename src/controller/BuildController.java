@@ -81,10 +81,7 @@ public class BuildController implements MouseListener, ActionListener {
 			case BUILD_CIRCLE:
 				type = "circle";
 				success = overlord.addCircle(overlord.getNextName("C"), x, y);
-				
 				break; 	
-	
-				
 			}
 			frame.unselectAll();
 			if(!success && currentSelectedMode != 0){
@@ -196,7 +193,7 @@ public class BuildController implements MouseListener, ActionListener {
 			currentSelectedMode = BUILD_LEFT_FLIPPER;
 			// buildView.addLeftFlipper();
 			break;
-		case "AddCircle":
+		case "Circle":
 			currentSelectedMode = BUILD_CIRCLE;
 			break;
 		case "RightFlipper": // TODO Implement with model

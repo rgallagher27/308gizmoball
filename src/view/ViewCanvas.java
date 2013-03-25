@@ -69,7 +69,6 @@ public class ViewCanvas extends JPanel implements Observer {
 		buildCont = bc;
 		addKeyListener(eventListener);
 		addMouseListener(bc);
-		
 	}
 	
 	public void setMode(boolean running){

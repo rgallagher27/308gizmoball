@@ -167,6 +167,15 @@ public class Overlord extends Observable implements iOverlord {
 
 	private boolean canPlace(String ex, int startX, int startY, int endX,
 			int endY) {
+		
+		if(startX == endX && startY == endY){
+			System.out.println("t1: " + !board[startY][startX].equals(""));
+			System.out.println("t2: " + !board[startY][startX].equals(ex));
+			if (!board[startY][startX].equals("") && !board[startY][startX].equals(ex))
+				return false;
+			return true;
+		}else{
+			
 		for (int y = startY; y < endY; y++) {
 			for (int x = startX; x < endX; x++) {
 				if (ex.length() > 0) {
@@ -177,6 +186,7 @@ public class Overlord extends Observable implements iOverlord {
 						return false;
 				}
 			}
+		}
 		}
 		return true;
 	}
@@ -239,12 +249,17 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addAbsorber(String id, int x, int y, int width, int height) {
-		System.out.println("width: " + width + " height : " + height);
-		if (canPlace("", x, y, (x + height - 1), (y + width - 1))) {
+	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
+		int height = Math.abs(y - y2);
+		int width = Math.abs(x - x2);
+		
+		if(height < 1 || width < 1){
+			return false;
+		}
+		if (canPlace(id, x, y, x2, y2)) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + (width - 1)), (y + (height - 1)));
+			setPlace(id, x, y, x2, y2);
 
 			if (!loadingFile) {
 				setChanged();
@@ -315,7 +330,9 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addCircle(String id, int x, int y) {
-		if (canPlace("", x, y, x, y)) {
+		System.out.println("circle...");
+		if (canPlace(id, x, y, x, y)) {
+			System.out.println("circle time!");
 			gizmos.put(id, new CircleBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
@@ -330,7 +347,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addFlipper(String id, int x, int y, boolean orient) {
-		if (canPlace("", x, y, x + 1, y + 1)) {
+		if (canPlace(id, x, y, x + 1, y + 1)) {
 			if (!orient) {
 				gizmos.put(id, new LeftFlipper(id, new GizPoint(x, y), 1, 2,
 						cellWidth, cellHeight));
@@ -351,7 +368,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addSquare(String id, int x, int y) {
-		if (canPlace("", x, y, x, y)) {
+		if (canPlace(id, x, y, x, y)) {
 			gizmos.put(id, new SquareBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
@@ -366,7 +383,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addTriangle(String id, int x, int y) {
-		if (canPlace("", x, y, x, y)) {
+		if (canPlace(id, x, y, x, y)) {
 			gizmos.put(id, new TriangleBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
