@@ -31,6 +31,7 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton addTrigger;
 	private JRadioButton removeTrigger;
 	private JRadioButton addBall;
+	private JRadioButton circle;
 	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
@@ -97,6 +98,11 @@ public class CompleteViewContainer extends JFrame {
 		triangle.addActionListener(buildCont);
 		triangle.setActionCommand("Triangle");
 		
+		circle = new JRadioButton("Add Circle");
+		circle.addActionListener(buildCont);
+		circle.setActionCommand("Circle");
+		
+		
 		leftFlipper = new JRadioButton("Add Left Flipper");
 		leftFlipper.addActionListener(buildCont);
 		leftFlipper.setActionCommand("LeftFlipper");
@@ -141,6 +147,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(absorber);
 		buildButtonsPanel.add(square);
 		buildButtonsPanel.add(triangle);
+		buildButtonsPanel.add(circle);
 		buildButtonsPanel.add(leftFlipper);
 		buildButtonsPanel.add(rightFlipper);
 		buildButtonsPanel.add(remove);
@@ -149,6 +156,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(removeTrigger);
 		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
+		
 		
 	}
 	private void buildInitial(){
@@ -217,17 +225,15 @@ public class CompleteViewContainer extends JFrame {
 		mode = false;
 		view.setMode(false);
 		pack();
-		revalidate();
 		repaint();
 	}
 
 	public void switchPlay() {
 		buildButtonsPanel.setVisible(false);
 		playButtonsPanel.setVisible(true);
-		mode = false;
+		mode = true;
 		view.setMode(true);
 		pack();
-		revalidate();
 		repaint();
 	}
 	
@@ -277,8 +283,13 @@ public class CompleteViewContainer extends JFrame {
 		rotate.setSelected(false);
 		addTrigger.setSelected(false);
 		removeTrigger.setSelected(false);
+		circle.setSelected(false);
 		addBall.setSelected(false);
 		showBallInfo(false);
+	}
+	
+	public boolean getMode(){
+		return mode;
 	}
 
 	private static final long serialVersionUID = 1L;

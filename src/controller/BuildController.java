@@ -28,6 +28,7 @@ public class BuildController implements MouseListener, ActionListener {
 	private final int BUILD_ADD_TRIGGER = 9;
 	private final int BUILD_REMOVE_TRIGGER = 10;
 	private final int ADD_BALL = 1;
+	private final int BUILD_CIRCLE = 11;
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -40,6 +41,10 @@ public class BuildController implements MouseListener, ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
+		if(frame.getMode()){
+			//ignore mouse clicks during play mode.
+		}else{
 		int x = view.mouseX(e.getX());
 		int y = view.mouseY(e.getY());
 		
@@ -56,25 +61,40 @@ public class BuildController implements MouseListener, ActionListener {
 				if(gizName.contains("A")){
 					success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
 					frame.showBallInfo(false);
-					currentSelectedMode = 0;
+					
 				}else{
 					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
 					success = overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
 					frame.showBallInfo(false);
-					currentSelectedMode = 0;
+					
 					}
 				}
 				break;
+			case BUILD_SQUARE:
+				type = "square";
+				success = overlord.addSquare(overlord.getNextName("S"), x, y);
+				break;
+			case BUILD_TRIANGLE:
+				type = "triangle";
+				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
+				break;
+			case BUILD_CIRCLE:
+				type = "circle";
+				success = overlord.addCircle(overlord.getNextName("C"), x, y);
+				
+				break; 	
 	
 				
 			}
 			frame.unselectAll();
-			if(!success){
+			if(!success && currentSelectedMode != 0){
 				frame.error("The " + type + " gizmo could not be added at that location!");
 			}
+			currentSelectedMode = 0;
 			success = false;
 			type = "";
 
+		}
 		}
 
 		System.out.println(view.mouseX(e.getX()) + " : "
@@ -175,6 +195,9 @@ public class BuildController implements MouseListener, ActionListener {
 		case "LeftFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_LEFT_FLIPPER;
 			// buildView.addLeftFlipper();
+			break;
+		case "AddCircle":
+			currentSelectedMode = BUILD_CIRCLE;
 			break;
 		case "RightFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_RIGHT_FLIPPER;

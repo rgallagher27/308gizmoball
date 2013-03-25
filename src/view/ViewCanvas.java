@@ -76,8 +76,10 @@ public class ViewCanvas extends JPanel implements Observer {
 		runningMode = running;
 		if(running){
 			eventListener.start();
+			requestFocus();
 		}else{
 			eventListener.stop();
+			requestFocus();
 		}
 	}
 	

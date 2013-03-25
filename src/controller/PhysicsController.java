@@ -80,7 +80,7 @@ public class PhysicsController implements IController {
 	{	
 		
 		int keyPressed = event.getKeyCode();
-		
+		System.out.println("KEY PRESSED : " + keyPressed);
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
