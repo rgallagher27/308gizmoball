@@ -224,9 +224,12 @@ public class Overlord extends Observable implements iOverlord {
 		} else {
 
 			if (startY != endY) {
+				System.out.println("-------" + place);
+				System.out.println("---- " + startY + " -- " + endY);
 				for (int y = startY; y < endY; y++) {
 					for (int x = startX; x < endX; x++) {
 						board[y][x] = place;
+						System.out.println("placing " + place);
 					}
 				}
 			} else {
@@ -256,6 +259,7 @@ public class Overlord extends Observable implements iOverlord {
 		if(height < 1 || width < 1){
 			return false;
 		}
+		
 		if (canPlace(id, x, y, x2, y2)) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
