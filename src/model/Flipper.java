@@ -13,27 +13,27 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected double maxRotation, minRotation;
 	protected boolean active;
 	protected Vect rotationCenter;
+	protected double flipperVelocity;
 	protected double angularVel, angularVelMs;
 	protected Circle nonRotationalCircle;
 	protected final double DELTA_T = ((double)1) /30;
 
 	public Flipper(String identifier, GizPoint p, double row, double column, double width, double height) {
-		point 			= p;
-		columnHeight		= column;
-		cellWidth			= width;
-		cellHeight		= height;
-		rowWidth			= row;
-		rotation 			= 0;
-		rotationIncrement = (1080.0/1000.0) * (1000.0/30.0);
-		angularVel = 1080L;
+		point 					= p;
+		columnHeight			= column;
+		cellWidth				= width;
+		cellHeight				= height;
+		rowWidth				= row;
+		rotation 				= 0;
+		rotationVelocity 		= 600;
+		angularVel 				= 1080L;
+		lineSegments 			= new ArrayList<LineSegment>();
+		circles					= new ArrayList<Circle>();
+		active 					= false;
+		
 		this.identifier 		= identifier;
-		
-		lineSegments 		= new ArrayList<LineSegment>();
-		circles			= new ArrayList<Circle>();
-		
-		active 			= false;
-		this.width = 2;
-		this.height = 2;
+		this.width 				= 2;
+		this.height 			= 2;
 	}
 
 	@Override
@@ -69,16 +69,16 @@ public class Flipper extends Gizmo implements iGizmo {
 	@Override
 	public void collide(iBall ball) {
 		if(ball.equals(null))return;
-		double min = Double.POSITIVE_INFINITY;
 		double newMin;
-		LineSegment closestLine = null;
-		Circle closestCircle = null;
-		boolean stationaryCircle = false;
+		double min 					= Double.POSITIVE_INFINITY;
+		LineSegment closestLine 	= null;
+		Circle closestCircle 		= null;
+		boolean stationaryCircle 	= false;
 		
 		if(rotation == minRotation || rotation == maxRotation){
 			angularVel = 0;
 		}else{
-			angularVel = 1080L;
+			angularVel = (flipperVelocity / 60);
 		}
 		
 		for(LineSegment l : lineSegments){
@@ -111,21 +111,22 @@ public class Flipper extends Gizmo implements iGizmo {
 		 
 		//0.95 reflection coeff
 		if(closestLine != null){
-			ball.setVelocity(Geometry.reflectRotatingWall(closestLine, rotationCenter,Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity(), 1));
-			System.out.println("hit wall");
+			ball.setVelocity(Geometry.reflectRotatingWall(closestLine, rotationCenter,Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity()));
 		}
 		if(closestCircle != null && stationaryCircle)ball.setVelocity(
-					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity(), 1));
+					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity()));
 		if(closestCircle != null && !stationaryCircle){
 			ball.setVelocity(
-					Geometry.reflectRotatingCircle(closestCircle, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity(), 1)
+					Geometry.reflectRotatingCircle(closestCircle, rotationCenter, Math.toRadians(angularVel), ball.returnBounds(), ball.getVelocity())
 				);
 		}
 		//trigger.
 		for(iGizmo giz: triggers){
-			System.out.println(this.getIdentifier() + " has triggered " + giz.getIdentifier());
 			giz.performAction(true);
-			giz.move();
+			giz.move(min);
 		}
+		
+		System.err.println("Ball Velocity after Flipper Collision: " + ball.getVelocity().toString());
+		System.out.println("Flipper.collide()");
 	}
 }

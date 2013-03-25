@@ -1,25 +1,16 @@
 package controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Timer;
-
-import view.GizmoFactory;
-import view.framework.G2DAbstractCanvas;
-import view.framework.G2DObject;
 
 import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
-import model.physics.Circle;
-import model.physics.LineSegment;
 
 public class PhysicsController implements IController {
 	
@@ -125,29 +116,24 @@ public class PhysicsController implements IController {
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{	
-		new Runnable() {
-			
-			@Override
-			public void run() {
-				double Current_Delta_T = DELTA_T;
-				/*
-				 * Move all the Balls while checking for possible
-				 * collisions with iGizmo  and iBall objects
-				 */
-				for(iBall b : overlord.getBalls()){
-					if(b.isCaptured())continue;
-					for(int i = 0; i < 50; i++){
-						Current_Delta_T = collideBalls(b, Current_Delta_T);
-						Current_Delta_T = collideGizmos(b, Current_Delta_T);
-						b.move(Current_Delta_T);
-					}
-				}
-				/*
-				 * Move all the static Gizmos
-				 */
-				overlord.moveAllGizmos();
+		/*
+		 * Move all the static Gizmos
+		 */
+		overlord.moveAllGizmos(DELTA_T);
+		
+		double Current_Delta_T = DELTA_T;
+		/*
+		 * Move all the Balls while checking for possible
+		 * collisions with iGizmo  and iBall objects
+		 */
+		for(iBall b : overlord.getBalls()){
+			if(b.isCaptured())continue;
+			for(int i = 0; i < 50; i++){
+				Current_Delta_T = collideBalls(b, Current_Delta_T);
+				Current_Delta_T = collideGizmos(b, Current_Delta_T);
+				b.move(Current_Delta_T);
 			}
-		}.run();
+		}
 	}
 
 	

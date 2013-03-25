@@ -1,8 +1,6 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,13 +9,10 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import model.physics.Vect;
 import exception.CannotRotateException;
 
-import model.physics.Vect;
-
 public class Overlord extends Observable implements iOverlord {
-
-	private Dimension gridDimentions, canvasDimentions;
 
 	private HashMap<String, iGizmo> gizmos;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersDown;
@@ -33,19 +28,14 @@ public class Overlord extends Observable implements iOverlord {
 
 	public Overlord(Dimension gridDimentions, Dimension canvasDimentions) {
 
-		this.gridDimentions = gridDimentions;
-		this.canvasDimentions = canvasDimentions;
-		cellWidth = canvasDimentions.getWidth() / gridDimentions.getWidth();
-		cellHeight = canvasDimentions.getHeight() / gridDimentions.getHeight();
-		gizmos = new HashMap<String, iGizmo>();
-		balls = new HashMap<String, iBall>();
-		keyTriggersDown = new HashMap<Integer, ArrayList<iGizmo>>();
-		keyTriggersUp = new HashMap<Integer, ArrayList<iGizmo>>();
-		connects = new ArrayList<String>();
-		board = new String[gridDimentions.width][gridDimentions.height]; // x
-																			// along,
-																			// y
-																			// up
+		cellWidth 			= canvasDimentions.getWidth() / gridDimentions.getWidth();
+		cellHeight			= canvasDimentions.getHeight() / gridDimentions.getHeight();
+		gizmos 				= new HashMap<String, iGizmo>();
+		balls 				= new HashMap<String, iBall>();
+		keyTriggersDown 	= new HashMap<Integer, ArrayList<iGizmo>>();
+		keyTriggersUp 		= new HashMap<Integer, ArrayList<iGizmo>>();
+		connects 			= new ArrayList<String>();
+		board 				= new String[gridDimentions.width][gridDimentions.height]; 
 
 		for (int x = 0; x < gridDimentions.width; x++) {
 			for (int y = 0; y < gridDimentions.height; y++) {
@@ -70,6 +60,7 @@ public class Overlord extends Observable implements iOverlord {
 		for (Integer keyVal : keyTriggersUp.keySet()) {
 			keyTriggersUp.get(keyVal).remove(gizRem);
 		}
+		
 		gizmos.remove(gizmoName);
 		connects.remove(gizmoName);
 		removeFromBoard(gizmoName);
@@ -372,7 +363,7 @@ public class Overlord extends Observable implements iOverlord {
 		if (con == null)
 			return false;
 		if (direction) {
-			tmp = (ArrayList<iGizmo>) keyTriggersUp.get(keyNum);
+			tmp = keyTriggersUp.get(keyNum);
 			if(tmp == null){
 				tmp = new ArrayList<iGizmo>();
 			}
@@ -380,7 +371,7 @@ public class Overlord extends Observable implements iOverlord {
 			keyTriggersUp.put(keyNum, tmp);
 			return true;
 		} else {
-			tmp = (ArrayList<iGizmo>) keyTriggersDown.get(keyNum);
+			tmp = keyTriggersDown.get(keyNum);
 			if(tmp == null){
 				tmp = new ArrayList<iGizmo>();
 			}
@@ -487,9 +478,9 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void moveAllGizmos() {
+	public void moveAllGizmos(double Delta_T) {
 		for (iGizmo giz : getGizmos()) {
-			giz.move();
+			giz.move(Delta_T);
 		}
 		setChanged();
 		notifyObservers();

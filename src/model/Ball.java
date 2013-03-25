@@ -1,8 +1,5 @@
 package model;
 
-import java.awt.geom.Point2D;
-import java.util.Observable;
-
 import model.physics.Circle;
 import model.physics.Geometry;
 import model.physics.Geometry.VectPair;

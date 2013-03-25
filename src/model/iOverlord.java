@@ -1,9 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import exception.CannotRotateException;
 
@@ -34,7 +32,7 @@ public interface iOverlord {
 	public boolean connect(String producerGizmo, String consumerGizmo);
 	public void loadGame(String mapName);
 	public void saveGame(String mapName);
-	public void moveAllGizmos();
+	public void moveAllGizmos(double Delta_T);
 	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode);
 	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode);
 	public void resetGame();

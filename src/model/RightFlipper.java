@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.Point;
-
 import model.physics.Angle;
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -18,27 +16,30 @@ public class RightFlipper extends Flipper {
 	}
 	
 	@Override
-	public void move()
+	public void move(double Delta_T)
 	{
+		if(rotation > maxRotation){
+			rotation = maxRotation;
+		}
+		if(rotation < minRotation){
+			rotation = minRotation;
+		}
 		if(active){
 			if(rotation < maxRotation){
-				rotation += rotationIncrement;
-				if(rotation > maxRotation){
-					rotation =  maxRotation;
-				}
-				angularVel = -angularVel;
-				fillLineSegments();
+				super.flipperVelocity = (rotationVelocity * Delta_T);
+				rotation = rotation + super.flipperVelocity;
+
+				angularVel = -angularVel;  // these may be wrong
 			}
 		}else{
 			if(rotation > minRotation){
-				rotation -= rotationIncrement;
-				if(rotation < minRotation){
-					rotation =  minRotation;
-				}
-				angularVel = +angularVel;
-				fillLineSegments();
+				super.flipperVelocity = (rotationVelocity * Delta_T);
+				rotation = rotation - super.flipperVelocity;
+
+				angularVel = +angularVel; // these may be wrong + / - dependant on direction.
 			}
 		}
+		fillLineSegments();
 	}
 	
 	@Override
@@ -46,6 +47,7 @@ public class RightFlipper extends Flipper {
 		rotation     = r;
 		maxRotation += r;
 		minRotation += r;
+		fillLineSegments();
 	}
 	
 	private void fillLineSegments()

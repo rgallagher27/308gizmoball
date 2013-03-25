@@ -38,7 +38,7 @@ public class Absorber extends Gizmo implements iGizmo {
 	}
 
 	@Override
-	public void move() {
+	public void move(double Delta_T) {
 		if(active){
 			if((!capturedBalls.isEmpty())){
 				iBall b = capturedBalls.get(0);

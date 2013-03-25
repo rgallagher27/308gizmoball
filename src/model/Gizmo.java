@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class Gizmo implements iGizmo {
 	
 	protected GizPoint point;
 	protected double rowWidth, columnHeight, cellWidth, cellHeight;
-	protected double rotation, rotationIncrement;
+	protected double rotation, rotationVelocity;
 	protected List<LineSegment> lineSegments;
 	protected List<Circle> circles;
 	protected String identifier;
@@ -142,9 +141,8 @@ public class Gizmo implements iGizmo {
 				);
 		//trigger.
 		for(iGizmo giz: triggers){
-			System.out.println(this.getIdentifier() + " has triggered " + giz.getIdentifier());
 			giz.performAction(true);
-			giz.move();
+			giz.move(min);
 		}
 	}
 
@@ -154,7 +152,7 @@ public class Gizmo implements iGizmo {
 	}
 
 	@Override
-	public void move() {
+	public void move(double Delta_T) {
 		
 	}
 
@@ -194,13 +192,11 @@ public class Gizmo implements iGizmo {
 
 	@Override
 	public List<LineSegment> getSegments() {
-		// TODO Auto-generated method stub
 		return lineSegments;
 	}
 
 	@Override
 	public List<Circle> getCircles() {
-		// TODO Auto-generated method stub
 		return circles;
 	}
 }
