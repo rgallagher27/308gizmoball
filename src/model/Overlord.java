@@ -191,9 +191,15 @@ public class Overlord extends Observable implements iOverlord {
 
 	private void setPlace(String place, int startX, int startY, int endX,
 			int endY) {
+		if(startY != endY){
 		for (int y = startY; y < endY; y++) {
 			for (int x = startX; x < endX; x++) {
 				board[y][x] = place;
+			}
+		}
+		}else{
+			for (int x = startX; x < endX; x++) {
+				board[startY][x] = place;
 			}
 		}
 	}
@@ -210,11 +216,11 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int width, int height) {
-
+		System.out.println("width: " + width + " height : " + height);
 		if (canPlace("", x, y, (x + height-1), (y + width-1))) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + height-1), (y + width-1));
+			setPlace(id, x, y, (x + (height-1)), (y + (width-1)));
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -521,6 +527,13 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		setChanged();
 		notifyObservers();
+		
+		for(int i = 0; i < 20; i++){
+			for(int y = 0; y < 20; y++){
+				System.out.print(board[i][y]);
+			}
+			System.out.println();
+		}
 	}
 	
 	public String getGizName(int x, int y){

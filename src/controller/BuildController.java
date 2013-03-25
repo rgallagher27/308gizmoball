@@ -51,13 +51,20 @@ public class BuildController implements MouseListener, ActionListener {
 			case ADD_BALL:
 				if(gizName.contains("A")){
 					overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
+					frame.showBallInfo(false);
+					currentSelectedMode = 0;
 				}else{
 					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
 					overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
+					frame.showBallInfo(false);
+					currentSelectedMode = 0;
 					}
 				}
+				break;
+	
 				
 			}
+			frame.unselectAll();
 
 		}
 

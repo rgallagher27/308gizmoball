@@ -28,7 +28,10 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton absorber;
 	private JRadioButton remove;
 	private JRadioButton rotate;
-
+	private JRadioButton addTrigger;
+	private JRadioButton removeTrigger;
+	private JRadioButton addBall;
+	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
 	private JPanel buttonsPanel;
@@ -36,9 +39,7 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel ballInfo;
 	
 	
-	private JRadioButton addTrigger;
-	private JRadioButton removeTrigger;
-	private JRadioButton addBall;
+	
 	private JButton load;
 	private JButton save;
 	private JButton play;
@@ -231,22 +232,53 @@ public class CompleteViewContainer extends JFrame {
 	}
 	
 	public double getBallVX(){
-		double in = Double.parseDouble(tfVX.getText());
+		double in;
+		try{
+			in = Double.parseDouble(tfVX.getText());
+		}catch(NumberFormatException nfe){
+			error("The ball X velocity must be between -200 and 200L");
+			in = Double.MIN_VALUE;
+		}
 		if(in >= -200 && in <= 200) return in;
-		error("The ball X velocity must be between -200 and 200L");
+	
+		
 		return Double.MIN_VALUE;
 	}
 	
 	public double getBallVY(){
-		double in = Double.parseDouble(tfVY.getText());
+		double in;
+		try{
+			in = Double.parseDouble(tfVY.getText());
+		}catch(NumberFormatException nfe){
+			error("The ball Y velocity must be between -200 and 200L");
+			in = Double.MIN_VALUE;
+		}
 		if(in >= -200 && in <= 200) return in;
-		error("The ball Y velocity must be between -200 and 200L");
+	
 		return Double.MIN_VALUE;
 	}
 	
 	public void showBallInfo(boolean b){
+		if(b == false){
+			tfVX.setText("");
+			tfVY.setText("");
+		}
 		ballInfo.setVisible(b);
 		pack();
+	}
+	
+	public void unselectAll(){
+		square.setSelected(false);
+		triangle.setSelected(false);
+		leftFlipper.setSelected(false);
+		rightFlipper.setSelected(false);
+		absorber.setSelected(false);
+		remove.setSelected(false);
+		rotate.setSelected(false);
+		addTrigger.setSelected(false);
+		removeTrigger.setSelected(false);
+		addBall.setSelected(false);
+		showBallInfo(false);
 	}
 
 	private static final long serialVersionUID = 1L;
