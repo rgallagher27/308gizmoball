@@ -55,10 +55,10 @@ public class LeftFlipper extends Flipper {
 		lineSegments.clear();
 		circles.clear();
 		
-		double topLX = (point.getX() * cellWidth);
+		double topLX = point.getX() * cellWidth;
 		double topLY = (point.getY() * cellHeight) + (cellWidth/4);
 		
-		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth/2);
+		double topRX = topLX + (cellWidth/4);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
@@ -68,20 +68,19 @@ public class LeftFlipper extends Flipper {
 		double bottomRY = bottomLY;
 		
 		double centerXTop = (topLX + cellWidth/4);
-		double centerYTop = topLY + 1;
+		double centerYTop = topLY;
 		rotationCenter = new Vect(centerXTop, centerYTop);
 		
-		double centerXBot = (bottomLX + cellWidth/4);
-		double centerYBot = bottomLY + 1;
+		double centerXBot = centerXTop;
+		double centerYBot = bottomLY;
 		
 		Vect centerTop = new Vect(centerXTop, centerYTop);  // center point of rotation
 		
 		nonRotationalCircle = new Circle(centerXTop, centerYTop, cellWidth/4);
 		Circle bot = new Circle(centerXBot, centerYBot, cellWidth/4);
 		
-		
 		LineSegment line3 = new LineSegment(topLX, topLY, bottomLX, bottomLY);
-
+		
 		Circle topL = new Circle(topLX, topLY, 0);
 		
 		Circle botL = new Circle(bottomLX, bottomLY, 0);
@@ -91,7 +90,6 @@ public class LeftFlipper extends Flipper {
 		Circle topR = new Circle(topRX,topRY, 0);
 		
 		Circle botR = new Circle(bottomRX,bottomRY, 0);
-		
 		
 		Angle rotationA = new Angle(Math.toRadians(rotation));
 		line3 = Geometry.rotateAround(line3, centerTop, rotationA);
@@ -104,7 +102,7 @@ public class LeftFlipper extends Flipper {
 		
 		lineSegments.add(line3);
 		lineSegments.add(line4);
-
+		
 		circles.add(bot);
 		circles.add(topR);
 		circles.add(topL);

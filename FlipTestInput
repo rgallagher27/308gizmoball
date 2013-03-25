@@ -1,11 +1,9 @@
+Absorber A 0 19 20 20
+KeyConnect key 84 down A
+Connect A A
 
 LeftFlipper LF92 9 14
 KeyConnect key 32 down LF92
 KeyConnect key 32 up LF92
 
-
-Absorber A 0 19 20 20
-KeyConnect key 84 down A
-Connect A A
-
-Ball b1 10 0 0 0
+Ball b2 9 0 0 0

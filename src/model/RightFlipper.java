@@ -83,11 +83,11 @@ public class RightFlipper extends Flipper {
 		
 		Circle topL = new Circle(topLX, topLY, 0);
 		
-		Circle topR = new Circle(topRX,topRY, 0);
+		Circle botL = new Circle(bottomLX, bottomLY, 0);
 		
 		LineSegment line4 = new LineSegment(topRX, topRY, bottomRX, bottomRY);
 		
-		Circle botL = new Circle(bottomLX, bottomLY, 0);
+		Circle topR = new Circle(topRX,topRY, 0);
 		
 		Circle botR = new Circle(bottomRX,bottomRY, 0);
 		
