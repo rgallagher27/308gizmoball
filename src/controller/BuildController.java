@@ -92,6 +92,11 @@ public class BuildController implements MouseListener, ActionListener {
 				}
 				currentSelectedMode = 0;
 				break;
+			case BUILD_REMOVE:
+				type = "remove";
+				success = overlord.removeGizmo(gizName);
+				currentSelectedMode = 0;
+				break;
 	
 				
 			}

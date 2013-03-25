@@ -58,8 +58,9 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void removeGizmo(String gizmoName) {
+	public boolean removeGizmo(String gizmoName) {
 		iGizmo gizRem = getGizmo(gizmoName);
+		if(gizRem != null){
 		for (iGizmo giz : getGizmos()) {
 			giz.removeTrigger(gizRem);
 		}
@@ -75,6 +76,9 @@ public class Overlord extends Observable implements iOverlord {
 		removeFromBoard(gizmoName);
 		setChanged();
 		notifyObservers(gizmoName);
+		return true;
+		}
+		return false;
 	}
 
 	@Override
