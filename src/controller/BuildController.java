@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import exception.CannotRotateException;
+
 import view.CompleteViewContainer;
 import view.ViewCanvas;
 
@@ -79,6 +81,15 @@ public class BuildController implements MouseListener, ActionListener {
 			case BUILD_TRIANGLE:
 				type = "triangle";
 				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_ROTATE:
+				type = "rotate";
+				try {
+					success = overlord.rotateGizmo(gizName);
+				} catch (CannotRotateException e1) {
+					e1.printStackTrace();
+				}
 				currentSelectedMode = 0;
 				break;
 	
