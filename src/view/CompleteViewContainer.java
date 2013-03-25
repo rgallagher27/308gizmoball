@@ -33,26 +33,30 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel playButtonsPanel;
 	private JPanel buttonsPanel;
 	private JPanel content;
+	private JPanel ballInfo;
 	
 	
-	private JButton addTrigger;
-	private JButton removeTrigger;
-	private JButton addBall;
+	private JRadioButton addTrigger;
+	private JRadioButton removeTrigger;
+	private JRadioButton addBall;
 	private JButton load;
 	private JButton save;
 	private JButton play;
+	
+	private TextField tfVX;
+	private TextField tfVY;
 	
 	
 	public CompleteViewContainer(){
 		view = new ViewCanvas();
 		mode = true; //true = play, false = build
-		buildInitial();
 	}
 	
 	public void addController(IController ic, GraphicsController gc, BuildController bc){
 		control = ic;
 		buildCont = bc;
 		view.addController(ic, gc, bc);
+		buildInitial();
 		switchPlay();
 	}
 	
@@ -63,8 +67,8 @@ public class CompleteViewContainer extends JFrame {
 	private void playButtons(){
 		playButtonsPanel = new JPanel();
 		load = new JButton("Load");
-		load.addActionListener(buildCont);
 		load.setActionCommand("Load");
+		load.addActionListener(buildCont);
 		save = new JButton("Save");
 		save.addActionListener(buildCont);
 		save.setActionCommand("Save");
@@ -108,17 +112,29 @@ public class CompleteViewContainer extends JFrame {
 		rotate.addActionListener(buildCont);
 		rotate.setActionCommand("Rotate");
 		
-		addTrigger = new JButton("Add Trigger");
+		addTrigger = new JRadioButton("Add Trigger");
 		addTrigger.addActionListener(buildCont);
 		addTrigger.setActionCommand("AddTrigger");
 		
-		removeTrigger = new JButton("Remove Trigger");
+		removeTrigger = new JRadioButton("Remove Trigger");
 		removeTrigger.addActionListener(buildCont);
 		removeTrigger.setActionCommand("RemoveTrigger");
 		
-		addBall = new JButton("Add Ball");
+		addBall = new JRadioButton("Add Ball");
 		addBall.addActionListener(buildCont);
 		addBall.setActionCommand("AddBall");
+		
+		ballInfo = new JPanel();
+		ballInfo.setLayout(new BoxLayout(ballInfo, BoxLayout.Y_AXIS));
+		ballInfo.add(new JLabel("Ball X Velocity:"));
+		tfVX = new TextField();
+		tfVX.setMaximumSize(new Dimension(100,30));
+		ballInfo.add(tfVX);
+		ballInfo.add(new JLabel("Ball Y Velocity:"));
+		tfVY = new TextField();
+		tfVY.setMaximumSize(new Dimension(100,30));
+		ballInfo.add(tfVY);
+		ballInfo.setVisible(false);
 		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
@@ -131,6 +147,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(addTrigger);
 		buildButtonsPanel.add(removeTrigger);
 		buildButtonsPanel.add(addBall);
+		buildButtonsPanel.add(ballInfo);
 		
 	}
 	private void buildInitial(){
@@ -211,6 +228,25 @@ public class CompleteViewContainer extends JFrame {
 		pack();
 		revalidate();
 		repaint();
+	}
+	
+	public double getBallVX(){
+		double in = Double.parseDouble(tfVX.getText());
+		if(in >= -200 && in <= 200) return in;
+		error("The ball X velocity must be between -200 and 200L");
+		return Double.MIN_VALUE;
+	}
+	
+	public double getBallVY(){
+		double in = Double.parseDouble(tfVY.getText());
+		if(in >= -200 && in <= 200) return in;
+		error("The ball Y velocity must be between -200 and 200L");
+		return Double.MIN_VALUE;
+	}
+	
+	public void showBallInfo(boolean b){
+		ballInfo.setVisible(b);
+		pack();
 	}
 
 	private static final long serialVersionUID = 1L;

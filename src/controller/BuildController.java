@@ -35,6 +35,7 @@ public class BuildController implements MouseListener, ActionListener {
 		this.frame = frame;
 		overlord = ov;
 		currentSelectedMode = 0;
+	
 	}
 
 	@Override
@@ -49,7 +50,11 @@ public class BuildController implements MouseListener, ActionListener {
 			switch (currentSelectedMode) {
 			case ADD_BALL:
 				if(gizName.contains("A")){
-					
+					overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
+				}else{
+					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
+					overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
+					}
 				}
 				
 			}
@@ -87,8 +92,10 @@ public class BuildController implements MouseListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		System.out.println(e.getActionCommand());
+		
 		switch (e.getActionCommand()) {
+		
 		case "Load":
 			if (frame != null) {
 				java.io.File f = frame.askForMapFile();
@@ -130,6 +137,7 @@ public class BuildController implements MouseListener, ActionListener {
 		// break;
 		case "AddBall":
 			currentSelectedMode = ADD_BALL;
+			frame.showBallInfo(true);
 			// int velocity = -1;
 			// while(velocity < 0 || velocity > 200){
 			// String input =

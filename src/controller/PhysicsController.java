@@ -48,8 +48,8 @@ public class PhysicsController implements IController {
 	
 	public void stop(){
 		gameLoop.stop();
-		overlord.resetGame();
 		runningMode = false;
+		overlord.resetGame();
 	}
 	
 	

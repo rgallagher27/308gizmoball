@@ -240,6 +240,7 @@ public class Overlord extends Observable implements iOverlord {
 				
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
+				((Absorber) absorb).captureBall(newBall);
 				return true;
 			}
 		}
@@ -255,6 +256,7 @@ public class Overlord extends Observable implements iOverlord {
 			}
 			return true;
 		}
+	
 		return false;
 	}
 
@@ -509,6 +511,7 @@ public class Overlord extends Observable implements iOverlord {
 	public void resetGame(){
 		for(iBall ball: getBalls()){
 			ball.setLocation(ball.getOrigLocation());
+			System.out.println(ball.getIdentifier() + " : " + ball.getOrigLocation().getX() + " - " +  ball.getOrigLocation().getY());
 			ball.setVelocity(ball.getOrigVelocity());
 		}
 		for(iGizmo giz : getGizmos()){
@@ -522,6 +525,7 @@ public class Overlord extends Observable implements iOverlord {
 	
 	public String getGizName(int x, int y){
 		for(iGizmo giz: getGizmos()){
+			if(giz.getIdentifier().equals("WALL")) continue;
 			if(giz.getLocation().getX() == x && giz.getLocation().getY() == y){
 				return giz.getIdentifier();
 			}

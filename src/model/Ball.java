@@ -39,6 +39,7 @@ public class Ball implements iBall {
 		radius = 0.25F;
 		//physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
 		physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
+		System.out.println("new " + identifier);
 	}
 
 	public double getRadius(){
@@ -56,7 +57,7 @@ public class Ball implements iBall {
 
 	@Override
 	public void setLocation(BallPoint p) {
-		point = p;
+		point = new BallPoint(p.getX(), p.getY());
 	}
 
 	@Override
