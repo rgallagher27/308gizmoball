@@ -23,6 +23,7 @@ public class CompleteViewContainer extends JFrame {
 	
 	private JRadioButton square;
 	private JRadioButton triangle;
+	private JRadioButton circle;
 	private JRadioButton leftFlipper;
 	private JRadioButton rightFlipper;
 	private JRadioButton absorber;
@@ -97,6 +98,10 @@ public class CompleteViewContainer extends JFrame {
 		triangle.addActionListener(buildCont);
 		triangle.setActionCommand("Triangle");
 		
+		circle = new JRadioButton("Add Circle");
+		circle.addActionListener(buildCont);
+		circle.setActionCommand("Circle");
+		
 		leftFlipper = new JRadioButton("Add Left Flipper");
 		leftFlipper.addActionListener(buildCont);
 		leftFlipper.setActionCommand("LeftFlipper");
@@ -141,6 +146,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(absorber);
 		buildButtonsPanel.add(square);
 		buildButtonsPanel.add(triangle);
+		buildButtonsPanel.add(circle);
 		buildButtonsPanel.add(leftFlipper);
 		buildButtonsPanel.add(rightFlipper);
 		buildButtonsPanel.add(remove);
@@ -270,6 +276,7 @@ public class CompleteViewContainer extends JFrame {
 	public void unselectAll(){
 		square.setSelected(false);
 		triangle.setSelected(false);
+		circle.setSelected(false);
 		leftFlipper.setSelected(false);
 		rightFlipper.setSelected(false);
 		absorber.setSelected(false);

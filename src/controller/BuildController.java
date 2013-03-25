@@ -20,13 +20,14 @@ public class BuildController implements MouseListener, ActionListener {
 	
 	private final int BUILD_SQUARE = 2;
 	private final int BUILD_TRIANGLE = 3;
-	private final int BUILD_LEFT_FLIPPER = 4;
-	private final int BUILD_RIGHT_FLIPPER = 5;
-	private final int BUILD_ABSORBER = 6;
-	private final int BUILD_REMOVE = 7;
-	private final int BUILD_ROTATE = 8;
-	private final int BUILD_ADD_TRIGGER = 9;
-	private final int BUILD_REMOVE_TRIGGER = 10;
+	private final int BUILD_CIRCLE = 4;
+	private final int BUILD_LEFT_FLIPPER = 5;
+	private final int BUILD_RIGHT_FLIPPER = 6;
+	private final int BUILD_ABSORBER = 7;
+	private final int BUILD_REMOVE = 8;
+	private final int BUILD_ROTATE = 9;
+	private final int BUILD_ADD_TRIGGER = 10;
+	private final int BUILD_REMOVE_TRIGGER = 11;
 	private final int ADD_BALL = 1;
 
 	public BuildController(iOverlord ov, ViewCanvas v,
@@ -64,6 +65,21 @@ public class BuildController implements MouseListener, ActionListener {
 					currentSelectedMode = 0;
 					}
 				}
+				break;
+			case BUILD_SQUARE:
+				type = "square";
+				success = overlord.addSquare(overlord.getNextName("S"), x, y);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_TRIANGLE:
+				type = "triangle";
+				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_CIRCLE:
+				type = "circle";
+				success = overlord.addCircle(overlord.getNextName("C"), x, y);
+				currentSelectedMode = 0;
 				break;
 	
 				
