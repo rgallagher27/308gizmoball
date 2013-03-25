@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Point;
 import java.util.List;
+import java.util.ArrayList;
 
 import model.physics.*;
 
@@ -28,6 +29,8 @@ public interface iGizmo {
 	public void addTrigger(iGizmo giz);
 	
 	public void removeTrigger(iGizmo giz);
+
+	public ArrayList<iGizmo> getTriggers();
 	
 	public double getCellHeight();
 	

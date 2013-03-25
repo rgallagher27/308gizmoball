@@ -19,23 +19,27 @@ import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
 import view.framework.*;
+import controller.BuildController;
+import controller.GraphicsController;
 import controller.PhysicsController;
-import controller.GizmoFactory;
 import controller.IController;
 
-public class PrototypeView extends JPanel implements Observer {
+public class ViewCanvas extends JPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
 	private final Dimension windowSize 		= new Dimension(1000, 800);
 	private final Dimension canvasSize 		= new Dimension(1000, 1000);
 	private final Dimension gridSize   		= new Dimension(20, 20);
+	private boolean runningMode;
 	
 	private IController eventListener;
+	private GraphicsController graphics;
+	private BuildController buildCont;
 	
 	private G2DAbstractCanvas abstractCanvas;
 
-	public PrototypeView() {
+	public ViewCanvas() {
 		super();
 		setPreferredSize(this.windowSize);
 		abstractCanvas 	= new G2DAbstractCanvas(canvasSize.getWidth(), canvasSize.getHeight());
@@ -47,13 +51,34 @@ public class PrototypeView extends JPanel implements Observer {
 		 * Request window focus.
 		 */
 		requestFocus();
+		setVisible(true);
+	}
+
+	
+	public int mouseX(int x){
+		return (int) (abstractCanvas.abstractX(x) / (canvasSize.getWidth() / gridSize.getWidth()));
 	}
 	
-	public void addController(IController ic){
+	public int mouseY(int y){
+		return (int) (abstractCanvas.abstractY(y) / (canvasSize.getWidth() / gridSize.getWidth()));
+	}
+	
+	public void addController(IController ic, GraphicsController gc, BuildController bc){
 		eventListener = ic;
+		graphics = gc;
+		buildCont = bc;
 		addKeyListener(eventListener);
-		addMouseListener(eventListener);
+		addMouseListener(bc);
 		
+	}
+	
+	public void setMode(boolean running){
+		runningMode = running;
+		if(running){
+			eventListener.start();
+		}else{
+			eventListener.stop();
+		}
 	}
 	
 	public Dimension getGridSize(){
@@ -82,25 +107,18 @@ public class PrototypeView extends JPanel implements Observer {
 		buffer.setColor(Color.BLACK);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
 		
-		eventListener.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
+		if(!runningMode){
+			graphics.factoryDraw(abstractCanvas, 20, 20, (double)50, (double)50);
+		}
 		
 		for(String gizmo : eventListener.getGizmos()){
-			if(eventListener.getGraphicsGizmo(gizmo) != null){
-			eventListener.getGraphicsGizmo(gizmo).draw(abstractCanvas);
-			/* draw segments */
-			for(G2DObject obj : eventListener.getGraphicsSegments(gizmo)){
-				obj.draw(abstractCanvas);
-			}
-			for(G2DObject obj : eventListener.getCircleSegments(gizmo)){
-				obj.draw(abstractCanvas);
-			}
-			
+			if(graphics.getGraphicsGizmo(gizmo) != null){
+				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
 		}
+		
 		for(String ball : eventListener.getBalls()){
-			eventListener.getGraphicsBall(ball).draw(abstractCanvas);
-			/* draw segments */
-			eventListener.getCircleSegmentsBall(ball).draw(abstractCanvas);
+			graphics.getGraphicsBall(ball).draw(abstractCanvas);
 		}
 		
             

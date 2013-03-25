@@ -9,10 +9,13 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JOptionPane;
 
+import javax.swing.JFrame;
+
 // import view.IBuildView;
 // import view.IPlayView;
+import view.CompleteViewContainer;
 
-public class GUIListener implements GUIController {
+public class GUIListener implements KeyListener, ActionListener, MouseListener {
 
 	public static final int KEYLISTENER = 0;
 	public static final int MOUSELISTENER = 0;
@@ -34,15 +37,16 @@ public class GUIListener implements GUIController {
 
 	private final int type;
 
+	private CompleteViewContainer frame;
+
 	public GUIListener(final int type) {
 		this.type = type;
 	}
 
-	// public GUIListener(final int type, IPlayView frame) {
-	// 	this.type = type;
-	// 	this.playView = frame;
-	// 	this.buildView = null;
-	// }
+	public GUIListener(final int type, CompleteViewContainer frame) {
+		this.type = type;
+		this.frame = frame;
+	}
 	
 	// public GUIListener(final int type, IBuildView frame){
 	// 	this.type = type;
@@ -72,31 +76,37 @@ public class GUIListener implements GUIController {
 	public void actionPerformed(ActionEvent arg0) {
 
 		switch (type) {
-		// case LOAD:
-		// 	if(playView != null){
-		// 		java.io.File f = playView.askForMapFile();
-		// 		if(f != null && f.exists()) {
-		// 			playView.information(f.getPath()); //TODO Implement with model
-		// 		} else if (f != null){ 
-		// 			playView.error("This file doesn't exist.");
-		// 		}
-		// 	} else if (buildView != null){
-		// 		java.io.File f = buildView.askForMapFile();
-		// 		if(f != null && f.exists()) {
-		// 			buildView.information(f.getPath()); //TODO Implement with model
-		// 		} else if(f != null) { 
-		// 			buildView.error("This file doesn't exist.");
-		// 		}
-		// 	}
-		// 	break;
-		// case SAVE:
-		// 	java.io.File f = buildView.askForSaveFile();
-		// 	if(f != null && !f.exists()) {
-		// 		buildView.information(f.getPath()); //TODO Implement with model
-		// 	} else if(f != null){ 
-		// 		buildView.error("I can't overwrite an existing file.");
-		// 	}
-		// 	break;
+		case LOAD:
+			if(frame != null){
+				java.io.File f = frame.askForMapFile();
+				if(f != null && f.exists()) {
+					frame.information(f.getPath()); //TODO Implement with model
+				} else if (f != null){ 
+					frame.error("This file doesn't exist.");
+				}
+			} else if (frame != null){
+				java.io.File f = frame.askForMapFile();
+				if(f != null && f.exists()) {
+					frame.information(f.getPath()); //TODO Implement with model
+				} else if(f != null) { 
+					frame.error("This file doesn't exist.");
+				}
+			}
+			break;
+		case SAVE:
+			java.io.File f = frame.askForMapFile();
+			if(f != null && !f.exists()) {
+				frame.information(f.getPath()); //TODO Implement with model
+			} else if(f != null){ 
+				frame.error("I can't overwrite an existing file.");
+			}
+			break;
+			case BUILD_MODE:
+			frame.switchBuild();
+			break;
+			case PLAY_MODE:
+			frame.switchPlay();
+			break;
 		// case BUILD_MODE:
 		// 	playView.dispose(); playView = null;
 		// 	buildView = new view.BuildView();
@@ -105,9 +115,9 @@ public class GUIListener implements GUIController {
 		// 	buildView.dispose(); buildView = null;
 		// 	playView = new view.PlayView();
 		// 	break;
-		// case START: //TODO Implement with model
-		// 	playView.information("The game will start when you press this button.");
-		// 	break;
+		case START: //TODO Implement with model
+			frame.information("The game will start when you press this button.");
+			break;
 		case ADD_BALL:
 			// int velocity = -1;
 			// while(velocity < 0 || velocity > 200){

@@ -1,6 +1,8 @@
-package controller;
+package view;
 
 import java.awt.Color;
+
+import controller.GraphicsController;
 
 import model.*;
 import model.physics.Circle;
@@ -18,96 +20,86 @@ import view.framework.Matrix;
 
 public class GizmoFactory {
 
-	private IController controller;
+	private GraphicsController controller;
 	
-	public GizmoFactory(IController ic) {
+	public GizmoFactory(GraphicsController ic) {
 		controller = ic;
 	}
 	
-	
-	public G2DObject drawSegment(LineSegment ls){
-		Vect point1 = ls.p1();
-		Vect point2 = ls.p2();
-		return new G2DLine(point1.x(), point1.y(), point2.x(), point2.y(), Color.WHITE);
-	}
-	
-	public G2DObject drawCircle(Circle c){
-		double r = c.getRadius();
-		Vect cent = c.getCenter();
-		if(r == 0) r = 1;
-		return new G2DCircle(new G2DPoint(cent.x(), cent.y()), r, Color.CYAN);
-	}
-	
-	public G2DObject drawBall(iBall ball)
+	public G2DObject drawBall(String ball)
     {
-        double cellWidth 		= ball.getCellWidth();
-		double cellheight 		= ball.getCellHeight();
+        double cellWidth 		= controller.getBallCellWidth(ball);
+		double cellheight 		= controller.getBallCellHeight(ball);
 
-		double x 				= ball.getLocation().getX();
-		double y 				= ball.getLocation().getY();
+		double x 				= controller.getBallX(ball);
+		double y 				= controller.getBallY(ball);
 		
     	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
     }
 	
-	public G2DObject draw(iGizmo giz){
-		if(giz instanceof Flipper) return drawFlipper(giz);
-		if(giz instanceof Absorber) return drawAbsorber(giz);
-		if(giz instanceof SquareBumper) return drawSquareBumper(giz);
-		if(giz instanceof TriangleBumper) return drawTriangleBumper(giz);
-		if(giz instanceof CircleBumper) return drawCircleBumper(giz);
+	public G2DObject draw(String giz){
+		if(giz.contains("F")) return drawFlipper(giz);
+		if(giz.contains("A")) return drawAbsorber(giz);
+		if(giz.contains("S")) return drawSquareBumper(giz);
+		if(giz.contains("T")) return drawTriangleBumper(giz);
+		if(giz.contains("C")) return drawCircleBumper(giz);
 		return null;
 	}
 	
-	public G2DObject drawFlipper(iGizmo flipper)
+	public G2DObject drawFlipper(String flipper)
 	{	
 		
 		double flipperX = 0;
 		double flipperY = 0;
-		double cellWidth 			= flipper.getCellWidth();
-		double cellheight 			= flipper.getCellHeight();
-		double flipperGridX			= flipper.getLocation().getX();
-		double flipperGridY        	= flipper.getLocation().getY();
-		double flipperGridWidth 	= flipper.getRowWidth();
-		double flipperGridHeight	= flipper.getColumnHeight();
+		double cellWidth 			= controller.getGizWidth(flipper);
+		double cellheight			= controller.getGizHeight(flipper);
+		double flipperGridX			= controller.getGizX(flipper);
+		double flipperGridY			= controller.getGizY(flipper);
+		double flipperGridWidth		= controller.getGizRowWidth(flipper);
+		double flipperGridHeight	= controller.getGizColumnHeight(flipper);
+
 		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
 		double flipperHeight 		= (flipperGridHeight * cellheight);
 		
-		if(flipper instanceof LeftFlipper){
+		if(flipper.contains("L")){
 			flipperX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
 			flipperY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
-		}else if(flipper instanceof RightFlipper){
+		}else if(flipper.contains("R")){
 			flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
 			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
 		}
 		G2DObject flipperGroup = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight);
         
-		this.rotateObjectAroundSelf(flipper.getRotation(),
+		rotateObjectAroundSelf(controller.getGizRotation(flipper),
 									flipperGroup,
 									flipperX,
 									flipperY);
 		return flipperGroup;
 	}
 
-    public G2DObject drawAbsorber(iGizmo absorber)
+    public G2DObject drawAbsorber(String absorber)
     {
-        double cellWidth 		= absorber.getCellWidth();
-		double cellheight 		= absorber.getCellHeight();
+    	
+    	double cellWidth		= controller.getGizWidth(absorber);
+        double cellheight		= controller.getGizHeight(absorber);
+
 		
-		double x 				= absorber.getLocation().getX() * cellWidth;
-		double y 				= absorber.getLocation().getY() * cellheight;
+		double x				= controller.getGizX(absorber) * cellWidth;
+		double y				= controller.getGizY(absorber) * cellheight;
+	
     	
     	return new G2DRectangle(new G2DPoint( x , y ), 
-    			                new G2DPoint( x + (absorber.getRowWidth() * cellWidth), y + (absorber.getColumnHeight() * cellheight)), 
+    			                new G2DPoint( x + (controller.getGizRowWidth(absorber) * cellWidth), y + (controller.getGizColumnHeight(absorber) * cellheight)), 
     			                Color.red);
     }
 	
-	public G2DObject drawSquareBumper(iGizmo bumper)
+	public G2DObject drawSquareBumper(String bumper)
     {
-        double cellWidth 		= bumper.getCellWidth();
-		double cellheight 		= bumper.getCellHeight();
+        double cellWidth 		= controller.getGizWidth(bumper);
+		double cellheight 		= controller.getGizHeight(bumper);
 		
-		double x = bumper.getLocation().getX();
-		double y = bumper.getLocation().getY();
+		double x = controller.getGizX(bumper);
+		double y = controller.getGizY(bumper);
     	
     	return new G2DRectangle(x*cellWidth,
 				                y*cellheight,
@@ -116,13 +108,13 @@ public class GizmoFactory {
 				                Color.red);
     }
     
-    public G2DObject drawTriangleBumper(iGizmo triangle)
+    public G2DObject drawTriangleBumper(String triangle)
     {
-        double cellWidth 		= triangle.getCellWidth();
-		double cellheight 		= triangle.getCellHeight();
+        double cellWidth 		= controller.getGizWidth(triangle);
+		double cellheight 		= controller.getGizHeight(triangle);
 		
-		double x 				= triangle.getLocation().getX();
-		double y 				= triangle.getLocation().getY();
+		double x 				= controller.getGizX(triangle);
+		double y 				= controller.getGizY(triangle);
 		
 		G2DObject newTriangle = new G2DTriangle((int)(x*cellWidth),
 					                (int)(y*cellheight),
@@ -130,7 +122,7 @@ public class GizmoFactory {
 					                (int)cellheight,
 					                Color.blue);
 		
-		this.rotateObjectAroundSelf( triangle.getRotation(), newTriangle, 
+		this.rotateObjectAroundSelf( controller.getGizRotation(triangle), newTriangle, 
 									 (x * cellWidth) + (cellWidth / 2), 
 									 (y * cellheight) + (cellheight / 2)
 									);
@@ -138,16 +130,16 @@ public class GizmoFactory {
     	return newTriangle;
     }
 	
-	public G2DObject drawCircleBumper(iGizmo circle)
+	public G2DObject drawCircleBumper(String circle)
     {
-        double cellWidth 		= circle.getCellWidth();
-		double cellheight 		= circle.getCellHeight();
+        double cellWidth 		= controller.getGizWidth(circle);
+		double cellheight 		= controller.getGizHeight(circle);
 		
-		double x 				= circle.getLocation().getX();
-		double y 				= circle.getLocation().getY();
+		double x 				= controller.getGizX(circle);
+		double y 				= controller.getGizY(circle);
 		
 		return new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
-							circle.getRowWidth() * (cellWidth / 2),
+							controller.getGizRowWidth(circle) * (cellWidth / 2),
 							Color.green);
     }
 	

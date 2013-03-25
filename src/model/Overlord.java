@@ -191,9 +191,15 @@ public class Overlord extends Observable implements iOverlord {
 
 	private void setPlace(String place, int startX, int startY, int endX,
 			int endY) {
+		if(startY != endY){
 		for (int y = startY; y < endY; y++) {
 			for (int x = startX; x < endX; x++) {
 				board[y][x] = place;
+			}
+		}
+		}else{
+			for (int x = startX; x < endX; x++) {
+				board[startY][x] = place;
 			}
 		}
 	}
@@ -210,11 +216,11 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int width, int height) {
-
+		System.out.println("width: " + width + " height : " + height);
 		if (canPlace("", x, y, (x + height-1), (y + width-1))) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + height-1), (y + width-1));
+			setPlace(id, x, y, (x + (height-1)), (y + (width-1)));
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -236,17 +242,18 @@ public class Overlord extends Observable implements iOverlord {
 		if (vx == 0.0 && vy == 0.0 && absorb != null) {
 			if (canPlaceBall("A", x, y, x, y)) {
 				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-						cellWidth, cellHeight);
-				newBall.setVelocity(new Vect(vx, vy));
+						cellWidth, cellHeight, vx, vy);
+				
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
+				((Absorber) absorb).captureBall(newBall);
 				return true;
 			}
 		}
 		if (canPlaceBall("", x, y, x, y)) {
 			iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-					cellWidth, cellHeight);
-			newBall.setVelocity(new Vect(vx, vy));
+					cellWidth, cellHeight, vx, vy);
+
 			newBall.setCaptured(false);
 			balls.put(ballName, newBall);
 			if (!loadingFile) {
@@ -255,6 +262,7 @@ public class Overlord extends Observable implements iOverlord {
 			}
 			return true;
 		}
+	
 		return false;
 	}
 
@@ -504,6 +512,68 @@ public class Overlord extends Observable implements iOverlord {
 			return keyTriggersUp.get(keyCode);
 		}
 		return tmp;
+	}
+	
+	public void resetGame(){
+		for(iBall ball: getBalls()){
+			ball.setLocation(ball.getOrigLocation());
+			System.out.println(ball.getIdentifier() + " : " + ball.getOrigLocation().getX() + " - " +  ball.getOrigLocation().getY());
+			ball.setVelocity(ball.getOrigVelocity());
+		}
+		for(iGizmo giz : getGizmos()){
+			if(giz instanceof Flipper){
+				giz.setRotation(0);
+			}
+		}
+		setChanged();
+		notifyObservers();
+		
+		for(int i = 0; i < 20; i++){
+			for(int y = 0; y < 20; y++){
+				System.out.print(board[i][y]);
+			}
+			System.out.println();
+		}
+	}
+	
+	public String getGizName(int x, int y){
+		for(iGizmo giz: getGizmos()){
+			if(giz.getIdentifier().equals("WALL")) continue;
+			if(giz.getLocation().getX() == x && giz.getLocation().getY() == y){
+				return giz.getIdentifier();
+			}
+		}
+		return "";
+	}
+	
+	public String getBallName(int x, int y){
+		for(iBall ball: getBalls()){
+			if(ball.getLocation().getX() == (float) x && ball.getLocation().getY() == (float) y){
+				return ball.getIdentifier();
+			}
+		}
+		return "";
+	}
+	
+	public String getNextName(String name){
+		int maxNo = 0;
+		int no;
+		if(name.contains("B")){
+			for(iBall ball: getBalls()){
+				no = Integer.parseInt(ball.getIdentifier().substring(1));
+				if(no > maxNo) maxNo = no;
+			}
+			return "B" + (maxNo+1);
+		}else{
+			
+			for(iGizmo giz: getGizmos()){
+				if(giz.getIdentifier().contains(name)){
+					no = Integer.parseInt(giz.getIdentifier().substring(1));
+					if(no > maxNo) maxNo = no;
+				}
+			}
+			return name + (maxNo+1);
+		}
 	}
 
 }

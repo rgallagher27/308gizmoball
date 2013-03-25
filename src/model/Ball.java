@@ -20,10 +20,11 @@ public class Ball implements iBall {
 	protected boolean isCaptured;
 	protected double i = 0;
 	protected double radius;
+	protected Vect velocityOrig;
 
-	public Ball(String identifier, BallPoint p, double row, double column, double width, double height) {
+	public Ball(String identifier, BallPoint p, double row, double column, double width, double height, double velocityX, double velocityY) {
 		point 			= p;
-		startPoint		= p;
+		startPoint		= new BallPoint(p.getX(), p.getY());
 		this.row 			= row;
 		this.column 		= column;
 		this.identifier 	= identifier;
@@ -31,11 +32,14 @@ public class Ball implements iBall {
 		cellHeight		= height;
 		
 		gravity 		= (float)1/25;
-		velocity 		= new Vect(0, 0);
+		velocity 		= new Vect(velocityX, velocityY);
+		velocityOrig    = new Vect(velocityX, velocityY);
+		
 		isCaptured		= false;
 		radius = 0.25F;
 		//physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
 		physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
+		System.out.println("new " + identifier);
 	}
 
 	public double getRadius(){
@@ -53,7 +57,7 @@ public class Ball implements iBall {
 
 	@Override
 	public void setLocation(BallPoint p) {
-		point = p;
+		point = new BallPoint(p.getX(), p.getY());
 	}
 
 	@Override
@@ -182,6 +186,16 @@ public class Ball implements iBall {
 	}
 
 	public String toString() {
-		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " 0.0 0.0");
+		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " " + velocityOrig.x() + " " + velocityOrig.y());
+	}
+
+	@Override
+	public BallPoint getOrigLocation() {
+
+		return startPoint;
+	}
+	
+	public Vect getOrigVelocity(){
+		return velocityOrig;
 	}
 }

@@ -3,6 +3,8 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import controller.BuildController;
+import controller.GraphicsController;
 import controller.PhysicsController;
 import controller.IController;
 
@@ -10,7 +12,7 @@ import model.Overlord;
 import model.iOverlord;
 
 import view.CompleteViewContainer;
-import view.PrototypeView;
+
 
 public class Driver {
 
@@ -22,7 +24,9 @@ public class Driver {
 		ov.saveGame("Test");
 		((Overlord) ov).addObserver(cvc.getPlayView());
 		IController controller = new PhysicsController(ov);
-		cvc.addController(controller);
+		BuildController buildCont = new BuildController(ov, cvc.getPlayView(), cvc);
+		GraphicsController graphicsController = new GraphicsController(ov);
+		cvc.addController(controller, graphicsController, buildCont);
 	}
 	
 	

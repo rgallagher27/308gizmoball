@@ -11,6 +11,10 @@ public interface iBall {
 	
 	public BallPoint getLocation();
 	
+	public BallPoint getOrigLocation();
+	
+	public Vect getOrigVelocity();
+	
 	public void setLocation(BallPoint p);
 	
 	public Circle returnBounds();

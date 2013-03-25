@@ -10,6 +10,7 @@ import java.util.*;
 
 import javax.swing.Timer;
 
+import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DObject;
 
@@ -24,12 +25,11 @@ public class PhysicsController implements IController {
 	
 	private final int FPS = 30;
 	private final double DELTA_T = ((double)1) / FPS;
-	private GizmoFactory gizFactory;
-
 	private iOverlord overlord;
 	
 	private Timer gameLoop;
 			
+	private boolean runningMode;
 
 	public PhysicsController(iOverlord ov) 
 	{
@@ -38,70 +38,18 @@ public class PhysicsController implements IController {
 		
 		this.gameLoop 	= new Timer(1000/FPS, this);
 		
-		this.gameLoop.start();
-		gizFactory = new GizmoFactory(this);
+		//this.gameLoop.start();
 	}
 
-	public int getGizX(String name){
-		return overlord.getGizmo(name).getLocation().getX();
-	}
-
-	public int getGizY(String name){
-		return overlord.getGizmo(name).getLocation().getY();
+	public void start(){
+		gameLoop.start();
+		runningMode = true;
 	}
 	
-	public int getGizWidth(String name){
-		return overlord.getGizmo(name).getWidth();
-	}
-	
-	public int getGizHeight(String name){
-		return overlord.getGizmo(name).getHeight();
-	}
-	
-	public float getBallX(String name){
-		return overlord.getBall(name).getLocation().getX();
-	}
-
-	public float getBallY(String name){
-		return overlord.getBall(name).getLocation().getY();
-	}
-	
-	public double getBallRadius(String name){
-		return overlord.getBall(name).getRadius();
-	}
-	
-	public G2DObject getGraphicsGizmo(String gizmo){
-		iGizmo giz = overlord.getGizmo(gizmo);
-		return gizFactory.draw(giz);
-	}
-	
-	public G2DObject getGraphicsBall(String ball){
-		iBall ballz = overlord.getBall(ball);
-		return gizFactory.drawBall(ballz);
-	}
-	
-	public List<G2DObject> getGraphicsSegments(String gizmo){
-		
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(LineSegment ls : overlord.getGizmo(gizmo).getSegments()){
-			tmp.add(gizFactory.drawSegment(ls));
-		}
-		return tmp;
-		
-	}
-	
-	public List<G2DObject> getCircleSegments(String gizmo){
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(Circle c : overlord.getGizmo(gizmo).getCircles()){
-			tmp.add(gizFactory.drawCircle(c));
-		}
-		return tmp;
-	}
-	
-	public G2DObject getCircleSegmentsBall(String ball){
-		return gizFactory.drawCircle(overlord.getBall(ball).returnBounds());
+	public void stop(){
+		gameLoop.stop();
+		runningMode = false;
+		overlord.resetGame();
 	}
 	
 	
@@ -132,13 +80,13 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
 		
 		int keyPressed = event.getKeyCode();
 		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
+		
 	}
 
 	/*
@@ -202,34 +150,6 @@ public class PhysicsController implements IController {
 		}.run();
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent event) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	private double collideGizmos(iBall b, double Current_Delta_T) {
 		double lowestTime = Double.POSITIVE_INFINITY;
@@ -288,10 +208,4 @@ public class PhysicsController implements IController {
 		}
 	}
 
-	@Override
-	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
-			double rowWidth, double columnHeight) {
-		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
-		
-	}
 }
