@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 
-import model.LeftFlipper;
 import model.physics.Circle;
 import model.physics.LineSegment;
 import view.framework.G2DAbstractCanvas;
@@ -50,7 +49,6 @@ public class GizmoFactory {
 				return drawTriangleBumper(giz);
 			case "C":
 				return drawCircleBumper(giz);
-	
 			default:
 				return null;
 		}
@@ -134,62 +132,15 @@ public class GizmoFactory {
 		
 		return flipperGroup;
 	}
-	
-	public G2DObject drawFlipper(String flipper)
-	{	
-		
-		double flipperX = 0;
-		double flipperY = 0;
-		double cellWidth 			= controller.getGizWidth(flipper);
-		double cellheight			= controller.getGizHeight(flipper);
-		double flipperGridX			= controller.getGizX(flipper);
-		double flipperGridY			= controller.getGizY(flipper);
-		double flipperGridWidth		= controller.getGizRowWidth(flipper);
-		double flipperGridHeight	= controller.getGizColumnHeight(flipper);
-
-		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-		double flipperHeight 		= (flipperGridHeight * cellheight);
-		
-		if(flipper.contains("L")){
-			flipperX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
-			flipperY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
-		}else if(flipper.contains("R")){
-			flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
-			flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
-		}
-		
-		G2DGroup flipperGroup = new G2DGroup();
-		
-		G2DObject flipperMain = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
-        
-		rotateObjectAroundSelf(controller.getGizRotation(flipper),
-									flipperGroup,
-									flipperX,
-									flipperY);
-		
-		flipperGroup.add(flipperMain);
-		
-		for(LineSegment l : controller.getLines(flipper)){
-			flipperGroup.add(new G2DLine(new G2DPoint(l.p1().x(), l.p1().y()), new G2DPoint(l.p2().x(), l.p2().y()), Color.green));
-		}
-		
-		for(Circle c : controller.getCircles(flipper)){
-			flipperGroup.add(new G2DCircle(new G2DPoint(c.getCenter().x(), c.getCenter().y()), c.getRadius(), Color.green));
-		}
-		
-		return flipperGroup;
-	}
 
     public G2DObject drawAbsorber(String absorber)
     {
     	
     	double cellWidth		= controller.getGizWidth(absorber);
         double cellheight		= controller.getGizHeight(absorber);
-
 		
 		double x				= controller.getGizX(absorber) * cellWidth;
 		double y				= controller.getGizY(absorber) * cellheight;
-	
     	
     	return new G2DRectangle(new G2DPoint( x , y ), 
     			                new G2DPoint( x + (controller.getGizRowWidth(absorber) * cellWidth), y + (controller.getGizColumnHeight(absorber) * cellheight)), 
@@ -233,7 +184,6 @@ public class GizmoFactory {
 									 (x * cellWidth) + (cellWidth / 2), 
 									 (y * cellheight) + (cellheight / 2)
 									);
-    	
     	return newTriangle;
     }
 	
