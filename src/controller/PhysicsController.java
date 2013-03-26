@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import model.Absorber;
+import model.Portal;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
@@ -129,7 +130,6 @@ public class PhysicsController implements IController {
 			}
 		}
 	}
-
 	
 	private double collideGizmos(iBall b, double Current_Delta_T) {
 		double lowestTime = Double.POSITIVE_INFINITY;
@@ -147,12 +147,21 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
-			else{
+			System.out.println(closestGizmo.toString());
+			
+			if(closestGizmo.getGizType() == Absorber._TYPE){
 				((Absorber)closestGizmo).captureBall(b, false);
 				b.setCaptured(true);
+			}
+			else if(closestGizmo.getGizType() == Portal._TYPE){
+				System.out.println(closestGizmo.toString());
+				overlord.setBallLocation(b.getIdentifier(), 
+										 ((Portal) closestGizmo).getSecondLocation().getX(), 
+										 ((Portal) closestGizmo).getSecondLocation().getY());
+			}else {
 				closestGizmo.collide(b);
 			}
+			
 			b.move(Current_Delta_T);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;

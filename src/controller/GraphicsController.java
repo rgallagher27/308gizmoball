@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Portal;
 import model.iGizmo;
 import model.iOverlord;
 import model.physics.Circle;
@@ -46,6 +47,18 @@ public class GraphicsController {
 
 	public int getGizY(String name){
 		return overlord.getGizmo(name).getLocation().getY();
+	}
+	
+	public int getPortalX2(String name)
+	{
+		iGizmo giz = overlord.getGizmo(name);
+		return giz.getGizType() == Portal._TYPE ? ((Portal)giz).getSecondLocation().getX() : 0;
+	}
+
+	public int getPortalY2(String name)
+	{
+		iGizmo giz = overlord.getGizmo(name);
+		return giz.getGizType() == Portal._TYPE ? ((Portal)giz).getSecondLocation().getY() : 0;
 	}
 	
 	public double getGizRotation(String name){

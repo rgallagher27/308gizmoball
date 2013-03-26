@@ -8,10 +8,13 @@ import model.physics.Vect;
 
 public class Portal extends Gizmo implements iGizmo {
 	
-	public static final String _TYPE = "C";
+	public static final String _TYPE = "P";
 	
-	public Portal(String identifier, GizPoint p, double row, double column, double width, double height) {
+	private GizPoint secondPoint;
+	
+	public Portal(String identifier, GizPoint p, GizPoint p2, double row, double column, double width, double height) {
 		point 				= p;
+		secondPoint			= p2;
 		rowWidth 			= row;
 		columnHeight		= column;
 		cellWidth			= width;
@@ -32,17 +35,28 @@ public class Portal extends Gizmo implements iGizmo {
 	@Override
 	public String getGizType() 
 	{
-		return CircleBumper._TYPE;
+		return Portal._TYPE;
 	}
 
+	@Override
 	public void setLocation(GizPoint p) {
 		point = p;
 		fillLineSegments();
 	}
 	
+	public void setSecondLocation(GizPoint p)
+	{
+		secondPoint = p;
+	}
+	
+	public GizPoint getSecondLocation()
+	{
+		return this.secondPoint;
+	}
+	
 	@Override
 	public String toString() {
-		return ("Circle " + identifier + " " + point.getX() + " " + point.getY());
+		return ("Portal " + identifier + " " + point.getX() + " " + point.getY());
 	}
 	
 	private void fillLineSegments(){

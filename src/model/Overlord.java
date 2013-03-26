@@ -279,15 +279,14 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
 		int height = Math.abs(y - y2);
-		int width = Math.abs(x - x2);
+		int width  = Math.abs(x - x2);
 		
 		if(height < 1 || width < 1){
 			return false;
 		}
 		
 		if (canPlace(id, x, y, x2, y2)) {
-			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
-					cellWidth, cellHeight));
+			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height, cellWidth, cellHeight));
 			setPlace(id, x, y, x2, y2);
 
 			if (!loadingFile) {
@@ -301,8 +300,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addBall(String ballName, String absorberName, float x,
-			float y, double vx, double vy) {
+	public boolean addBall(String ballName, String absorberName, float x, float y, double vx, double vy) {
 
 		iGizmo absorb = null;
 		if (absorberName.length() > 0) {
@@ -366,6 +364,23 @@ public class Overlord extends Observable implements iOverlord {
 			gizmos.put(id, new CircleBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
+			if (!loadingFile) {
+				setChanged();
+				notifyObservers(id);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addPortal(String id, int x, int y, int x2, int y2)
+	{
+		System.out.println("portal...");
+		if (canPlace(id, x, y, x, y)) {
+			System.out.println("portal time!");
+			gizmos.put(id, new Portal(id, new GizPoint(x, y), new GizPoint(x2, y2), 1, 1, cellWidth, cellHeight));
+			setPlace(id, x, y, x, y);
+			setPlace(id, x2, y2, x2, y2);
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -537,6 +552,7 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse = null;
 		loadingFile = false;
 		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
+		this.addPortal("P1", 1, 9, 5, 9);
 		
 		setChanged();
 		notifyObservers();

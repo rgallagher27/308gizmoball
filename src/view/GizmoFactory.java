@@ -5,6 +5,7 @@ import java.awt.Color;
 import model.Absorber;
 import model.CircleBumper;
 import model.LeftFlipper;
+import model.Portal;
 import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
@@ -53,9 +54,62 @@ public class GizmoFactory {
 				return drawTriangleBumper(giz);
 			case CircleBumper._TYPE:
 				return drawCircleBumper(giz);
+			case Portal._TYPE:
+				return drawPortal(giz);
 			default:
 				return null;
 		}
+	}
+	
+	public G2DObject drawPortal(String portal)
+	{
+		Color colour = controller.getGizColour(portal);
+		
+        double cellWidth 		= controller.getGizWidth(portal);
+		double cellheight 		= controller.getGizHeight(portal);
+		
+		double x 				= controller.getGizX(portal);
+		double y 				= controller.getGizY(portal);
+		
+		double x2 				= controller.getPortalX2(portal);
+		double y2				= controller.getPortalY2(portal);
+		
+		G2DGroup circleGroup 	= new G2DGroup();
+		
+		G2DObject centerCircle 	= new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 8),
+												Color.red);
+		
+		G2DObject innerCircle 	= new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 4),
+												Color.orange);
+		
+		G2DObject outerCircle 	= new G2DCircle( new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 2),
+												colour);
+		
+
+		G2DObject centerCircle2 	= new G2DCircle(new G2DPoint((int)(x2*cellWidth)+(cellWidth/2), (int)(y2*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 8),
+												Color.red);
+		
+		G2DObject innerCircle2 	= new G2DCircle(new G2DPoint((int)(x2*cellWidth)+(cellWidth/2), (int)(y2*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 4),
+												Color.orange);
+		
+		G2DObject outerCircle2 	= new G2DCircle( new G2DPoint((int)(x2*cellWidth)+(cellWidth/2), (int)(y2*cellheight)+(cellheight/2)), 
+												controller.getGizRowWidth(portal) * (cellWidth / 2),
+												colour);
+
+		circleGroup.add(outerCircle);
+		circleGroup.add(innerCircle);
+		circleGroup.add(centerCircle);
+		
+		circleGroup.add(outerCircle2);
+		circleGroup.add(innerCircle2);
+		circleGroup.add(centerCircle2);
+		
+		return circleGroup;
 	}
 	
 	public G2DObject drawLeftFlipper(String flipper)
