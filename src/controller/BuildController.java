@@ -292,6 +292,10 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_1;
 			frame.showKeyInfo(true);
 			break;
+		case "RemoveKeyTrigger":
+			currentSelectedMode = BUILD_REMOVE_KEY_TRIGGER_1;
+			frame.showKeyInfo(true);
+			break;
 			
 		default:
 		}

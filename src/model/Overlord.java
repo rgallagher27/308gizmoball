@@ -251,6 +251,15 @@ public class Overlord extends Observable implements iOverlord {
 			}
 		}
 	}
+	
+	private void clearBoard(){
+		for (int x = 0; x < board[0].length; x++) {
+			for (int y = 0; y < board.length; y++) {
+					board[y][x] = "";
+				
+			}
+		}
+	}
 
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
@@ -500,6 +509,12 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public void loadGame(String mapName) {
+		gizmos.clear();
+		keyTriggersDown.clear();
+		keyTriggersUp.clear();
+		connects.clear();
+		balls.clear();
+		clearBoard();
 		loadingFile = true;
 		fileParse = new FileParser(this);
 		fileParse.loadFile(mapName);
