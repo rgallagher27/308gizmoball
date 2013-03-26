@@ -32,6 +32,9 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton removeTrigger;
 	private JRadioButton addBall;
 	private JRadioButton circle;
+	private JRadioButton addKeyTrigger;
+	private JRadioButton removeKeyTrigger;
+	
 	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
@@ -39,7 +42,7 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel content;
 	private JPanel ballInfo;
 	private JPanel absorberInfo;
-	
+	private JPanel keyInfo;
 	
 	private JButton load;
 	private JButton save;
@@ -49,6 +52,7 @@ public class CompleteViewContainer extends JFrame {
 	private TextField tfVY;
 	private TextField absHeight;
 	private TextField absWidth;
+	private JLabel keyPressed;
 	
 	public CompleteViewContainer(){
 		view = new ViewCanvas();
@@ -61,6 +65,7 @@ public class CompleteViewContainer extends JFrame {
 		view.addController(ic, gc, bc);
 		buildInitial();
 		switchPlay();
+		
 	}
 	
 	public ViewCanvas getPlayView() {
@@ -128,6 +133,21 @@ public class CompleteViewContainer extends JFrame {
 		removeTrigger.addActionListener(buildCont);
 		removeTrigger.setActionCommand("RemoveTrigger");
 		
+		addKeyTrigger = new JRadioButton("Add Key Trigger");
+		addKeyTrigger.addActionListener(buildCont);
+		addKeyTrigger.setActionCommand("AddKeyTrigger");
+		
+		keyInfo = new JPanel();
+		keyInfo.setLayout(new BoxLayout(keyInfo, BoxLayout.Y_AXIS));
+		keyInfo.add(new JLabel("Key Pressed:"));
+		keyPressed = new JLabel();
+		keyInfo.add(keyPressed);
+		keyInfo.setVisible(false);
+		
+		removeKeyTrigger = new JRadioButton("Remove Key Trigger");
+		removeKeyTrigger.addActionListener(buildCont);
+		removeKeyTrigger.setActionCommand("RemoveKeyTrigger");
+		
 		addBall = new JRadioButton("Add Ball");
 		addBall.addActionListener(buildCont);
 		addBall.setActionCommand("AddBall");
@@ -170,6 +190,9 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(rotate);
 		buildButtonsPanel.add(addTrigger);
 		buildButtonsPanel.add(removeTrigger);
+		buildButtonsPanel.add(addKeyTrigger);
+		buildButtonsPanel.add(keyInfo);
+		buildButtonsPanel.add(removeKeyTrigger);
 		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
 		
@@ -315,6 +338,14 @@ public class CompleteViewContainer extends JFrame {
 		pack();
 	}
 	
+	public void showKeyInfo(boolean b){
+		if(b == false){
+			keyPressed.setText("");
+		}
+		keyInfo.setVisible(b);
+		pack();
+	}
+	
 	public void showAbsInfo(boolean b){
 		if(b == false){
 			absWidth.setText("");
@@ -322,6 +353,10 @@ public class CompleteViewContainer extends JFrame {
 		}
 		absorberInfo.setVisible(b);
 		pack();
+	}
+	
+	public void setKey(int key){
+		keyPressed.setText(""+key);
 	}
 	
 	
@@ -337,8 +372,15 @@ public class CompleteViewContainer extends JFrame {
 		removeTrigger.setSelected(false);
 		circle.setSelected(false);
 		addBall.setSelected(false);
+		removeKeyTrigger.setSelected(false);
+		addKeyTrigger.setSelected(false);
 		showBallInfo(false);
 		showAbsInfo(false);
+		showKeyInfo(false);
+	}
+	
+	public void focusView(){
+		view.requestFocus();
 	}
 	
 	public boolean getMode(){

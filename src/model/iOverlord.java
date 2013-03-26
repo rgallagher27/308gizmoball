@@ -42,5 +42,6 @@ public interface iOverlord {
 	public String getBallName(int x, int y);
 	public String getNextName(String name);
 	public boolean disconnect(String oldGizName, String gizName);
+	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName);
 	
 }

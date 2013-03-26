@@ -50,6 +50,7 @@ public class ViewCanvas extends JPanel implements Observer {
 		 * 
 		 * Request window focus.
 		 */
+		setFocusable(true);
 		requestFocus();
 		setVisible(true);
 	}
@@ -75,10 +76,17 @@ public class ViewCanvas extends JPanel implements Observer {
 		runningMode = running;
 		if(running){
 			eventListener.start();
+			removeKeyListener(buildCont);
+			addKeyListener(eventListener);
 			requestFocus();
+			requestFocusInWindow();
 		}else{
 			eventListener.stop();
+			removeKeyListener(eventListener);
+			addKeyListener(buildCont);
 			requestFocus();
+			requestFocusInWindow();
+			
 		}
 	}
 	

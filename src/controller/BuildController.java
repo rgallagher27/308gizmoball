@@ -3,6 +3,8 @@ package controller;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -11,7 +13,7 @@ import view.ViewCanvas;
 
 import model.iOverlord;
 
-public class BuildController implements MouseListener, ActionListener {
+public class BuildController implements MouseListener, ActionListener, KeyListener {
 
 	private iOverlord overlord;
 	private ViewCanvas view;
@@ -29,11 +31,16 @@ public class BuildController implements MouseListener, ActionListener {
 	private final int BUILD_ADD_TRIGGER_2 = 12;
 	private final int BUILD_REMOVE_TRIGGER_1 = 10;
 	private final int BUILD_REMOVE_TRIGGER_2 = 13;
+	private final int BUILD_REMOVE_KEY_TRIGGER_1 = 14;
+	private final int BUILD_REMOVE_KEY_TRIGGER_2 = 15;
+	private final int BUILD_ADD_KEY_TRIGGER_1 = 16;
+	private final int BUILD_ADD_KEY_TRIGGER_2 = 17;
 	private final int ADD_BALL = 1;
 	private final int BUILD_CIRCLE = 11;
 	
 	private String gizName;
 	private String oldGizName;
+	private int keyPressed;
 	
 
 	public BuildController(iOverlord ov, ViewCanvas v,
@@ -117,6 +124,22 @@ public class BuildController implements MouseListener, ActionListener {
 				type = "remove the trigger";
 				currentSelectedMode = 0;
 				break;
+			case BUILD_ADD_KEY_TRIGGER_2:
+				success = overlord.keyConnect(keyPressed, false, gizName);
+				if(success){
+					success = overlord.keyConnect(keyPressed, true, gizName);
+				}
+				type = "add a key connection ";
+				currentSelectedMode = 0;
+				break;
+			case BUILD_REMOVE_KEY_TRIGGER_2:
+				success = overlord.keyConnect(keyPressed, false, gizName);
+				if(success){
+					success = overlord.keyConnect(keyPressed, true, gizName);
+				}
+				type = "remove the key connection ";
+				currentSelectedMode = 0;
+				break;
 				
 			}
 			
@@ -124,9 +147,10 @@ public class BuildController implements MouseListener, ActionListener {
 			frame.unselectAll();
 			
 			if(!success && currentSelectedMode != 0 && 
-					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2)){
+					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
+					|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2)){
 				frame.error("The " + type + " gizmo could not be added at that location!");
-			}else if(!success && currentSelectedMode != 0){
+			}else if(!success && currentSelectedMode == 0){
 				frame.error("Could not " + type + " between the selected gizmos.");
 			}
 			currentSelectedMode = 0;
@@ -169,7 +193,7 @@ public class BuildController implements MouseListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
-		
+		frame.focusView();
 		switch (e.getActionCommand()) {
 		
 		case "Load":
@@ -264,9 +288,41 @@ public class BuildController implements MouseListener, ActionListener {
 			currentSelectedMode = BUILD_REMOVE_TRIGGER_1;
 			// buildView.removeTrigger();
 			break;
+		case "AddKeyTrigger":
+			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_1;
+			frame.showKeyInfo(true);
+			break;
+			
 		default:
 		}
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.getKeyCode());
+		if(currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_1){
+			keyPressed = e.getKeyCode();
+			frame.setKey(keyPressed);
+			currentSelectedMode = BUILD_REMOVE_KEY_TRIGGER_2;
+		}else if(currentSelectedMode == BUILD_ADD_KEY_TRIGGER_1){
+			keyPressed = e.getKeyCode();
+			frame.setKey(keyPressed);
+			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_2;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -437,9 +437,16 @@ public class Overlord extends Observable implements iOverlord {
 			}
 			tmp.add(con);
 			keyTriggersDown.put(keyNum, tmp);
+			System.out.println("added");
 			return true;
 		}
 
+	}
+	
+	@Override
+	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
@@ -608,6 +615,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	public String getGizName(int x, int y) {
+		if(x > 19 || y > 19) return "";
 		if (board[y][x].equals("") || board[y][x].contains("B"))
 			return "";
 
@@ -648,4 +656,6 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		return name + (maxNo + 1);
 	}
+
+	
 }
