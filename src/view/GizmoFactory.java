@@ -2,6 +2,12 @@ package view;
 
 import java.awt.Color;
 
+import model.Absorber;
+import model.CircleBumper;
+import model.LeftFlipper;
+import model.RightFlipper;
+import model.SquareBumper;
+import model.TriangleBumper;
 import model.physics.Circle;
 import model.physics.LineSegment;
 import view.framework.G2DAbstractCanvas;
@@ -37,17 +43,17 @@ public class GizmoFactory {
 	
 	public G2DObject draw(String giz){
 		switch (controller.getGizType(giz)) {
-			case "LF":
+			case LeftFlipper._TYPE:
 				return drawLeftFlipper(giz);
-			case "RF":
+			case RightFlipper._TYPE:
 				return drawRightFlipper(giz);
-			case "A":
+			case Absorber._TYPE:
 				return drawAbsorber(giz);
-			case "S":
+			case SquareBumper._TYPE:
 				return drawSquareBumper(giz);
-			case "T":
+			case TriangleBumper._TYPE:
 				return drawTriangleBumper(giz);
-			case "C":
+			case CircleBumper._TYPE:
 				return drawCircleBumper(giz);
 			default:
 				return null;

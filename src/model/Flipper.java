@@ -26,7 +26,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		cellHeight				= height;
 		rowWidth				= row;
 		rotation 				= 0;
-		rotationVelocity 		= 900;
+		rotationVelocity 		= 2100;
 		lineSegments 			= new ArrayList<LineSegment>();
 		circles					= new ArrayList<Circle>();
 		active 					= false;
@@ -86,7 +86,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		if(rotation == minRotation || rotation == maxRotation){
 			angularVel = 0;
 		}else{
-			angularVel = (flipperVelocity / 100);
+			angularVel = (flipperVelocity / 150);
 		}
 		
 		for(LineSegment l : lineSegments){

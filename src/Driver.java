@@ -15,6 +15,7 @@ public class Driver {
 		
 		CompleteViewContainer cvc = new CompleteViewContainer();
 		iOverlord ov = new Overlord(cvc.getPlayView().getGridSize(), cvc.getPlayView().getCanvasSize());
+		ov.loadGame("Input");
 		ov.saveGame("Test");
 		((Overlord) ov).addObserver(cvc.getPlayView());
 		IController controller = new PhysicsController(ov);
@@ -27,7 +28,6 @@ public class Driver {
 	public static void main(String[] args)
 	{	
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
