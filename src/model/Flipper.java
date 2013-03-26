@@ -138,7 +138,5 @@ public class Flipper extends Gizmo implements iGizmo {
 		if(closestLine != null) System.out.println("Line Hit");
 		if(closestCircle != null && stationaryCircle) System.out.println("Stat Circle Hit");
 		if(closestCircle != null && !stationaryCircle) System.out.println("Moving Circle Hit");
-		System.err.println("Ball Velocity after Flipper Collision: " + ball.getVelocity().toString());
-		System.out.println("Flipper.collide()");
 	}
 }

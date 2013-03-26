@@ -8,8 +8,6 @@ import model.LeftFlipper;
 import model.RightFlipper;
 import model.SquareBumper;
 import model.TriangleBumper;
-import model.physics.Circle;
-import model.physics.LineSegment;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
@@ -83,15 +81,7 @@ public class GizmoFactory {
 		G2DObject flipperMain = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
 		
 		flipperGroup.add(flipperMain);
-		
-		/*for(LineSegment l : controller.getLines(flipper)){
-			flipperGroup.add(new G2DLine(new G2DPoint(l.p1().x(), l.p1().y()), new G2DPoint(l.p2().x(), l.p2().y()), Color.green));
-		}
-		
-		for(Circle c : controller.getCircles(flipper)){
-			flipperGroup.add(new G2DCircle(new G2DPoint(c.getCenter().x(), c.getCenter().y()), c.getRadius(), Color.green));
-		}
-		*/
+	
 		rotateObjectAroundSelf(controller.getGizRotation(flipper),
 				flipperGroup,
 				flipperX,
@@ -120,18 +110,8 @@ public class GizmoFactory {
 		G2DGroup flipperGroup = new G2DGroup();
 		
 		G2DObject flipperMain = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
-        
-		
 		
 		flipperGroup.add(flipperMain);
-		
-		/*for(LineSegment l : controller.getLines(flipper)){
-			flipperGroup.add(new G2DLine(new G2DPoint(l.p1().x(), l.p1().y()), new G2DPoint(l.p2().x(), l.p2().y()), Color.green));
-		}
-		
-		for(Circle c : controller.getCircles(flipper)){
-			flipperGroup.add(new G2DCircle(new G2DPoint(c.getCenter().x(), c.getCenter().y()), c.getRadius(), Color.green));
-		}*/
 		
 		rotateObjectAroundSelf(controller.getGizRotation(flipper),
 				flipperGroup,
