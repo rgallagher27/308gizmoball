@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import javax.sound.sampled.*;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -23,6 +27,10 @@ public class Gizmo implements iGizmo {
 	protected List<iGizmo> triggers;
 	protected int width, height;
 	protected Color colour;
+	protected File url;
+	protected AudioInputStream audio;
+	protected Clip clip;
+	private long timeTrig;
 	
 	public Gizmo() {
 		rotation = 0;
@@ -149,10 +157,29 @@ public class Gizmo implements iGizmo {
 				);
 		//trigger.
 		this.performAction(false);
+		//sound
+		if(clip != null){
+			if(timeTrig == 0){
+			timeTrig = System.currentTimeMillis();
+			clip.start();
+			}
+		}
 		for(iGizmo giz: triggers){
 			giz.performAction(true);
 			giz.move(min);
 		}
+		rebuildSound();
+	}
+
+	private void rebuildSound(){
+		if(clip != null){
+		//clip.stop();
+			if((timeTrig + 500) < System.currentTimeMillis()){
+				timeTrig = 0;
+				clip.setFramePosition(0);
+			}
+		}
+		//clip.open(audio);
 	}
 
 	@Override

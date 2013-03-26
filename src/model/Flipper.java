@@ -1,7 +1,13 @@
 package model;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -34,6 +40,19 @@ public class Flipper extends Gizmo implements iGizmo {
 		this.identifier 		= identifier;
 		this.width 				= 2;
 		this.height 			= 2;
+		
+		url = new File("bloop_x.wav");
+		try {
+			audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

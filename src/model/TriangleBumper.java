@@ -1,6 +1,12 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
@@ -20,6 +26,20 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		rotation		= 0;
 		this.height = 1;
 		this.width = 1;
+		
+		url = new File("boing2.wav");
+		try {
+			audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		fillLineSegments();
 	}
 
