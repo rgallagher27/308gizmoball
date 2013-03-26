@@ -1,5 +1,10 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import model.iGizmo;
 import model.iOverlord;
 import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
@@ -14,6 +19,17 @@ public class GraphicsController {
 		overlord = ov;
 		gizFactory = new GizmoFactory(this);
 		
+	}
+	
+	public ArrayList<String> getGizTriggers(){
+		return overlord.getConnects();
+	}
+	public ArrayList<String> getGizTriggers(String name){
+		ArrayList<String> tmp = new ArrayList<String>();
+		for(iGizmo giz : overlord.getGizmo(name).getTriggers()){
+			tmp.add(giz.getIdentifier());
+		}
+		return tmp;
 	}
 	public int getGizX(String name){
 		return overlord.getGizmo(name).getLocation().getX();

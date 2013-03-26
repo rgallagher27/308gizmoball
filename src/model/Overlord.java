@@ -89,6 +89,10 @@ public class Overlord extends Observable implements iOverlord {
 	public iGizmo getGizmo(String gizmoName) {
 		return gizmos.get(gizmoName);
 	}
+	
+	public ArrayList<String> getConnects(){
+		return connects;
+	}
 
 	@Override
 	public List<iBall> getBalls() {
@@ -502,6 +506,8 @@ public class Overlord extends Observable implements iOverlord {
 			return false;
 		producer.addTrigger(consumer);
 		connects.add(producerGizmo);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 	
@@ -517,6 +523,8 @@ public class Overlord extends Observable implements iOverlord {
 		if(producer.getTriggerCount() == 0){
 		connects.remove(producerGizmo);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 		
 	}
@@ -535,6 +543,8 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse = null;
 		loadingFile = false;
 		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override

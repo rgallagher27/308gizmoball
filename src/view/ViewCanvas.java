@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -36,6 +37,7 @@ public class ViewCanvas extends JPanel implements Observer {
 	private IController eventListener;
 	private GraphicsController graphics;
 	private BuildController buildCont;
+	private Random rnd = new Random();
 	
 	private G2DAbstractCanvas abstractCanvas;
 
@@ -128,6 +130,22 @@ public class ViewCanvas extends JPanel implements Observer {
 		
 		for(String ball : eventListener.getBalls()){
 			graphics.getGraphicsBall(ball).draw(abstractCanvas);
+		}
+		
+		if(!runningMode){
+			if(graphics.getGizTriggers().size() > 0){
+				for(String connect : graphics.getGizTriggers()){
+					for(String to : graphics.getGizTriggers(connect)){
+						new G2DLine((graphics.getGizX(connect) * graphics.getGizWidth(connect)) + (graphics.getGizWidth(connect) / 2), 
+								(graphics.getGizY(connect) * graphics.getGizHeight(connect)) + (graphics.getGizHeight(connect) / 2), 
+								(graphics.getGizX(to) * graphics.getGizWidth(to)) + (graphics.getGizWidth(to) / 2), 
+								(graphics.getGizY(to) * graphics.getGizHeight(to)) + (graphics.getGizHeight(to) / 2), 
+								new Color(rnd.nextInt(155) + 100, rnd.nextInt(155) + 100, rnd.nextInt(155) + 100)).draw(abstractCanvas);
+					}
+				}
+			}
+			
+			
 		}
 		
             
