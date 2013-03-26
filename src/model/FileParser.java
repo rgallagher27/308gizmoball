@@ -103,14 +103,17 @@ public class FileParser {
                 } else if(tok[3].equals("down")) {
                     temp = false;
                 } else {
-                    //error
+                    input = null;
+                    overlord.fileError();
                 }
                 overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
                 break;
             case "Delete":
                 overlord.removeGizmo(tok[1]);
                 break;
-            default: //Error throw up error message dialog box
+            default: 
+                input = null;
+                overlord.fileError();
                 break;
             }
         }
