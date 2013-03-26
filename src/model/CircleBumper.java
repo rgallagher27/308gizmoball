@@ -26,13 +26,6 @@ public class CircleBumper extends Gizmo implements iGizmo {
 		circles.add(
 				new Circle(new Vect((point.getX() * cellWidth) + radius, (point.getY() * cellHeight) + radius), cellWidth / 2)
 				);
-		
-		/*
-		circles.add(
-				new Circle(new Vect(point.getX() * cellWidth, point.getY() * cellHeight), cellWidth / 2)
-				);
-		*/		
-		
 	}
 	
 	@Override
