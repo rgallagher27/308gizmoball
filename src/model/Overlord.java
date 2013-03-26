@@ -12,6 +12,7 @@ import java.util.Set;
 import model.physics.Vect;
 import exception.CannotRotateException;
 
+
 public class Overlord extends Observable implements iOverlord {
 
 	private HashMap<String, iGizmo> gizmos;
@@ -151,6 +152,16 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		fileParse.closeSaveFile();
 		fileParse = null;
+	}
+
+	public void fileError() {
+		javax.swing.JOptionPane.showMessageDialog(
+			null, 
+			"The file you tried to load from was found to have an error.\n" +
+			"You will be returned to the build screen with the Corruptted gizmo missing.\n" +
+			"You can now try and rebuild it.",
+			"Corrupt File",
+			javax.swing.JOptionPane.WARNING_MESSAGE);
 	}
 
 	@Override
@@ -306,7 +317,7 @@ public class Overlord extends Observable implements iOverlord {
 
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
-				((Absorber) absorb).captureBall(newBall);
+				((Absorber) absorb).captureBall(newBall, true);
 				return true;
 			}
 		} else {
@@ -571,7 +582,7 @@ public class Overlord extends Observable implements iOverlord {
 				temp.setLocation(new BallPoint(19, 19));
 				removeFromBoard(ballName);
 				temp.setCaptured(true);
-				((Absorber) absorb).captureBall(temp);
+				((Absorber) absorb).captureBall(temp, true);
 				// setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the
 				// ball is inside the absorber, dont place on map
 				setChanged();
@@ -650,6 +661,8 @@ public class Overlord extends Observable implements iOverlord {
 			if (giz instanceof Flipper) {
 				giz.setRotation(0);
 				giz.performAction(false);
+			}else if(giz instanceof Absorber){
+				((Absorber) giz).reset();
 			}
 		}
 		setChanged();

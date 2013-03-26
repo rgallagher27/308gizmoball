@@ -22,17 +22,18 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		this.width = 1;
 		fillLineSegments();
 	}
-	
-	@Override
-	public String getGizType() 
-	{
-		return TriangleBumper._TYPE;
-	}
+
 	
 	@Override
 	public void setRotation(double r) {
 		rotation = r;
 		fillLineSegments();
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return TriangleBumper._TYPE;  
 	}
 	
 	public void setLocation(GizPoint p) {
@@ -102,7 +103,16 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 				circles.add(new Circle(topRX, topRY, 0));
 				circles.add(new Circle(bottomLX, bottomLY, 0));
 				circles.add(new Circle(bottomRX, bottomRY, 0));
-	
+				break;
+			case 270:
+				lineSegments.add(new LineSegment(topLX, topLY, bottomRX, bottomRY));
+				lineSegments.add(new LineSegment(topLX, topLY,bottomLX, bottomLY));
+				lineSegments.add(new LineSegment(bottomRX, bottomRY, bottomLX, bottomLY));
+				    
+				circles.add(new Circle(topLX, topLY, 0));
+				circles.add(new Circle(bottomLX, bottomLY, 0));
+				circles.add(new Circle(bottomRX, bottomRY, 0));
+				break;
 			default:
 				break;
 		}
