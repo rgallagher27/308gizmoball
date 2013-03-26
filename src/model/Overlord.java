@@ -593,6 +593,7 @@ public class Overlord extends Observable implements iOverlord {
 		for (iGizmo giz : getGizmos()) {
 			if (giz instanceof Flipper) {
 				giz.setRotation(0);
+				giz.performAction(false);
 			}
 		}
 		setChanged();

@@ -46,6 +46,7 @@ public class LeftFlipper extends Flipper {
 		rotation    = -r;
 		maxRotation -= r;
 		minRotation -= r;
+		fillLineSegments();
 	}
 	
 	private void fillLineSegments()

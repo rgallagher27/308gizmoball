@@ -102,16 +102,32 @@ public class BuildController implements MouseListener, ActionListener {
 				break;
 			case BUILD_ADD_TRIGGER_2:
 				success = overlord.connect(oldGizName, gizName);
-				currentSelectedMode = 0;
 				oldGizName = "";
+				type = "add a trigger";
+				currentSelectedMode = 0;
 				break;
+			case BUILD_REMOVE_TRIGGER_1:
+				type = "trigger";
+				oldGizName = gizName;
+				currentSelectedMode = BUILD_REMOVE_TRIGGER_2;
+				break;
+			case BUILD_REMOVE_TRIGGER_2:
+				success = overlord.disconnect(oldGizName, gizName);
+				oldGizName = "";
+				type = "remove the trigger";
+				currentSelectedMode = 0;
+				break;
+				
 			}
 			
 			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2){
 			frame.unselectAll();
 			
-			if(!success && currentSelectedMode != 0){
+			if(!success && currentSelectedMode != 0 && 
+					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2)){
 				frame.error("The " + type + " gizmo could not be added at that location!");
+			}else if(!success && currentSelectedMode != 0){
+				frame.error("Could not " + type + " between the selected gizmos.");
 			}
 			currentSelectedMode = 0;
 			success = false;
