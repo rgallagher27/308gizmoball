@@ -147,7 +147,6 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			
 			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
 			else{
 				((Absorber)closestGizmo).captureBall(b);
