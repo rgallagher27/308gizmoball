@@ -28,9 +28,7 @@ public class PhysicsController implements IController {
 	private iOverlord overlord;
 	
 	private Timer gameLoop;
-			
-	private boolean runningMode;
-
+		
 	public PhysicsController(iOverlord ov) 
 	{
 		super();
@@ -43,12 +41,19 @@ public class PhysicsController implements IController {
 
 	public void start(){
 		gameLoop.start();
-		runningMode = true;
+	
+	}
+	public void pause(){
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
 	}
 	
 	public void stop(){
 		gameLoop.stop();
-		runningMode = false;
+	
 		overlord.resetGame();
 	}
 	
@@ -82,7 +87,7 @@ public class PhysicsController implements IController {
 	{	
 		
 		int keyPressed = event.getKeyCode();
-		
+		System.out.println("KEY PRESSED : " + keyPressed);
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}

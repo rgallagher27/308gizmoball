@@ -34,9 +34,22 @@ public class CircleBumper extends Gizmo implements iGizmo {
 		
 	}
 
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
+	
 	@Override
 	public String toString() {
 		return ("Circle " + identifier + " " + point.getX() + " " + point.getY());
+	}
+	
+	private void fillLineSegments(){
+		circles.clear();
+		double radius = cellWidth / 2;
+		circles.add(
+				new Circle(new Vect((point.getX() * cellWidth) + radius, (point.getY() * cellHeight) + radius), cellWidth / 2)
+				);
 	}
 
 }

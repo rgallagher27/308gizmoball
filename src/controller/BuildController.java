@@ -3,15 +3,19 @@ package controller;
 import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import exception.CannotRotateException;
 
 import view.CompleteViewContainer;
 import view.ViewCanvas;
 
 import model.iOverlord;
 
-public class BuildController implements MouseListener, ActionListener {
+public class BuildController implements MouseListener, ActionListener, KeyListener {
 
 	private iOverlord overlord;
 	private ViewCanvas view;
@@ -25,9 +29,26 @@ public class BuildController implements MouseListener, ActionListener {
 	private final int BUILD_ABSORBER = 6;
 	private final int BUILD_REMOVE = 7;
 	private final int BUILD_ROTATE = 8;
-	private final int BUILD_ADD_TRIGGER = 9;
-	private final int BUILD_REMOVE_TRIGGER = 10;
+	private final int BUILD_ADD_TRIGGER_1 = 9;
+	private final int BUILD_ADD_TRIGGER_2 = 12;
+	private final int BUILD_REMOVE_TRIGGER_1 = 10;
+	private final int BUILD_REMOVE_TRIGGER_2 = 13;
+	private final int BUILD_REMOVE_KEY_TRIGGER_1 = 14;
+	private final int BUILD_REMOVE_KEY_TRIGGER_2 = 15;
+	private final int BUILD_ADD_KEY_TRIGGER_1 = 16;
+	private final int BUILD_ADD_KEY_TRIGGER_2 = 17;
 	private final int ADD_BALL = 1;
+	private final int BUILD_CIRCLE = 11;
+	private final int BUILD_MOVE_1 = 18;
+	private final int BUILD_MOVE_2 = 19;
+	private final int BUILD_MOVE_BALL_1 = 20;
+	private final int BUILD_MOVE_BALL_2 = 21;
+	private final int BUILD_REMOVE_BALL = 22;
+	
+	private String gizName;
+	private String oldGizName;
+	private String oldBall;
+	private int keyPressed;
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -40,32 +61,189 @@ public class BuildController implements MouseListener, ActionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
+		if(frame.getMode()){
+			//ignore mouse clicks during play mode.
+		}else{
 		int x = view.mouseX(e.getX());
 		int y = view.mouseY(e.getY());
 		
-		String gizName = overlord.getGizName(x, y);
+		gizName = overlord.getGizName(x, y);
 		String ballName = overlord.getBallName(x, y);
+		System.out.println("gizName: " + gizName);
+		String type = "";
+		boolean success = false;
 
 		if (x < 20 && y < 20) {
 			switch (currentSelectedMode) {
 			case ADD_BALL:
+				type = "ball";
 				if(gizName.contains("A")){
-					overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
-					frame.showBallInfo(false);
-					currentSelectedMode = 0;
+					success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
+					frame.showBallInfo(false); 
+					
 				}else{
 					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
-					overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
+					success = overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
 					frame.showBallInfo(false);
-					currentSelectedMode = 0;
+					
 					}
 				}
 				break;
-	
+			case BUILD_ABSORBER:
+				type = "absorber";
+				if(frame.getAbsorberHeight() != Integer.MIN_VALUE && frame.getAbsorberWidth() != Integer.MIN_VALUE){
+					success = overlord.addAbsorber(overlord.getNextName("A"), x, y, (x +frame.getAbsorberWidth()), (y + frame.getAbsorberHeight()));
+					frame.showAbsInfo(false);
+				}
+				break;
+			case BUILD_SQUARE:
+				type = "square";
+				success = overlord.addSquare(overlord.getNextName("S"), x, y);
+				break;
+			case BUILD_TRIANGLE:
+				type = "triangle";
+				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
+				break;
+			case BUILD_CIRCLE:
+				type = "circle";
+				success = overlord.addCircle(overlord.getNextName("C"), x, y);
+				break; 	
+			case BUILD_ADD_TRIGGER_1:
+				type = "trigger";
+				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
+				currentSelectedMode = BUILD_ADD_TRIGGER_2;
+				}
+				break;
+			case BUILD_ADD_TRIGGER_2:
+				success = overlord.connect(oldGizName, gizName);
+				oldGizName = "";
+				type = "add a trigger";
+				currentSelectedMode = -1;
+				break;
+			case BUILD_ROTATE:
+				type = "rotate";
+				try {
+					success = overlord.rotateGizmo(gizName);
+				} catch (CannotRotateException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case BUILD_REMOVE:
+				type = "remove";
+				success = overlord.removeGizmo(gizName);
+				break;
+			case BUILD_LEFT_FLIPPER:
+				type = "Left Flipper";
+				success = overlord.addFlipper(overlord.getNextName("LF"), x, y, false);
 				
+				break;
+			case BUILD_RIGHT_FLIPPER:
+				type = "Right Flipper";
+				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, true);
+				
+				break;
+			case BUILD_MOVE_1:
+				type = "moved";
+				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
+				currentSelectedMode = BUILD_MOVE_2;
+				}
+				break;
+			case BUILD_MOVE_2:
+				if(gizName.equals("")){
+					success = overlord.moveGizmo(oldGizName, x, y);
+				}else{
+					success = false;
+				}
+				currentSelectedMode = -1;
+				break;
+			case BUILD_MOVE_BALL_1:
+				type = "moved";
+				oldBall = ballName;
+				if(oldBall.equals("")) {
+					currentSelectedMode = 0;
+					success = false;
+				}else{
+				currentSelectedMode = BUILD_MOVE_BALL_2;
+				}
+				break;
+			case BUILD_MOVE_BALL_2:
+				success = overlord.moveBall(oldBall, gizName, x, y);
+				currentSelectedMode = -1;
+				break;
+			case BUILD_REMOVE_TRIGGER_1:
+				type = "trigger";
+				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
+				currentSelectedMode = BUILD_REMOVE_TRIGGER_2;
+				}
+				break;
+			case BUILD_REMOVE_TRIGGER_2:
+				success = overlord.disconnect(oldGizName, gizName);
+				oldGizName = "";
+				type = "remove the trigger";
+				currentSelectedMode = -1;
+				break;
+			case BUILD_ADD_KEY_TRIGGER_2:
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
+				success = overlord.keyConnect(keyPressed, false, gizName);
+				if(success){
+					success = overlord.keyConnect(keyPressed, true, gizName);
+				}
+				type = "add a key connection ";
+				currentSelectedMode = -1;
+				}
+				break;
+			case BUILD_REMOVE_KEY_TRIGGER_2:
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
+				success = overlord.removeKeyConnect(keyPressed, false, gizName);
+				if(success){
+					success = overlord.removeKeyConnect(keyPressed, true, gizName);
+				}
+				type = "remove the key connection ";
+				currentSelectedMode = -1;
+				}
+				break;
+			case BUILD_REMOVE_BALL:
+				type = "remove ball";
+				success = overlord.removeBall(ballName);
+				break;
+			default:
+				currentSelectedMode = 0;
+				break;
 			}
+			
+			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2
+					&& currentSelectedMode != BUILD_MOVE_BALL_2){
 			frame.unselectAll();
+			
+			if(!success && currentSelectedMode != 0 && 
+					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
+					|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2)){
+				frame.error("The " + type + " gizmo could not be added at that location!");
+			}else if(!success && currentSelectedMode == -1){
+				frame.error("Could not " + type + " between the selected gizmos.");
+			}
+			currentSelectedMode = 0;
+			success = false;
+			type = "";
+			oldGizName = "";
+			oldBall = "";
+			}
 
+		}
 		}
 
 		System.out.println(view.mouseX(e.getX()) + " : "
@@ -100,33 +278,34 @@ public class BuildController implements MouseListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
-		
+		frame.unselectAll();
+		frame.select(e.getActionCommand());
+		frame.focusView();
 		switch (e.getActionCommand()) {
 		
 		case "Load":
 			if (frame != null) {
 				java.io.File f = frame.askForMapFile();
 				if (f != null && f.exists()) {
-					frame.information(f.getPath()); // TODO Implement with model
+					overlord.loadGame(f.getPath());
+					//frame.information(f.getPath()); // TODO Implement with model
 				} else if (f != null) {
 					frame.error("This file doesn't exist.");
 				}
-			} else if (frame != null) {
-				java.io.File f = frame.askForMapFile();
-				if (f != null && f.exists()) {
-					frame.information(f.getPath()); // TODO Implement with model
-				} else if (f != null) {
-					frame.error("This file doesn't exist.");
-				}
-			}
+			} 
 			break;
 		case "Save":
-			java.io.File f = frame.askForMapFile();
+			java.io.File f = frame.askForMapFileSave();
 			if (f != null && !f.exists()) {
-				frame.information(f.getPath()); // TODO Implement with model
+				overlord.saveGame(f.getPath());
+				//frame.information(f.getPath()); // TODO Implement with model
 			} else if (f != null) {
 				frame.error("I can't overwrite an existing file.");
 			}
+			break;
+		case "Exit":
+			frame.dispose();
+			System.exit(0);
 			break;
 		case "Build":
 			frame.switchBuild();
@@ -134,66 +313,101 @@ public class BuildController implements MouseListener, ActionListener {
 		case "Play":
 			frame.switchPlay();
 			break;
-		// case BUILD_MODE:
-		// playView.dispose(); playView = null;
-		// buildView = new view.BuildView();
-		// break;
-		// case PLAY_MODE:
-		// buildView.dispose(); buildView = null;
-		// playView = new view.PlayView();
-		// break;
+		case "Pause":
+			frame.pause();
+			break;
+	
 		case "AddBall":
 			currentSelectedMode = ADD_BALL;
 			frame.showBallInfo(true);
-			// int velocity = -1;
-			// while(velocity < 0 || velocity > 200){
-			// String input =
-			// buildView.ask("Please give the initial velocity (0 - 200).");
-			// if(input == null) return;
-			// velocity = Integer.parseInt(input);
-			// }
-			// buildView.information("Initial velocity = " + velocity); //TODO
-			// Implement with model
 			break;
 		case "Square": // TODO Implement with model
 			currentSelectedMode = BUILD_SQUARE;
-			// buildView.addSquares();
+		
 			break;
 		case "Triangle": // TODO Implement with model
 			currentSelectedMode = BUILD_TRIANGLE;
-			// buildView.addTriangles();
+			
 			break;
 		case "LeftFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_LEFT_FLIPPER;
-			// buildView.addLeftFlipper();
+			
+			break;
+		case "Circle":
+			currentSelectedMode = BUILD_CIRCLE;
 			break;
 		case "RightFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_RIGHT_FLIPPER;
-			// buildView.addRightFlipper();
+	
 			break;
 		case "Absorber": // TODO Implement with model
 			currentSelectedMode = BUILD_ABSORBER;
-			// buildView.addAbsorber();
+			frame.showAbsInfo(true);
+			break;
+		case "DeleteBall":
+			currentSelectedMode = BUILD_REMOVE_BALL;
+			break;
+		case "MoveBall":
+			currentSelectedMode = BUILD_MOVE_BALL_1;
 			break;
 		case "Remove": // TODO Implement with model
 			currentSelectedMode = BUILD_REMOVE;
-			// buildView.remove();
+		
 			break;
 		case "Rotate": // TODO Implement with model
 			currentSelectedMode = BUILD_ROTATE;
-			// buildView.rotate();
+			
 			break;
 		case "AddTrigger": // TODO Implement with model
-			currentSelectedMode = BUILD_ADD_TRIGGER;
-			// buildView.addTrigger();
+			currentSelectedMode = BUILD_ADD_TRIGGER_1;
+		
 			break;
 		case "RemoveTrigger": // TODO Implement with model
-			currentSelectedMode = BUILD_REMOVE_TRIGGER;
-			// buildView.removeTrigger();
+			currentSelectedMode = BUILD_REMOVE_TRIGGER_1;
+			
 			break;
+		case "AddKeyTrigger":
+			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_1;
+			frame.showKeyInfo(true);
+			break;
+		case "RemoveKeyTrigger":
+			currentSelectedMode = BUILD_REMOVE_KEY_TRIGGER_1;
+			frame.showKeyInfo(true);
+			break;
+		case "Move":
+			currentSelectedMode = BUILD_MOVE_1;
+			break;
+			
 		default:
 		}
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println(e.getKeyCode());
+		if(currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_1){
+			keyPressed = e.getKeyCode();
+			frame.setKey(keyPressed);
+			currentSelectedMode = BUILD_REMOVE_KEY_TRIGGER_2;
+		}else if(currentSelectedMode == BUILD_ADD_KEY_TRIGGER_1){
+			keyPressed = e.getKeyCode();
+			frame.setKey(keyPressed);
+			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_2;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

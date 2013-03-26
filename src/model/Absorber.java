@@ -26,8 +26,8 @@ public class Absorber extends Gizmo implements iGizmo {
 		lineSegments 	= new ArrayList<LineSegment>();
 		circles		= new ArrayList<Circle>();
 		capturedBalls 	= new ArrayList<iBall>();
-		this.width = (int) width;
-		this.height = (int) height;
+		this.width = (int) row;
+		this.height = (int) column;
 		fillLineSegments();
 	}
 	
@@ -36,6 +36,11 @@ public class Absorber extends Gizmo implements iGizmo {
 	{
 		active = a;
 	}
+	
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
 
 	@Override
 	public void move() {
@@ -43,8 +48,10 @@ public class Absorber extends Gizmo implements iGizmo {
 			if((!capturedBalls.isEmpty())){
 				iBall b = capturedBalls.get(0);
 					  b.setVelocity(new Vect(0, -2));
-					  b.setLocation(new BallPoint(19, 18));
+					  b.setLocation(new BallPoint(point.getX() + (width-1), point.getY() - 1));
+					  
 					  b.setCaptured(false);
+					  System.out.println("firing " + b.getIdentifier());
 				capturedBalls.remove(0);
 			}
 		}

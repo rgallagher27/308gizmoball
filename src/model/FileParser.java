@@ -56,9 +56,8 @@ public class FileParser {
             case "Absorber":
                 overlord.addAbsorber(  tok[1], 
 						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
-						Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
-						Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])
-					);
+						Integer.parseInt(tok[4]), 
+						Integer.parseInt(tok[5]));
                 break;
             case "Ball":
                 overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));

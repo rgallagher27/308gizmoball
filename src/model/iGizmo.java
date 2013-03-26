@@ -59,5 +59,7 @@ public interface iGizmo {
 	
 	public List<Circle> getCircles();
 	
+	public int getTriggerCount();
+	
 
 }

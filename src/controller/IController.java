@@ -16,6 +16,7 @@ public interface IController extends KeyListener, ActionListener {
 	public List<String> getBalls();
 	public void start();
 	public void stop();
+	public void pause();
 	
 	
 }
