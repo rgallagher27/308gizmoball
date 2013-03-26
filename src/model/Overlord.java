@@ -88,7 +88,7 @@ public class Overlord extends Observable implements iOverlord {
 		ArrayList<iBall> tmp 		= new ArrayList<iBall>(balls.values());
 		ArrayList<iBall> returned 	= new ArrayList<iBall>();
 		for (iBall b : tmp) {
-			if (!b.isCaptured())
+			//if (!b.isCaptured())
 				returned.add(b);
 		}
 		return returned;
