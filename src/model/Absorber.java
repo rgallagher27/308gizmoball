@@ -50,7 +50,7 @@ public class Absorber extends Gizmo implements iGizmo {
 		if(active){
 			if((!capturedBalls.isEmpty())){
 				iBall b = capturedBalls.get(0);
-					  b.setVelocity(new Vect(0, -2.2));
+					  b.setVelocity(new Vect(0, -2));
 					  b.setLocation(new BallPoint(19, 18));
 					  b.setCaptured(false);
 				capturedBalls.remove(0);

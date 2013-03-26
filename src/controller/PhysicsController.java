@@ -120,7 +120,7 @@ public class PhysicsController implements IController {
 		 * Move all the Balls while checking for possible
 		 * collisions with iGizmo  and iBall objects
 		 */
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 150; i++){
 		for(iBall b : overlord.getBalls()){
 			if(b.isCaptured())continue;
 				Current_Delta_T = collideBalls(b, Current_Delta_T);
