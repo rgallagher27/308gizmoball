@@ -116,6 +116,13 @@ public class GraphicsController {
 		return null;
 	}
 	
+	public G2DObject getGraphicsLine(String connect, String to){
+		if(overlord.getGizmo(connect) != null && overlord.getGizmo(to) != null){
+			return gizFactory.drawLine(connect, to);
+		}
+		return null;
+	}
+	
 	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight) {
 		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
 		
