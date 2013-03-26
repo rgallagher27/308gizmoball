@@ -156,11 +156,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				}
 				break;
 			case BUILD_MOVE_2:
-				if(gizName.equals("")){
-					success = overlord.moveGizmo(oldGizName, x, y);
-				}else{
-					success = false;
-				}
+				success = overlord.moveGizmo(oldGizName, x, y);
 				currentSelectedMode = -1;
 				break;
 			case BUILD_MOVE_BALL_1:

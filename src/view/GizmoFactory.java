@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.util.Random;
 
 import model.Absorber;
 import model.CircleBumper;
@@ -24,6 +25,7 @@ import controller.GraphicsController;
 public class GizmoFactory {
 
 	private GraphicsController controller;
+	private Random rnd = new Random();
 	
 	public GizmoFactory(GraphicsController ic) {
 		controller = ic;
@@ -39,6 +41,75 @@ public class GizmoFactory {
 		
     	return new G2DCircle(new G2DPoint((int)(x*cellWidth)+(cellWidth/2), (int)(y*cellheight)+(cellheight/2)), cellWidth/4, Color.yellow);
     }
+	
+	public G2DObject drawLine(String connect, String to){
+		double conX;
+		double conY;
+		double toX;
+		double toY;
+		if(controller.getGizType(connect).equals(LeftFlipper._TYPE)){
+			double cellWidth 			= controller.getGizWidth(connect);
+			double cellheight			= controller.getGizHeight(connect);
+			double flipperGridX			= controller.getGizX(connect);
+			double flipperGridY			= controller.getGizY(connect);
+			double flipperGridWidth		= controller.getGizRowWidth(connect);
+			double flipperGridHeight	= controller.getGizColumnHeight(connect);
+			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+			double flipperHeight 		= (flipperGridHeight * cellheight);
+			
+			conX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
+			conY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		}else if(controller.getGizType(connect).equals(RightFlipper._TYPE)){
+			double cellWidth 			= controller.getGizWidth(connect);
+			double cellheight			= controller.getGizHeight(connect);
+			double flipperGridX			= controller.getGizX(connect);
+			double flipperGridY			= controller.getGizY(connect);
+			double flipperGridWidth		= controller.getGizRowWidth(connect);
+			double flipperGridHeight	= controller.getGizColumnHeight(connect);
+
+			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+			double flipperHeight 		= (flipperGridHeight * cellheight);
+			
+			conX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
+			conY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		}else{
+			conX = (controller.getGizX(connect) * controller.getGizWidth(connect)) + (controller.getGizWidth(connect) / 2); 
+			conY = (controller.getGizY(connect) * controller.getGizHeight(connect)) + (controller.getGizHeight(connect) / 2);
+		}
+		
+		if(controller.getGizType(to).equals(LeftFlipper._TYPE)){
+			double cellWidth 			= controller.getGizWidth(to);
+			double cellheight			= controller.getGizHeight(to);
+			double flipperGridX			= controller.getGizX(to);
+			double flipperGridY			= controller.getGizY(to);
+			double flipperGridWidth		= controller.getGizRowWidth(to);
+			double flipperGridHeight	= controller.getGizColumnHeight(to);
+			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+			double flipperHeight 		= (flipperGridHeight * cellheight);
+			
+			toX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
+			toY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		}else if(controller.getGizType(to).equals(RightFlipper._TYPE)){
+			double cellWidth 			= controller.getGizWidth(to);
+			double cellheight			= controller.getGizHeight(to);
+			double flipperGridX			= controller.getGizX(to);
+			double flipperGridY			= controller.getGizY(to);
+			double flipperGridWidth		= controller.getGizRowWidth(to);
+			double flipperGridHeight	= controller.getGizColumnHeight(to);
+
+			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+			double flipperHeight 		= (flipperGridHeight * cellheight);
+			
+			toX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
+			toY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		}else{
+			toX = (controller.getGizX(to) * controller.getGizWidth(to)) + (controller.getGizWidth(to) / 2); 
+			toY = (controller.getGizY(to) * controller.getGizHeight(to)) + (controller.getGizHeight(to) / 2);
+		}
+		
+		return new G2DLine(conX, conY, toX, toY, new Color(rnd.nextInt(155) + 100, rnd.nextInt(155) + 100, rnd.nextInt(155) + 100));
+		
+	}
 	
 	public G2DObject draw(String giz){
 		switch (controller.getGizType(giz)) {

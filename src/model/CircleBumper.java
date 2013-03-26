@@ -1,6 +1,12 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
@@ -25,7 +31,28 @@ public class CircleBumper extends Gizmo implements iGizmo {
 		double radius = cellWidth / 2;
 		circles.add(
 				new Circle(new Vect((point.getX() * cellWidth) + radius, (point.getY() * cellHeight) + radius), cellWidth / 2)
-				);	
+				);
+		
+		url = new File("blip.wav");
+		try {
+			audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*
+		circles.add(
+				new Circle(new Vect(point.getX() * cellWidth, point.getY() * cellHeight), cellWidth / 2)
+				);
+		*/		
+		
 	}
 	
 	@Override

@@ -172,8 +172,10 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	private boolean canPlace(String ex, int startX, int startY, int endX, int endY) {
-		 if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
-					0 > endX || endX > 20 || 0 > endY || endY > 20){
+		System.out.println("startX: " + startX + " startY: " + startY + " endX: " + endX + " endY: " + endY);
+		 if(startX < 0 || startX > 19 || startY < 0 || startY > 19 || endX < 0 || endX > 19
+				 || endY < 0 || endY > 19){
+			 		System.out.println("false place");
 					 return false;
 				 }
 		if (startX == endX && startY == endY) {
@@ -182,15 +184,16 @@ public class Overlord extends Observable implements iOverlord {
 				return false;
 			return true;
 		} else if(ex.contains("F")){
-			if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
-					0 > endX || endX > 19 || 0 > endY || endY > 19){
+			if(startX < 0 || startX > 18 || startY < 0 || startY > 18 || endX < 0 || endX > 19 
+					|| endY < 0 || endY > 19){
+					System.out.println("false place2");
 					 return false;
 				 }
 			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
-				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
-				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
-				(!board[endY][endX].equals("") && !board[endY][endX].equals(ex)))
-				return false;
+				(!board[startY][startX+1].equals("") && !board[startY][startX+1].equals(ex)) ||
+				(!board[startY+1][startX].equals("") && !board[startY+1][startX].equals(ex)) ||
+				(!board[startY+1][startX+1].equals("") && !board[startY+1][startX+1].equals(ex)))
+				return false;	
 		} else {
 			for (int y = startY; y < endY; y++) {
 				for (int x = startX; x < endX; x++) {
@@ -212,18 +215,14 @@ public class Overlord extends Observable implements iOverlord {
 
 		int x = (int) Math.floor(startX);
 		int y = (int) Math.floor(startY);
-		System.out.println("x: " + x + " y: " + y);
+		
 
 		if (ex.length() > 0) {
-			System.out.println("t : " + !board[y][x].equals(""));
-			System.out.println("t2: " + !board[y][x].equals(ex));
+		
 			if (!board[y][x].equals("") && !board[y][x].equals(ex)) {
-				System.out.println("returning false");
 				return false;
 			}
 		} else {
-			System.out.println("t : " + !board[y][x].equals(""));
-			System.out.println("t2: " + !board[y][x].equals(ex));
 			if (!board[y][x].equals(""))
 				return false;
 		}
@@ -234,27 +233,27 @@ public class Overlord extends Observable implements iOverlord {
 	private void setPlace(String place, int startX, int startY, int endX,
 			int endY) {
 
-		if (startY == endY && endX == startX) {
+		if(place.contains("S") || place.contains("T") || place.contains("C")){
 			board[startY][startX] = place;
-			System.out.println("placed " + place);
-		} else {
-
-			if (startY != endY) {
-				System.out.println("-------" + place);
-				System.out.println("---- " + startY + " -- " + endY);
-				for (int y = startY; y < endY; y++) {
-					for (int x = startX; x < endX; x++) {
-						board[y][x] = place;
-						System.out.println("placing " + place);
+		}else if(place.contains("F")){
+			board[startY][startX] = place;
+			board[startY][startX+1] = place;
+			board[startY+1][startX] = place;
+			board[startY+1][startX+1] = place;
+		}else if(place.contains("A")){
+			if(startY == endY){
+				for(int i = startX; i < endX; i++){
+					board[startY][i] = place;
+				}
+			}else{
+				for(int y = startY; y < endY; y++){
+					for(int i = startX; i < endX; i++){
+						board[y][i] = place;
 					}
 				}
-			} else {
-				for (int x = startX; x < endX; x++) {
-					board[startY][x] = place;
-				}
-				System.out.println("placed " + place);
 			}
 		}
+		
 	}
 
 	private void removeFromBoard(String toRemove) {
@@ -279,15 +278,16 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
 		int height = Math.abs(y - y2);
-		int width  = Math.abs(x - x2);
-		
+		int width = Math.abs(x - x2);
+		System.out.println("height: " + height + " width: " + width);
 		if(height < 1 || width < 1){
 			return false;
 		}
 		
-		if (canPlace(id, x, y, x2, y2)) {
-			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height, cellWidth, cellHeight));
-			setPlace(id, x, y, x2, y2);
+		if (canPlace(id, x, y, (x + width-1), (y + height-1))) {
+			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
+					cellWidth, cellHeight));
+			setPlace(id, x, y, (x + width-1), (y + height-1));
 
 			if (!loadingFile) {
 				setChanged();
@@ -300,7 +300,8 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addBall(String ballName, String absorberName, float x, float y, double vx, double vy) {
+	public boolean addBall(String ballName, String absorberName, float x,
+			float y, double vx, double vy) {
 
 		iGizmo absorb = null;
 		if (absorberName.length() > 0) {
@@ -342,8 +343,8 @@ public class Overlord extends Observable implements iOverlord {
 		iGizmo temp = getGizmo(gizmoName);
 		if(temp == null) return false;
 		
-		if (canPlace(gizmoName, x, y, x + (temp.getWidth()),
-				y + (temp.getHeight()))) {
+		if (canPlace(gizmoName, x, y, x + (temp.getWidth()-1),
+				y + (temp.getHeight()-1))) {
 			temp.setLocation(new GizPoint(x, y));
 			removeFromBoard(gizmoName);
 			setPlace(gizmoName, x, y, x + (temp.getWidth()),
@@ -364,23 +365,6 @@ public class Overlord extends Observable implements iOverlord {
 			gizmos.put(id, new CircleBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
-			if (!loadingFile) {
-				setChanged();
-				notifyObservers(id);
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean addPortal(String id, int x, int y, int x2, int y2)
-	{
-		System.out.println("portal...");
-		if (canPlace(id, x, y, x, y)) {
-			System.out.println("portal time!");
-			gizmos.put(id, new Portal(id, new GizPoint(x, y), new GizPoint(x2, y2), 1, 1, cellWidth, cellHeight));
-			setPlace(id, x, y, x, y);
-			setPlace(id, x2, y2, x2, y2);
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
@@ -519,6 +503,8 @@ public class Overlord extends Observable implements iOverlord {
 			return false;
 		producer.addTrigger(consumer);
 		connects.add(producerGizmo);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 	
@@ -534,6 +520,8 @@ public class Overlord extends Observable implements iOverlord {
 		if(producer.getTriggerCount() == 0){
 		connects.remove(producerGizmo);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 		
 	}
