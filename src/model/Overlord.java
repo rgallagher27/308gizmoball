@@ -715,5 +715,10 @@ public class Overlord extends Observable implements iOverlord {
 		}
 	}
 
+	@Override
+	public ArrayList<String> getConnects() {
+		return connects;
+	}
+
 	
 }

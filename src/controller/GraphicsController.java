@@ -1,8 +1,10 @@
 package controller;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
+import model.iGizmo;
 import model.iOverlord;
 import model.physics.Circle;
 import model.physics.LineSegment;
@@ -19,6 +21,17 @@ public class GraphicsController {
 		overlord 	= ov;
 		gizFactory 	= new GizmoFactory(this);
 		
+	}
+	
+	public ArrayList<String> getGizTriggers(){
+		return overlord.getConnects();
+	}
+	public ArrayList<String> getGizTriggers(String name){
+		ArrayList<String> tmp = new ArrayList<String>();
+		for(iGizmo giz : overlord.getGizmo(name).getTriggers()){
+			tmp.add(giz.getIdentifier());
+		}
+		return tmp;
 	}
 	
 	public String getGizType(String name)
