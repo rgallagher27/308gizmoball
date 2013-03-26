@@ -36,6 +36,7 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton circle;
 	private JRadioButton addKeyTrigger;
 	private JRadioButton removeKeyTrigger;
+	private JRadioButton moveGizmos;
 	
 	
 	private JPanel buildButtonsPanel;
@@ -123,6 +124,10 @@ public class CompleteViewContainer extends JFrame {
 		rotate.addActionListener(buildCont);
 		rotate.setActionCommand("Rotate");
 		
+		moveGizmos = new JRadioButton("Move Gizmo");
+		moveGizmos.addActionListener(buildCont);
+		moveGizmos.setActionCommand("Move");
+		
 		addTrigger = new JRadioButton("Add Trigger");
 		addTrigger.addActionListener(buildCont);
 		addTrigger.setActionCommand("AddTrigger");
@@ -193,6 +198,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(rightFlipper);
 		buildButtonsPanel.add(remove);
 		buildButtonsPanel.add(rotate);
+		buildButtonsPanel.add(moveGizmos);
 		buildButtonsPanel.add(addTrigger);
 		buildButtonsPanel.add(removeTrigger);
 		buildButtonsPanel.add(addKeyTrigger);
@@ -321,11 +327,11 @@ public class CompleteViewContainer extends JFrame {
 		try{
 			in = Integer.parseInt(absWidth.getText());
 		}catch(NumberFormatException nfe){
-			error("The absorber width must be atleast 1 wide");
+			error("The absorber width must be atleast 1L wide");
 			in = Integer.MIN_VALUE;
 		}
 		if(in > 0) return in;
-		
+		error("The absorber width must be atleast 1L wide");
 		return Integer.MIN_VALUE;
 	}
 	
@@ -334,11 +340,11 @@ public class CompleteViewContainer extends JFrame {
 		try{
 			in = Integer.parseInt(absHeight.getText());
 		}catch(NumberFormatException nfe){
-			error("The absorber height must be atleast 1 high");
+			error("The absorber height must be atleast 1L high");
 			in = Integer.MIN_VALUE;
 		}
 		if(in > 0) return in;
-		
+		error("The absorber height must be atleast 1L high");
 		return Integer.MIN_VALUE;
 	}
 	
@@ -387,6 +393,7 @@ public class CompleteViewContainer extends JFrame {
 		addBall.setSelected(false);
 		removeKeyTrigger.setSelected(false);
 		addKeyTrigger.setSelected(false);
+		moveGizmos.setSelected(false);
 		showBallInfo(false);
 		showAbsInfo(false);
 		showKeyInfo(false);

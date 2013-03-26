@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import exception.CannotRotateException;
+
 import view.CompleteViewContainer;
 import view.ViewCanvas;
 
@@ -37,6 +39,8 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private final int BUILD_ADD_KEY_TRIGGER_2 = 17;
 	private final int ADD_BALL = 1;
 	private final int BUILD_CIRCLE = 11;
+	private final int BUILD_MOVE_1 = 18;
+	private final int BUILD_MOVE_2 = 19;
 	
 	private String gizName;
 	private String oldGizName;
@@ -111,7 +115,42 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				success = overlord.connect(oldGizName, gizName);
 				oldGizName = "";
 				type = "add a trigger";
-				currentSelectedMode = 0;
+				currentSelectedMode = -1;
+				break;
+			case BUILD_ROTATE:
+				type = "rotate";
+				try {
+					success = overlord.rotateGizmo(gizName);
+				} catch (CannotRotateException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case BUILD_REMOVE:
+				type = "remove";
+				success = overlord.removeGizmo(gizName);
+				break;
+			case BUILD_LEFT_FLIPPER:
+				type = "Left Flipper";
+				success = overlord.addFlipper(overlord.getNextName("LF"), x, y, false);
+				
+				break;
+			case BUILD_RIGHT_FLIPPER:
+				type = "Right Flipper";
+				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, true);
+				
+				break;
+			case BUILD_MOVE_1:
+				type = "moved";
+				oldGizName = gizName;
+				currentSelectedMode = BUILD_MOVE_2;
+				break;
+			case BUILD_MOVE_2:
+				if(gizName.equals("")){
+					success = overlord.moveGizmo(oldGizName, x, y);
+				}else{
+					success = false;
+				}
+				currentSelectedMode = -1;
 				break;
 			case BUILD_REMOVE_TRIGGER_1:
 				type = "trigger";
@@ -122,7 +161,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				success = overlord.disconnect(oldGizName, gizName);
 				oldGizName = "";
 				type = "remove the trigger";
-				currentSelectedMode = 0;
+				currentSelectedMode = -1;
 				break;
 			case BUILD_ADD_KEY_TRIGGER_2:
 				success = overlord.keyConnect(keyPressed, false, gizName);
@@ -130,7 +169,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 					success = overlord.keyConnect(keyPressed, true, gizName);
 				}
 				type = "add a key connection ";
-				currentSelectedMode = 0;
+				currentSelectedMode = -1;
 				break;
 			case BUILD_REMOVE_KEY_TRIGGER_2:
 				success = overlord.removeKeyConnect(keyPressed, false, gizName);
@@ -138,19 +177,19 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 					success = overlord.removeKeyConnect(keyPressed, true, gizName);
 				}
 				type = "remove the key connection ";
-				currentSelectedMode = 0;
+				currentSelectedMode = -1;
 				break;
 				
 			}
 			
-			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2){
+			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2){
 			frame.unselectAll();
 			
 			if(!success && currentSelectedMode != 0 && 
 					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
 					|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2)){
 				frame.error("The " + type + " gizmo could not be added at that location!");
-			}else if(!success && currentSelectedMode == 0){
+			}else if(!success && currentSelectedMode == -1){
 				frame.error("Could not " + type + " between the selected gizmos.");
 			}
 			currentSelectedMode = 0;
@@ -281,6 +320,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		case "RemoveKeyTrigger":
 			currentSelectedMode = BUILD_REMOVE_KEY_TRIGGER_1;
 			frame.showKeyInfo(true);
+			break;
+		case "Move":
+			currentSelectedMode = BUILD_MOVE_1;
 			break;
 			
 		default:

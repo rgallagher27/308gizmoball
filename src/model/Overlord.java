@@ -57,8 +57,9 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void removeGizmo(String gizmoName) {
+	public boolean removeGizmo(String gizmoName) {
 		iGizmo gizRem = getGizmo(gizmoName);
+		if(gizRem != null){
 		for (iGizmo giz : getGizmos()) {
 			giz.removeTrigger(gizRem);
 		}
@@ -74,6 +75,9 @@ public class Overlord extends Observable implements iOverlord {
 		removeFromBoard(gizmoName);
 		setChanged();
 		notifyObservers(gizmoName);
+		return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -166,27 +170,37 @@ public class Overlord extends Observable implements iOverlord {
 
 	private boolean canPlace(String ex, int startX, int startY, int endX,
 			int endY) {
-		
-		if(startX == endX && startY == endY){
-			System.out.println("t1: " + !board[startY][startX].equals(""));
-			System.out.println("t2: " + !board[startY][startX].equals(ex));
-			if (!board[startY][startX].equals("") && !board[startY][startX].equals(ex))
+		 if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
+					0 > endX || endX > 20 || 0 > endY || endY > 20){
+					 return false;
+				 }
+		if (startX == endX && startY == endY) {
+			if (!board[startY][startX].equals("")
+					&& !board[startY][startX].equals(ex))
 				return false;
 			return true;
-		}else{
-			
-			
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
-				if (ex.length() > 0) {
-					if (!board[y][x].equals("") && !board[y][x].equals(ex))
-						return false;
-				} else {
-					if (!board[y][x].equals(""))
-						return false;
+		} else if(ex.contains("F")){
+			if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
+					0 > endX || endX > 19 || 0 > endY || endY > 19){
+					 return false;
+				 }
+			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
+				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
+				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
+				(!board[endY][endX].equals("") && !board[endY][endX].equals(ex)))
+				return false;
+		} else {
+			for (int y = startY; y < endY; y++) {
+				for (int x = startX; x < endX; x++) {
+					if (ex.length() > 0) {
+						if (!board[y][x].equals("") && !board[y][x].equals(ex))
+							return false;
+					} else {
+						if (!board[y][x].equals(""))
+							return false;
+					}
 				}
 			}
-		}
 		}
 		return true;
 	}
@@ -326,7 +340,8 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public boolean moveGizmo(String gizmoName, int x, int y) {
 		iGizmo temp = getGizmo(gizmoName);
-
+		if(temp == null) return false;
+		
 		if (canPlace(gizmoName, x, y, x + (temp.getWidth() - 1),
 				y + (temp.getHeight() - 1))) {
 			temp.setLocation(new GizPoint(x, y));
@@ -364,11 +379,11 @@ public class Overlord extends Observable implements iOverlord {
 			if (!orient) {
 				gizmos.put(id, new LeftFlipper(id, new GizPoint(x, y), 1, 2,
 						cellWidth, cellHeight));
-				setPlace(id, x, y, x + 1, y + 1);
+				setPlace(id, x, y, x + 2, y + 2);
 			} else {
 				gizmos.put(id, new RightFlipper(id, new GizPoint(x, y), 1, 2,
 						cellWidth, cellHeight));
-				setPlace(id, x, y, x + 1, y + 1);
+				setPlace(id, x, y, x + 2, y + 2);
 			}
 			if (!loadingFile) {
 				setChanged();
@@ -666,29 +681,38 @@ public class Overlord extends Observable implements iOverlord {
 		return "";
 	}
 
-	public String getNextName(String name) {
+	public String getNextName(String name){
 		int maxNo = 0;
 		int no;
-		if (name.contains("B")) {
-			for (iBall ball : balls.values()) {
-				no = Integer.parseInt(ball.getIdentifier().substring(1));
-				if (no > maxNo)
-					maxNo = no;
-			}
-			return "B" + (maxNo + 1);
-		} else {
-
-			for (iGizmo giz : getGizmos()) {
-				if (giz.getIdentifier().contains(name) && !giz.getIdentifier().contains("L")) {
-					if (giz.getIdentifier().length() != 1) {
-						no = Integer.parseInt(giz.getIdentifier().substring(1));
-						if (no > maxNo)
-							maxNo = no;
+		if(name.length() == 2){
+			for(iGizmo giz: getGizmos()){
+				if(giz.getIdentifier().contains(name)){
+					if(giz.getIdentifier().length() != 2){
+					no = Integer.parseInt(giz.getIdentifier().substring(2));
+					if(no > maxNo) maxNo = no;
 					}
 				}
 			}
+			return name + (maxNo+1);
 		}
-		return name + (maxNo + 1);
+		if(name.contains("B")){
+			for(iBall ball: balls.values()){
+				no = Integer.parseInt(ball.getIdentifier().substring(1));
+				if(no > maxNo) maxNo = no;
+			}
+			return "B" + (maxNo+1);
+		}else{
+			
+			for(iGizmo giz: getGizmos()){
+				if(giz.getIdentifier().contains(name)){
+					if(giz.getIdentifier().length() != 1 && !giz.getIdentifier().contains("L")){
+					no = Integer.parseInt(giz.getIdentifier().substring(1));
+					if(no > maxNo) maxNo = no;
+					}
+				}
+			}
+			return name + (maxNo+1);
+		}
 	}
 
 	
