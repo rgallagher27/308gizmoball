@@ -1,8 +1,10 @@
 package model;
 
-import java.awt.Point;
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -10,22 +12,29 @@ import model.physics.LineSegment;
 
 public class Gizmo implements iGizmo {
 	
+	public static final String _TYPE = "G";
+	
 	protected GizPoint point;
 	protected double rowWidth, columnHeight, cellWidth, cellHeight;
-	protected double rotation, rotationIncrement;
+	protected double rotation, rotationVelocity;
 	protected List<LineSegment> lineSegments;
 	protected List<Circle> circles;
 	protected String identifier;
 	protected List<iGizmo> triggers;
 	protected int width, height;
+	protected Color colour;
 	
 	public Gizmo() {
 		rotation = 0;
 		triggers = new LinkedList<iGizmo>();
-		width = 0;
-		height = 0;
+		width    = 0;
+		height   = 0;
+		colour   = this.setColour();
 	}
 
+	public int getTriggerCount(){
+		return triggers.size();
+	}
 	@Override
 	public String getIdentifier() {
 		return identifier;
@@ -121,6 +130,7 @@ public class Gizmo implements iGizmo {
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min){
 				min = newMin;
+				closestCircle = null;
 				closestLine = l;
 			}
 		}
@@ -138,20 +148,20 @@ public class Gizmo implements iGizmo {
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
 				);
 		//trigger.
+		this.performAction(false);
 		for(iGizmo giz: triggers){
-			System.out.println(this.getIdentifier() + " has triggered " + giz.getIdentifier());
 			giz.performAction(true);
-			giz.move();
+			giz.move(min);
 		}
 	}
 
 	@Override
 	public void performAction(boolean a) {
-		
+		this.setColour();
 	}
 
 	@Override
-	public void move() {
+	public void move(double Delta_T) {
 		
 	}
 
@@ -159,6 +169,10 @@ public class Gizmo implements iGizmo {
 	public void addTrigger(iGizmo giz) {
 		triggers.add(giz);
 		
+	}
+	
+	public ArrayList<iGizmo> getTriggers() {
+		return new ArrayList<iGizmo>(triggers);
 	}
 
 	@Override
@@ -187,13 +201,30 @@ public class Gizmo implements iGizmo {
 
 	@Override
 	public List<LineSegment> getSegments() {
-		// TODO Auto-generated method stub
 		return lineSegments;
 	}
 
 	@Override
 	public List<Circle> getCircles() {
-		// TODO Auto-generated method stub
 		return circles;
+	}
+
+
+
+	@Override
+	public Color getColour() {
+		return this.colour;
+	}
+	
+	protected Color setColour()
+	{
+		Random rand = new Random();
+		return this.colour = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+	}
+
+	@Override
+	public String getGizType() 
+	{
+		return Gizmo._TYPE;
 	}
 }

@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.geom.Point2D;
-
 import model.physics.Circle;
 import model.physics.Vect;
 
@@ -10,6 +8,10 @@ public interface iBall {
 	public String getIdentifier();
 	
 	public BallPoint getLocation();
+	
+	public BallPoint getOrigLocation();
+	
+	public Vect getOrigVelocity();
 	
 	public void setLocation(BallPoint p);
 	
@@ -51,6 +53,6 @@ public interface iBall {
 	
 	public double getRadius();
 
-
+	public boolean getOrigCapture();
 
 }

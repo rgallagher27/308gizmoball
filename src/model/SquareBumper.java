@@ -1,45 +1,40 @@
 package model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
 
 public class SquareBumper extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "S";
 
 	public SquareBumper(String identifier, GizPoint p, double rowWidth, double columnHeight, double cellWidth, double cellHeight) {
 		super();
-		point 		= p;
+		point 				= p;
 		this.rowWidth 		= rowWidth;
-		this.columnHeight  = columnHeight;
+		this.columnHeight   = columnHeight;
 		this.cellWidth		= cellWidth;
 		this.cellHeight 	= cellHeight;
 		this.identifier 	= identifier;
-		height = 1;
-		width = 1;
+		height 				= 1;
+		width 				= 1;
 		
-		lineSegments = new ArrayList<LineSegment>();
-		circles = new ArrayList<Circle>();
+		lineSegments 		= new ArrayList<LineSegment>();
+		circles 			= new ArrayList<Circle>();
 		
 		fillLineSegments();
 		
 	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return SquareBumper._TYPE;
+	}
 
 	private void fillLineSegments()
 	{
-		/*double topLX = (point.getX() * cellWidth)  - ((rowWidth * cellWidth) / 2);
-		double topLY = (point.getY() * cellHeight) - ((columnHeight * cellHeight) / 2);
-		
-		double topRX = topLX + (rowWidth * cellWidth);
-		double topRY = topLY;
-		
-		double bottomLX = topLX;
-		double bottomLY = topLY + (columnHeight * cellHeight);
-		
-		double bottomRX = topRX;
-		double bottomRY = bottomLY;*/
-		
 		double topLX = point.getX() * cellWidth;
 		double topLY = point.getY() * cellHeight;
 		
@@ -69,6 +64,16 @@ public class SquareBumper extends Gizmo implements iGizmo {
 		circles.add(new Circle(bottomRX, bottomRY, 0));
 		
 		
+	}
+	
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
+
+	@Override
+	public String toString() {
+		return ("Square " + identifier + " " + point.getX() + " " + point.getY());
 	}
 
 }

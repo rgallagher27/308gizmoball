@@ -1,6 +1,9 @@
 *.class
 bin
 .metadata 
+*.sublime-project
+*.sublime-workspace
+makefile
 
 # Package Files #
 *.jar

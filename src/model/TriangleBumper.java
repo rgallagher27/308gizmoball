@@ -1,12 +1,13 @@
 package model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
 
 public class TriangleBumper extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "T";
 
 	public TriangleBumper( String identifier, GizPoint p, double row, double column, double width, double height) {
 		super();
@@ -21,9 +22,21 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		this.width = 1;
 		fillLineSegments();
 	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return TriangleBumper._TYPE;
+	}
+	
 	@Override
 	public void setRotation(double r) {
 		rotation = r;
+		fillLineSegments();
+	}
+	
+	public void setLocation(GizPoint p) {
+		point = p;
 		fillLineSegments();
 	}
 	
@@ -94,6 +107,11 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 				break;
 		}
 		
+	}
+
+	@Override
+	public String toString() {
+		return ("Triangle " + identifier + " " + point.getX() + " " + point.getY());
 	}
 
 }

@@ -1,9 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import exception.CannotRotateException;
 
@@ -16,8 +14,8 @@ public interface iOverlord {
 	public boolean addFlipper(String gizmoName, int x, int y, boolean orient); //true = right, false = left
 	public boolean addAbsorber(String id, int x, int y, int width, int height);
 	public boolean addBall(String ballName, String absorberName, float x, float y, double vx, double vy);
-	public void removeGizmo(String gizmoName);
-	public void removeBall(String ballName);
+	public boolean removeGizmo(String gizmoName);
+	public boolean removeBall(String ballName);
 	public List<iGizmo> getGizmos();
 	public List<iBall> getBalls();
 	public iGizmo getGizmo(String gizmoName);
@@ -34,8 +32,15 @@ public interface iOverlord {
 	public boolean connect(String producerGizmo, String consumerGizmo);
 	public void loadGame(String mapName);
 	public void saveGame(String mapName);
-	public void moveAllGizmos();
+	public void moveAllGizmos(double Delta_T);
 	public ArrayList<iGizmo> getGizmoDownKeytriggers(int keyCode);
 	public ArrayList<iGizmo> getGizmoUpKeytriggers(int keyCode);
+	public void resetGame();
+	public String getGizName(int x, int y);
+	public String getBallName(int x, int y);
+	public String getNextName(String name);
+	public boolean disconnect(String oldGizName, String gizName);
+	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName);
+	public ArrayList<String> getConnects();
 	
 }

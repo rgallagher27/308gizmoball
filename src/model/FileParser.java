@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import exception.CannotRotateException;
@@ -11,7 +15,10 @@ import exception.CannotRotateException;
 public class FileParser {
     
 	private iOverlord overlord;
-    
+    private File saveFile;
+    private FileWriter fw;
+    private BufferedWriter bw;
+
     public FileParser(iOverlord overlord ) {
     	this.overlord 	= overlord;
     }
@@ -49,9 +56,8 @@ public class FileParser {
             case "Absorber":
                 overlord.addAbsorber(  tok[1], 
 						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
-						Integer.parseInt(tok[4]) - Integer.parseInt(tok[2]), 
-						Integer.parseInt(tok[5]) - Integer.parseInt(tok[3])
-					);
+						Integer.parseInt(tok[4]), 
+						Integer.parseInt(tok[5]));
                 break;
             case "Ball":
                 overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
@@ -106,11 +112,46 @@ public class FileParser {
                 break;
             default: //Error throw up error message dialog box
                 break;
-        }
+            }
         }
     }
     
-    public void saveFile() {
-        
+    public void saveFile(String fileName) {
+        try {
+            saveFile = new File(fileName);
+ 
+            // If file doesnt exists, then create it
+            if (!saveFile.exists()) {
+                saveFile.createNewFile();
+            } else {
+                //Override Message
+                //Override to blank file
+                saveFile.delete();
+                saveFile = new File(fileName);
+                saveFile.createNewFile();
+            }
+
+            fw = new FileWriter(saveFile.getAbsoluteFile());
+            bw = new BufferedWriter(fw);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveGizmo(String gizmoString) {
+        try {
+            bw.write(gizmoString);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeSaveFile() {
+        try {
+            bw.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }

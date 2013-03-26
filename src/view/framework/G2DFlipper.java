@@ -7,13 +7,15 @@ public class G2DFlipper implements G2DObject {
 	private G2DGroup flipperGroup;
 	private double xPos, yPos;
 	private int width, height;
+	private Color colour;
 
-	public G2DFlipper(double x, double y, int width, int height) {
+	public G2DFlipper(double x, double y, int width, int height, Color col) {
 		this.flipperGroup = new G2DGroup();
 		this.xPos  	= x;
 		this.yPos  	= y;
 		this.width 	= width;
 		this.height = height;
+		this.colour = col;
 		
 		this.constructFlipperObject();
 	}
@@ -56,15 +58,15 @@ public class G2DFlipper implements G2DObject {
 		brY = (int) (this.yPos + this.height - (this.width * 2) );
 		
 		
-		G2DCircle   flipperHead = new G2DCircle(new G2DPoint(xPos, yPos), this.width, Color.orange);
+		G2DCircle   flipperHead = new G2DCircle(new G2DPoint(xPos, yPos), this.width, this.colour);
+		G2DPolygon 	flipperBody = new G2DPolygon(this.colour);
 		
-		G2DPolygon 	flipperBody = new G2DPolygon(Color.orange);
 					flipperBody.addPoint(new G2DPoint(tlX, tlY));
 					flipperBody.addPoint(new G2DPoint(trX, trY));
 					flipperBody.addPoint(new G2DPoint(brX, brY));
 					flipperBody.addPoint(new G2DPoint(blX, blY));
 		
-		G2DCircle   flipperBottom = new G2DCircle(new G2DPoint(this.xPos, brY), this.width, Color.orange);
+		G2DCircle   flipperBottom = new G2DCircle(new G2DPoint(this.xPos, brY), this.width, this.colour);
 		
 		this.flipperGroup = new G2DGroup();
 		this.flipperGroup.add(flipperHead);

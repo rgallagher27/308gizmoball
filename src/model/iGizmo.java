@@ -1,13 +1,17 @@
 package model;
 
-import java.awt.Point;
+import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
-import model.physics.*;
+import model.physics.Circle;
+import model.physics.LineSegment;
 
 public interface iGizmo {
 	
 	public String getIdentifier();
+	
+	public String getGizType();
 	
 	public GizPoint getLocation();
 	
@@ -28,6 +32,8 @@ public interface iGizmo {
 	public void addTrigger(iGizmo giz);
 	
 	public void removeTrigger(iGizmo giz);
+
+	public ArrayList<iGizmo> getTriggers();
 	
 	public double getCellHeight();
 	
@@ -43,7 +49,7 @@ public interface iGizmo {
 	
 	public void performAction(boolean a);
 	
-	public void move();
+	public void move(double Delta_T);
 
 	public int getWidth();
 
@@ -51,10 +57,14 @@ public interface iGizmo {
 	
 	public void rotate();
 	
+	public Color getColour();
+	
 	/* Segment test code */
 	public List<LineSegment> getSegments();
 	
 	public List<Circle> getCircles();
+	
+	public int getTriggerCount();
 	
 
 }

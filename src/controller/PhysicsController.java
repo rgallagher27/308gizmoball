@@ -1,107 +1,40 @@
 package controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Timer;
-
-import view.framework.G2DAbstractCanvas;
-import view.framework.G2DObject;
 
 import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
-import model.physics.Circle;
-import model.physics.LineSegment;
 
 public class PhysicsController implements IController {
 	
-	private final int FPS = 30;
-	private final double DELTA_T = ((double)1) / FPS;
-	private GizmoFactory gizFactory;
-
-	private iOverlord overlord;
+	private final int FPS 			= 60;
+	private final double DELTA_T 	= ((double)1) / FPS;
 	
+	private iOverlord overlord;
 	private Timer gameLoop;
-			
 
 	public PhysicsController(iOverlord ov) 
 	{
 		super();
+		
 		this.overlord 	= ov;
-		
 		this.gameLoop 	= new Timer(1000/FPS, this);
-		
-		this.gameLoop.start();
-		gizFactory = new GizmoFactory(this);
 	}
 
-	public int getGizX(String name){
-		return overlord.getGizmo(name).getLocation().getX();
-	}
-
-	public int getGizY(String name){
-		return overlord.getGizmo(name).getLocation().getY();
+	public void start(){
+		gameLoop.start();
 	}
 	
-	public int getGizWidth(String name){
-		return overlord.getGizmo(name).getWidth();
-	}
-	
-	public int getGizHeight(String name){
-		return overlord.getGizmo(name).getHeight();
-	}
-	
-	public float getBallX(String name){
-		return overlord.getBall(name).getLocation().getX();
-	}
-
-	public float getBallY(String name){
-		return overlord.getBall(name).getLocation().getY();
-	}
-	
-	public double getBallRadius(String name){
-		return overlord.getBall(name).getRadius();
-	}
-	
-	public G2DObject getGraphicsGizmo(String gizmo){
-		iGizmo giz = overlord.getGizmo(gizmo);
-		return gizFactory.draw(giz);
-	}
-	
-	public G2DObject getGraphicsBall(String ball){
-		iBall ballz = overlord.getBall(ball);
-		return gizFactory.drawBall(ballz);
-	}
-	
-	public List<G2DObject> getGraphicsSegments(String gizmo){
-		
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(LineSegment ls : overlord.getGizmo(gizmo).getSegments()){
-			tmp.add(gizFactory.drawSegment(ls));
-		}
-		return tmp;
-		
-	}
-	
-	public List<G2DObject> getCircleSegments(String gizmo){
-		ArrayList<G2DObject> tmp = new ArrayList<G2DObject>();
-		
-		for(Circle c : overlord.getGizmo(gizmo).getCircles()){
-			tmp.add(gizFactory.drawCircle(c));
-		}
-		return tmp;
-	}
-	
-	public G2DObject getCircleSegmentsBall(String ball){
-		return gizFactory.drawCircle(overlord.getBall(ball).returnBounds());
+	public void stop(){
+		gameLoop.stop();
+		overlord.resetGame();
 	}
 	
 	
@@ -132,13 +65,13 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		if(KeyEvent.VK_ENTER == event.getKeyCode()) System.exit(0);
 		
 		int keyPressed = event.getKeyCode();
 		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
+		
 	}
 
 	/*
@@ -177,59 +110,26 @@ public class PhysicsController implements IController {
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{	
-		new Runnable() {
-			
-			@Override
-			public void run() {
-				double Current_Delta_T = DELTA_T;
-				/*
-				 * Move all the Balls while checking for possible
-				 * collisions with iGizmo  and iBall objects
-				 */
-				for(iBall b : overlord.getBalls()){
-					if(b.isCaptured())continue;
-					for(int i = 0; i < 50; i++){
-						Current_Delta_T = collideBalls(b, Current_Delta_T);
-						Current_Delta_T = collideGizmos(b, Current_Delta_T);
-						b.move(Current_Delta_T);
-					}
-				}
-				/*
-				 * Move all the static Gizmos
-				 */
-				overlord.moveAllGizmos();
+		/*
+		 * Move all the static Gizmos
+		 */
+		overlord.moveAllGizmos(DELTA_T);
+		
+		double Current_Delta_T = DELTA_T;
+		/*
+		 * Move all the Balls while checking for possible
+		 * collisions with iGizmo  and iBall objects
+		 */
+		for(int i = 0; i < 150; i++){
+		for(iBall b : overlord.getBalls()){
+			if(b.isCaptured())continue;
+				Current_Delta_T = collideBalls(b, Current_Delta_T);
+				Current_Delta_T = collideGizmos(b, Current_Delta_T);
+				b.move(Current_Delta_T);
 			}
-		}.run();
+		}
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent event) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	private double collideGizmos(iBall b, double Current_Delta_T) {
 		double lowestTime = Double.POSITIVE_INFINITY;
@@ -247,7 +147,6 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			
 			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
 			else{
 				((Absorber)closestGizmo).captureBall(b);
@@ -289,9 +188,12 @@ public class PhysicsController implements IController {
 	}
 
 	@Override
-	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
-			double rowWidth, double columnHeight) {
-		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
-		
+	public void pause() {
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
 	}
+
 }
