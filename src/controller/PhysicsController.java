@@ -19,7 +19,6 @@ public class PhysicsController implements IController {
 	
 	private iOverlord overlord;
 	private Timer gameLoop;
-	private boolean runningMode;
 
 	public PhysicsController(iOverlord ov) 
 	{
@@ -31,12 +30,9 @@ public class PhysicsController implements IController {
 
 	public void start(){
 		gameLoop.start();
-		runningMode = true;
 	}
 	
 	public void stop(){
-		runningMode = false;
-		
 		gameLoop.stop();
 		overlord.resetGame();
 	}
