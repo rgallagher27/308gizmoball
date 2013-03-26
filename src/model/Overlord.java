@@ -173,7 +173,7 @@ public class Overlord extends Observable implements iOverlord {
 					&& !board[startY][startX].equals(ex))
 				return false;
 			return true;
-		} else if(ex.equalsIgnoreCase("F")){
+		} else if(ex.contains("F")){
 			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
 				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
 				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
@@ -344,7 +344,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addFlipper(String id, int x, int y, boolean orient) {
-		if (canPlace("F", x, y, x + 1, y + 1)) {
+		if (canPlace(id, x, y, x + 1, y + 1)) {
 			if (!orient) {
 				gizmos.put(id, new LeftFlipper(id, new GizPoint(x, y), 1, 2,
 						cellWidth, cellHeight));
