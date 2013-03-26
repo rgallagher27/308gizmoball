@@ -12,6 +12,7 @@ import java.util.Set;
 import model.physics.Vect;
 import exception.CannotRotateException;
 
+
 public class Overlord extends Observable implements iOverlord {
 
 	private HashMap<String, iGizmo> gizmos;
@@ -151,6 +152,16 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		fileParse.closeSaveFile();
 		fileParse = null;
+	}
+
+	public void fileError() {
+		javax.swing.JOptionPane.showMessageDialog(
+			null, 
+			"The file you tried to load from was found to have an error.\n" +
+			"You will be returned to the build screen with the Corruptted gizmo missing.\n" +
+			"You can now try and rebuild it.",
+			"Corrupt File",
+			javax.swing.JOptionPane.WARNING_MESSAGE);
 	}
 
 	@Override

@@ -47,35 +47,73 @@ public class FileParser {
      
     
     private void generate(ArrayList<String> input) {
+        ArrayList<String> ids = new ArrayList<String>();
+
         for(String s : input) {
             String[] tok = s.split("\\s");
-            
+
             switch(tok[0]) {
             case "":  //blank line in file
                 break;
             case "Absorber":
-                overlord.addAbsorber(  tok[1], 
-						Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), 
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addAbsorber(  tok[1], 
+						Integer.parseInt(tok[2]), 
+                        Integer.parseInt(tok[3]), 
 						Integer.parseInt(tok[4]), 
 						Integer.parseInt(tok[5]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "Ball":
-                overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "Circle":
-                overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addCircle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "LeftFlipper":
-                overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), false);
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "RightFlipper":
-                overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addFlipper(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), true);
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "Square":
-                overlord.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addSquare(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "Triangle":
-                overlord.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                if(!checkIDs(ids, tok[1])) {
+                    overlord.addTriangle(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
                 break;
             case "Gravity":
                 overlord.setGravity(Float.parseFloat(tok[1]));
@@ -103,14 +141,15 @@ public class FileParser {
                 } else if(tok[3].equals("down")) {
                     temp = false;
                 } else {
-                    //error
+                    overlord.fileError();
                 }
                 overlord.keyConnect(Integer.parseInt(tok[2]), temp, tok[4]);
                 break;
             case "Delete":
                 overlord.removeGizmo(tok[1]);
                 break;
-            default: //Error throw up error message dialog box
+            default: 
+                overlord.fileError();
                 break;
             }
         }
@@ -153,5 +192,14 @@ public class FileParser {
         } catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean checkIDs(ArrayList<String> ids, String ident) {
+        for(String id : ids) {
+            if(id.equals(ident)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
