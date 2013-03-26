@@ -158,8 +158,8 @@ public class Overlord extends Observable implements iOverlord {
 		javax.swing.JOptionPane.showMessageDialog(
 			null, 
 			"The file you tried to load from was found to have an error.\n" +
-			"You will be returned to the build screen with the partially loaded game " +
-			"so you can try and rebuild it.",
+			"You will be returned to the build screen with the Corruptted gizmo missing.\n" +
+			"You can now try and rebuild it.",
 			"Corrupt File",
 			javax.swing.JOptionPane.WARNING_MESSAGE);
 	}
