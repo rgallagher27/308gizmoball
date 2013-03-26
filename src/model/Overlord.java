@@ -165,16 +165,30 @@ public class Overlord extends Observable implements iOverlord {
 
 	}
 
-	private boolean canPlace(String ex, int startX, int startY, int endX,
+	 private boolean canPlace(String ex, int startX, int startY, int endX,
 			int endY) {
-		for (int y = startY; y < endY; y++) {
-			for (int x = startX; x < endX; x++) {
-				if (ex.length() > 0) {
-					if (!board[y][x].equals("") && !board[y][x].equals(ex))
-						return false;
-				} else {
-					if (!board[y][x].equals(""))
-						return false;
+
+		if (startX == endX && startY == endY) {
+			if (!board[startY][startX].equals("")
+					&& !board[startY][startX].equals(ex))
+				return false;
+			return true;
+		} else if(ex.equalsIgnoreCase("F")){
+			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
+				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
+				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
+				(!board[endY][endX].equals("") && !board[endY][endX].equals(ex)))
+				return false;
+		} else {
+			for (int y = startY; y < endY; y++) {
+				for (int x = startX; x < endX; x++) {
+					if (ex.length() > 0) {
+						if (!board[y][x].equals("") && !board[y][x].equals(ex))
+							return false;
+					} else {
+						if (!board[y][x].equals(""))
+							return false;
+					}
 				}
 			}
 		}
@@ -330,7 +344,7 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public boolean addFlipper(String id, int x, int y, boolean orient) {
-		if (canPlace("", x, y, x + 1, y + 1)) {
+		if (canPlace("F", x, y, x + 1, y + 1)) {
 			if (!orient) {
 				gizmos.put(id, new LeftFlipper(id, new GizPoint(x, y), 1, 2,
 						cellWidth, cellHeight));

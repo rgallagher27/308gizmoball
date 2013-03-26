@@ -109,7 +109,7 @@ public class BuildController implements MouseListener, ActionListener {
 				break;
 			case BUILD_RIGHT_FLIPPER:
 				type = "add RFlip";
-				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, false);
+				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, true);
 				currentSelectedMode = 0;
 				break;
 	
