@@ -307,7 +307,7 @@ public class Overlord extends Observable implements iOverlord {
 			absorb = getGizmo(absorberName);
 		}
 		System.out.println("vx : " + vx + " vy: " + vy);
-		if ((int) vx == 0 && (int) vy == 0 && absorb != null) {
+		if (absorb != null) {
 			if (canPlaceBall(absorberName, x, y, x, y)) {
 				System.out.println("placing in absorber");
 				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
@@ -546,7 +546,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void removeBall(String ballName) {
+	public boolean removeBall(String ballName) {
 		iBall ball = balls.remove(ballName);
 		if (ball != null) {
 			for (iGizmo a : getGizmos()) {
@@ -554,7 +554,11 @@ public class Overlord extends Observable implements iOverlord {
 					((Absorber) a).removeStoredBall(ballName);
 				}
 			}
+			setChanged();
+			notifyObservers();
+			return true;
 		}
+		return false;
 
 	}
 
@@ -562,15 +566,17 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean moveBall(String ballName, String absorberName, float x,
 			float y) {
 		iBall temp = getBall(ballName);
+		if(temp == null) return false;
 		iGizmo absorb = null;
 		if (absorberName.length() > 0) {
 			absorb = getGizmo(absorberName);
 		}
 		Vect v = temp.getVelocity();
-		if (v.x() == 0.0 && v.y() == 0.0 && absorb != null) {
-			if (canPlaceBall("A", x, y, x, y)) {
+		if (absorb != null) {
+			if (canPlaceBall(absorberName, x, y, x, y)) {
 				temp.setLocation(new BallPoint(19, 19));
 				removeFromBoard(ballName);
+				temp.setCaptured(true);
 				((Absorber) absorb).captureBall(temp);
 				// setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the
 				// ball is inside the absorber, dont place on map

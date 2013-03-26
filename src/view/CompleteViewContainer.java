@@ -38,6 +38,8 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton addKeyTrigger;
 	private JRadioButton removeKeyTrigger;
 	private JRadioButton moveGizmos;
+	private JRadioButton deleteBall;
+	private JRadioButton moveBall;
 	
 	private LinkedList<JRadioButton> buttons;
 	
@@ -171,6 +173,14 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.add(tfVY);
 		ballInfo.setVisible(false);
 		
+		moveBall = new JRadioButton("Move Ball");
+		moveBall.addActionListener(buildCont);
+		moveBall.setActionCommand("MoveBall");
+		
+		deleteBall = new JRadioButton("Delete Ball");
+		deleteBall.addActionListener(buildCont);
+		deleteBall.setActionCommand("DeleteBall");
+		
 		
 		absorberInfo = new JPanel();
 		absorberInfo.setLayout(new BoxLayout(absorberInfo, BoxLayout.Y_AXIS));
@@ -210,6 +220,8 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(removeKeyTrigger);
 		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
+		buildButtonsPanel.add(moveBall);
+		buildButtonsPanel.add(deleteBall);
 		buildButtonsPanel.add(load);
 		buildButtonsPanel.add(save);
 		
@@ -227,6 +239,8 @@ public class CompleteViewContainer extends JFrame {
 		buttons.add(addKeyTrigger);
 		buttons.add(removeKeyTrigger);
 		buttons.add(addBall);
+		buttons.add(moveBall);
+		buttons.add(deleteBall);
 	
 		
 		

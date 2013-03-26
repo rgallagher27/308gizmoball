@@ -41,11 +41,14 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private final int BUILD_CIRCLE = 11;
 	private final int BUILD_MOVE_1 = 18;
 	private final int BUILD_MOVE_2 = 19;
+	private final int BUILD_MOVE_BALL_1 = 20;
+	private final int BUILD_MOVE_BALL_2 = 21;
+	private final int BUILD_REMOVE_BALL = 22;
 	
 	private String gizName;
 	private String oldGizName;
+	private String oldBall;
 	private int keyPressed;
-	private boolean run = false;
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -152,6 +155,20 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				}
 				currentSelectedMode = -1;
 				break;
+			case BUILD_MOVE_BALL_1:
+				type = "moved";
+				oldBall = ballName;
+				if(oldBall.equals("")) {
+					currentSelectedMode = 0;
+					success = false;
+				}else{
+				currentSelectedMode = BUILD_MOVE_BALL_2;
+				}
+				break;
+			case BUILD_MOVE_BALL_2:
+				success = overlord.moveBall(oldBall, gizName, x, y);
+				currentSelectedMode = -1;
+				break;
 			case BUILD_REMOVE_TRIGGER_1:
 				type = "trigger";
 				oldGizName = gizName;
@@ -179,10 +196,15 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				type = "remove the key connection ";
 				currentSelectedMode = -1;
 				break;
-				
+			case BUILD_REMOVE_BALL:
+				type = "remove ball";
+				success = overlord.removeBall(ballName);
+				break;
+			
 			}
 			
-			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2){
+			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2
+					&& currentSelectedMode != BUILD_MOVE_BALL_2){
 			frame.unselectAll();
 			
 			if(!success && currentSelectedMode != 0 && 
@@ -297,7 +319,12 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		case "Absorber": // TODO Implement with model
 			currentSelectedMode = BUILD_ABSORBER;
 			frame.showAbsInfo(true);
-		
+			break;
+		case "DeleteBall":
+			currentSelectedMode = BUILD_REMOVE_BALL;
+			break;
+		case "MoveBall":
+			currentSelectedMode = BUILD_MOVE_BALL_1;
 			break;
 		case "Remove": // TODO Implement with model
 			currentSelectedMode = BUILD_REMOVE;
