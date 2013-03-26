@@ -26,7 +26,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		cellHeight				= height;
 		rowWidth				= row;
 		rotation 				= 0;
-		rotationVelocity 		= 900;
+		rotationVelocity 		= 1000;
 		lineSegments 			= new ArrayList<LineSegment>();
 		circles					= new ArrayList<Circle>();
 		active 					= false;
