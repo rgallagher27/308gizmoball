@@ -526,6 +526,9 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse = null;
 		loadingFile = false;
 		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
+		
+		setChanged();
+		notifyObservers();
 	}
 
 	@Override
