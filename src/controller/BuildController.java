@@ -25,10 +25,16 @@ public class BuildController implements MouseListener, ActionListener {
 	private final int BUILD_ABSORBER = 6;
 	private final int BUILD_REMOVE = 7;
 	private final int BUILD_ROTATE = 8;
-	private final int BUILD_ADD_TRIGGER = 9;
-	private final int BUILD_REMOVE_TRIGGER = 10;
+	private final int BUILD_ADD_TRIGGER_1 = 9;
+	private final int BUILD_ADD_TRIGGER_2 = 12;
+	private final int BUILD_REMOVE_TRIGGER_1 = 10;
+	private final int BUILD_REMOVE_TRIGGER_2 = 13;
 	private final int ADD_BALL = 1;
 	private final int BUILD_CIRCLE = 11;
+	
+	private String gizName;
+	private String oldGizName;
+	
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -48,7 +54,7 @@ public class BuildController implements MouseListener, ActionListener {
 		int x = view.mouseX(e.getX());
 		int y = view.mouseY(e.getY());
 		
-		String gizName = overlord.getGizName(x, y);
+		gizName = overlord.getGizName(x, y);
 		String ballName = overlord.getBallName(x, y);
 		System.out.println("gizName: " + gizName);
 		String type = "";
@@ -60,7 +66,7 @@ public class BuildController implements MouseListener, ActionListener {
 				type = "ball";
 				if(gizName.contains("A")){
 					success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
-					frame.showBallInfo(false);
+					frame.showBallInfo(false); 
 					
 				}else{
 					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
@@ -89,14 +95,28 @@ public class BuildController implements MouseListener, ActionListener {
 				type = "circle";
 				success = overlord.addCircle(overlord.getNextName("C"), x, y);
 				break; 	
+			case BUILD_ADD_TRIGGER_1:
+				type = "trigger";
+				oldGizName = gizName;
+				currentSelectedMode = BUILD_ADD_TRIGGER_2;
+				break;
+			case BUILD_ADD_TRIGGER_2:
+				success = overlord.connect(oldGizName, gizName);
+				currentSelectedMode = 0;
+				oldGizName = "";
+				break;
 			}
+			
+			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2){
 			frame.unselectAll();
+			
 			if(!success && currentSelectedMode != 0){
 				frame.error("The " + type + " gizmo could not be added at that location!");
 			}
 			currentSelectedMode = 0;
 			success = false;
 			type = "";
+			}
 
 		}
 		}
@@ -221,11 +241,11 @@ public class BuildController implements MouseListener, ActionListener {
 			// buildView.rotate();
 			break;
 		case "AddTrigger": // TODO Implement with model
-			currentSelectedMode = BUILD_ADD_TRIGGER;
+			currentSelectedMode = BUILD_ADD_TRIGGER_1;
 			// buildView.addTrigger();
 			break;
 		case "RemoveTrigger": // TODO Implement with model
-			currentSelectedMode = BUILD_REMOVE_TRIGGER;
+			currentSelectedMode = BUILD_REMOVE_TRIGGER_1;
 			// buildView.removeTrigger();
 			break;
 		default:

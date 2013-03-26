@@ -176,6 +176,7 @@ public class Overlord extends Observable implements iOverlord {
 			return true;
 		}else{
 			
+			
 		for (int y = startY; y < endY; y++) {
 			for (int x = startX; x < endX; x++) {
 				if (ex.length() > 0) {
@@ -453,6 +454,22 @@ public class Overlord extends Observable implements iOverlord {
 		producer.addTrigger(consumer);
 		connects.add(producerGizmo);
 		return true;
+	}
+	
+	public boolean disconnect(String producerGizmo, String consumerGizmo){
+		String[] tmp = new String[2];
+		iGizmo producer = getGizmo(producerGizmo);
+		iGizmo consumer = getGizmo(consumerGizmo);
+		tmp[0] = producerGizmo;
+		tmp[1] = consumerGizmo;
+		if (producer == null || consumer == null)
+			return false;
+		producer.removeTrigger(consumer);
+		if(producer.getTriggerCount() == 0){
+		connects.remove(producerGizmo);
+		}
+		return true;
+		
 	}
 
 	@Override

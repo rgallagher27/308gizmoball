@@ -29,6 +29,9 @@ public class Gizmo implements iGizmo {
 	
 	
 
+	public int getTriggerCount(){
+		return triggers.size();
+	}
 	@Override
 	public String getIdentifier() {
 		return identifier;
