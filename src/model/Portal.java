@@ -56,7 +56,7 @@ public class Portal extends Gizmo implements iGizmo {
 	
 	@Override
 	public String toString() {
-		return ("Portal " + identifier + " " + point.getX() + " " + point.getY());
+		return ("Portal " + identifier + " " + point.getX() + " " + point.getY() + " " + secondPoint.getX() + " " + secondPoint.getY());
 	}
 	
 	private void fillLineSegments(){

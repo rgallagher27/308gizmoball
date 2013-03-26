@@ -115,6 +115,14 @@ public class FileParser {
                     overlord.fileError();
                 }
                 break;
+            case "Portal":
+                if(!checkIDs(ids, tok[1])) {
+                   overlord.addPortal(tok[1], Integer.parseInt(tok[2]), Integer.parseInt(tok[3]), Integer.parseInt(tok[4]), Integer.parseInt(tok[5]));
+                    ids.add(tok[1]);
+                } else {
+                    overlord.fileError();
+                }
+                break;
             case "Gravity":
                 overlord.setGravity(Float.parseFloat(tok[1]));
                 break;
