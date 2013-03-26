@@ -112,7 +112,11 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			case BUILD_ADD_TRIGGER_1:
 				type = "trigger";
 				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
 				currentSelectedMode = BUILD_ADD_TRIGGER_2;
+				}
 				break;
 			case BUILD_ADD_TRIGGER_2:
 				success = overlord.connect(oldGizName, gizName);
@@ -145,7 +149,11 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			case BUILD_MOVE_1:
 				type = "moved";
 				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
 				currentSelectedMode = BUILD_MOVE_2;
+				}
 				break;
 			case BUILD_MOVE_2:
 				if(gizName.equals("")){
@@ -172,7 +180,11 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			case BUILD_REMOVE_TRIGGER_1:
 				type = "trigger";
 				oldGizName = gizName;
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
 				currentSelectedMode = BUILD_REMOVE_TRIGGER_2;
+				}
 				break;
 			case BUILD_REMOVE_TRIGGER_2:
 				success = overlord.disconnect(oldGizName, gizName);
@@ -181,26 +193,36 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				currentSelectedMode = -1;
 				break;
 			case BUILD_ADD_KEY_TRIGGER_2:
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
 				success = overlord.keyConnect(keyPressed, false, gizName);
 				if(success){
 					success = overlord.keyConnect(keyPressed, true, gizName);
 				}
 				type = "add a key connection ";
 				currentSelectedMode = -1;
+				}
 				break;
 			case BUILD_REMOVE_KEY_TRIGGER_2:
+				if(gizName.equals("")){
+					currentSelectedMode = 0;
+				}else{
 				success = overlord.removeKeyConnect(keyPressed, false, gizName);
 				if(success){
 					success = overlord.removeKeyConnect(keyPressed, true, gizName);
 				}
 				type = "remove the key connection ";
 				currentSelectedMode = -1;
+				}
 				break;
 			case BUILD_REMOVE_BALL:
 				type = "remove ball";
 				success = overlord.removeBall(ballName);
 				break;
-			
+			default:
+				currentSelectedMode = 0;
+				break;
 			}
 			
 			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2
@@ -217,6 +239,8 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			currentSelectedMode = 0;
 			success = false;
 			type = "";
+			oldGizName = "";
+			oldBall = "";
 			}
 
 		}
