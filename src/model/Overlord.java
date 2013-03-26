@@ -167,13 +167,20 @@ public class Overlord extends Observable implements iOverlord {
 
 	 private boolean canPlace(String ex, int startX, int startY, int endX,
 			int endY) {
-
+		 if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
+					0 > endX || endX > 20 || 0 > endY || endY > 20){
+					 return false;
+				 }
 		if (startX == endX && startY == endY) {
 			if (!board[startY][startX].equals("")
 					&& !board[startY][startX].equals(ex))
 				return false;
 			return true;
 		} else if(ex.contains("F")){
+			if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
+					0 > endX || endX > 19 || 0 > endY || endY > 19){
+					 return false;
+				 }
 			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
 				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
 				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
@@ -253,13 +260,19 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addAbsorber(String id, int x, int y, int width, int height) {
-		System.out.println("width: " + width + " height : " + height);
-		if (canPlace("", x, y, (x + height-1), (y + width-1))) {
+	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
+		int height = Math.abs(y - y2);
+		int width = Math.abs(x - x2);
+
+		if(height < 1 || width < 1){
+			return false;
+		}
+
+		if (canPlace(id, x, y, x2, y2)) {
 			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
 					cellWidth, cellHeight));
-			setPlace(id, x, y, (x + (width-1)), (y + (height-1)));
-			
+			setPlace(id, x, y, x2, y2);
+
 			if (!loadingFile) {
 				setChanged();
 				notifyObservers(id);
