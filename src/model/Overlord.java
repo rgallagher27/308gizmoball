@@ -52,7 +52,6 @@ public class Overlord extends Observable implements iOverlord {
 				board[y][x] = "";
 			}
 		}
-
 		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
 
 	}
@@ -520,6 +519,7 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse.loadFile(mapName);
 		fileParse = null;
 		loadingFile = false;
+		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
 	}
 
 	@Override

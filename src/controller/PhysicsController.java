@@ -43,6 +43,13 @@ public class PhysicsController implements IController {
 		gameLoop.start();
 	
 	}
+	public void pause(){
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
+	}
 	
 	public void stop(){
 		gameLoop.stop();

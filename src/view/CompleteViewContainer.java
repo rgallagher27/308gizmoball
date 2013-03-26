@@ -21,6 +21,8 @@ public class CompleteViewContainer extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu menu;
 	
+	private JFileChooser chooser = new JFileChooser();
+	
 	private JRadioButton square;
 	private JRadioButton triangle;
 	private JRadioButton leftFlipper;
@@ -72,20 +74,16 @@ public class CompleteViewContainer extends JFrame {
 		return view;
 	}
 	
+	public void pause(){
+		control.pause();
+	}
+	
 	private void playButtons(){
 		playButtonsPanel = new JPanel();
-		load = new JButton("Load");
-		load.setActionCommand("Load");
-		load.addActionListener(buildCont);
-		save = new JButton("Save");
-		save.addActionListener(buildCont);
-		save.setActionCommand("Save");
-		play = new JButton("Play");
+		play = new JButton("Pause");
 		play.addActionListener(buildCont);
-		play.setActionCommand("Play");
+		play.setActionCommand("Pause");
 		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.Y_AXIS));
-		playButtonsPanel.add(load);
-		playButtonsPanel.add(save);
 		playButtonsPanel.add(play);
 		
 	}
@@ -177,6 +175,13 @@ public class CompleteViewContainer extends JFrame {
 		absorberInfo.add(absHeight);
 		absorberInfo.setVisible(false);
 		
+		load = new JButton("Load");
+		load.setActionCommand("Load");
+		load.addActionListener(buildCont);
+		save = new JButton("Save");
+		save.addActionListener(buildCont);
+		save.setActionCommand("Save");
+		
 		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
@@ -195,6 +200,8 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(removeKeyTrigger);
 		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
+		buildButtonsPanel.add(load);
+		buildButtonsPanel.add(save);
 		
 		
 	}
@@ -242,8 +249,14 @@ public class CompleteViewContainer extends JFrame {
 	}
 	
 	public File askForMapFile() {
-		JFileChooser chooser = new JFileChooser();
-		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+		if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+			return chooser.getSelectedFile();
+		} else{
+			return null;
+		}
+	}
+	public File askForMapFileSave() {
+		if(chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
 			return chooser.getSelectedFile();
 		} else{
 			return null;

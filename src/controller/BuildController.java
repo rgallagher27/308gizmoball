@@ -41,7 +41,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private String gizName;
 	private String oldGizName;
 	private int keyPressed;
-	
+	private boolean run = false;
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -200,26 +200,25 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			if (frame != null) {
 				java.io.File f = frame.askForMapFile();
 				if (f != null && f.exists()) {
-					frame.information(f.getPath()); // TODO Implement with model
+					overlord.loadGame(f.getPath());
+					//frame.information(f.getPath()); // TODO Implement with model
 				} else if (f != null) {
 					frame.error("This file doesn't exist.");
 				}
-			} else if (frame != null) {
-				java.io.File f = frame.askForMapFile();
-				if (f != null && f.exists()) {
-					frame.information(f.getPath()); // TODO Implement with model
-				} else if (f != null) {
-					frame.error("This file doesn't exist.");
-				}
-			}
+			} 
 			break;
 		case "Save":
-			java.io.File f = frame.askForMapFile();
+			java.io.File f = frame.askForMapFileSave();
 			if (f != null && !f.exists()) {
-				frame.information(f.getPath()); // TODO Implement with model
+				overlord.saveGame(f.getPath());
+				//frame.information(f.getPath()); // TODO Implement with model
 			} else if (f != null) {
 				frame.error("I can't overwrite an existing file.");
 			}
+			break;
+		case "Exit":
+			frame.dispose();
+			System.exit(0);
 			break;
 		case "Build":
 			frame.switchBuild();
@@ -227,66 +226,53 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		case "Play":
 			frame.switchPlay();
 			break;
-		// case BUILD_MODE:
-		// playView.dispose(); playView = null;
-		// buildView = new view.BuildView();
-		// break;
-		// case PLAY_MODE:
-		// buildView.dispose(); buildView = null;
-		// playView = new view.PlayView();
-		// break;
+		case "Pause":
+			frame.pause();
+			break;
+	
 		case "AddBall":
 			currentSelectedMode = ADD_BALL;
 			frame.showBallInfo(true);
-			// int velocity = -1;
-			// while(velocity < 0 || velocity > 200){
-			// String input =
-			// buildView.ask("Please give the initial velocity (0 - 200).");
-			// if(input == null) return;
-			// velocity = Integer.parseInt(input);
-			// }
-			// buildView.information("Initial velocity = " + velocity); //TODO
-			// Implement with model
 			break;
 		case "Square": // TODO Implement with model
 			currentSelectedMode = BUILD_SQUARE;
-			// buildView.addSquares();
+		
 			break;
 		case "Triangle": // TODO Implement with model
 			currentSelectedMode = BUILD_TRIANGLE;
-			// buildView.addTriangles();
+			
 			break;
 		case "LeftFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_LEFT_FLIPPER;
-			// buildView.addLeftFlipper();
+			
 			break;
 		case "Circle":
 			currentSelectedMode = BUILD_CIRCLE;
 			break;
 		case "RightFlipper": // TODO Implement with model
 			currentSelectedMode = BUILD_RIGHT_FLIPPER;
-			// buildView.addRightFlipper();
+	
 			break;
 		case "Absorber": // TODO Implement with model
 			currentSelectedMode = BUILD_ABSORBER;
 			frame.showAbsInfo(true);
-			// buildView.addAbsorber();
+		
 			break;
 		case "Remove": // TODO Implement with model
 			currentSelectedMode = BUILD_REMOVE;
-			// buildView.remove();
+		
 			break;
 		case "Rotate": // TODO Implement with model
 			currentSelectedMode = BUILD_ROTATE;
-			// buildView.rotate();
+			
 			break;
 		case "AddTrigger": // TODO Implement with model
 			currentSelectedMode = BUILD_ADD_TRIGGER_1;
-			// buildView.addTrigger();
+		
 			break;
 		case "RemoveTrigger": // TODO Implement with model
 			currentSelectedMode = BUILD_REMOVE_TRIGGER_1;
-			// buildView.removeTrigger();
+			
 			break;
 		case "AddKeyTrigger":
 			currentSelectedMode = BUILD_ADD_KEY_TRIGGER_1;
