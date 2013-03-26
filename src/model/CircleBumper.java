@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import model.physics.Circle;
@@ -8,6 +7,8 @@ import model.physics.LineSegment;
 import model.physics.Vect;
 
 public class CircleBumper extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "C";
 	
 	public CircleBumper(String identifier, GizPoint p, double row, double column, double width, double height) {
 		point 		= p;
@@ -32,6 +33,12 @@ public class CircleBumper extends Gizmo implements iGizmo {
 				);
 		*/		
 		
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return CircleBumper._TYPE;
 	}
 
 	public void setLocation(GizPoint p) {

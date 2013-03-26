@@ -1,14 +1,17 @@
 package model;
 
-import java.awt.Point;
-import java.util.List;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
-import model.physics.*;
+import model.physics.Circle;
+import model.physics.LineSegment;
 
 public interface iGizmo {
 	
 	public String getIdentifier();
+	
+	public String getGizType();
 	
 	public GizPoint getLocation();
 	
@@ -46,13 +49,15 @@ public interface iGizmo {
 	
 	public void performAction(boolean a);
 	
-	public void move();
+	public void move(double Delta_T);
 
 	public int getWidth();
 
 	public int getHeight();
 	
 	public void rotate();
+	
+	public Color getColour();
 	
 	/* Segment test code */
 	public List<LineSegment> getSegments();

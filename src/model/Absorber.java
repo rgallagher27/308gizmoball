@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,25 +8,35 @@ import model.physics.LineSegment;
 import model.physics.Vect;
 
 public class Absorber extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "A";
 
 	protected List<iBall> capturedBalls;
 	protected boolean active;
 	
 	public Absorber( String identifier, GizPoint p, double row, double column, double width, double height) {
-		point 		= p;
-		rowWidth 		= row;
-		columnHeight	= column;
-		this.identifier 	= identifier;
-		cellWidth		= width;
-		cellHeight	= height;
-		active 		= false;
+		lineSegments 		= new ArrayList<LineSegment>();
+		circles				= new ArrayList<Circle>();
+		capturedBalls 		= new ArrayList<iBall>();
 		
-		lineSegments 	= new ArrayList<LineSegment>();
-		circles		= new ArrayList<Circle>();
-		capturedBalls 	= new ArrayList<iBall>();
-		this.width = (int) row;
-		this.height = (int) column;
-		fillLineSegments();
+		point 				= p;
+		rowWidth 			= row;
+		columnHeight		= column;
+		cellWidth			= width;
+		cellHeight			= height;
+		active 				= false;
+		
+		this.identifier 	= identifier;
+		this.width 			= (int) width;
+		this.height 		= (int) height;
+		
+		this.fillLineSegments();
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return Absorber._TYPE;
 	}
 	
 	@Override
@@ -36,22 +44,15 @@ public class Absorber extends Gizmo implements iGizmo {
 	{
 		active = a;
 	}
-	
-	public void setLocation(GizPoint p) {
-		point = p;
-		fillLineSegments();
-	}
 
 	@Override
-	public void move() {
+	public void move(double Delta_T) {
 		if(active){
 			if((!capturedBalls.isEmpty())){
 				iBall b = capturedBalls.get(0);
-					  b.setVelocity(new Vect(0, -2));
-					  b.setLocation(new BallPoint(point.getX() + (width-1), point.getY() - 1));
-					  
+					  b.setVelocity(new Vect(0, -2.2));
+					  b.setLocation(new BallPoint(19, 18));
 					  b.setCaptured(false);
-					  System.out.println("firing " + b.getIdentifier());
 				capturedBalls.remove(0);
 			}
 		}
@@ -108,8 +109,6 @@ public class Absorber extends Gizmo implements iGizmo {
 				break;
 			}
 		}
-		
-		
 	}
 
 	@Override

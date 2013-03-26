@@ -1,59 +1,39 @@
 package controller;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Timer;
-
-import view.GizmoFactory;
-import view.framework.G2DAbstractCanvas;
-import view.framework.G2DObject;
 
 import model.Absorber;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
-import model.physics.Circle;
-import model.physics.LineSegment;
 
 public class PhysicsController implements IController {
 	
-	private final int FPS = 30;
-	private final double DELTA_T = ((double)1) / FPS;
-	private iOverlord overlord;
+	private final int FPS 			= 60;
+	private final double DELTA_T 	= ((double)1) / FPS;
 	
+	private iOverlord overlord;
 	private Timer gameLoop;
-		
+
 	public PhysicsController(iOverlord ov) 
 	{
 		super();
+		
 		this.overlord 	= ov;
-		
 		this.gameLoop 	= new Timer(1000/FPS, this);
-		
-		//this.gameLoop.start();
 	}
 
 	public void start(){
 		gameLoop.start();
-	
-	}
-	public void pause(){
-		if(gameLoop.isRunning()){
-			gameLoop.stop();
-		}else{
-			gameLoop.start();
-		}
 	}
 	
 	public void stop(){
 		gameLoop.stop();
-	
 		overlord.resetGame();
 	}
 	
@@ -87,7 +67,7 @@ public class PhysicsController implements IController {
 	{	
 		
 		int keyPressed = event.getKeyCode();
-		System.out.println("KEY PRESSED : " + keyPressed);
+		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
@@ -130,29 +110,24 @@ public class PhysicsController implements IController {
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{	
-		new Runnable() {
-			
-			@Override
-			public void run() {
-				double Current_Delta_T = DELTA_T;
-				/*
-				 * Move all the Balls while checking for possible
-				 * collisions with iGizmo  and iBall objects
-				 */
-				for(iBall b : overlord.getBalls()){
-					if(b.isCaptured())continue;
-					for(int i = 0; i < 50; i++){
-						Current_Delta_T = collideBalls(b, Current_Delta_T);
-						Current_Delta_T = collideGizmos(b, Current_Delta_T);
-						b.move(Current_Delta_T);
-					}
-				}
-				/*
-				 * Move all the static Gizmos
-				 */
-				overlord.moveAllGizmos();
+		/*
+		 * Move all the static Gizmos
+		 */
+		overlord.moveAllGizmos(DELTA_T);
+		
+		double Current_Delta_T = DELTA_T;
+		/*
+		 * Move all the Balls while checking for possible
+		 * collisions with iGizmo  and iBall objects
+		 */
+		for(int i = 0; i < 100; i++){
+		for(iBall b : overlord.getBalls()){
+			if(b.isCaptured())continue;
+				Current_Delta_T = collideBalls(b, Current_Delta_T);
+				Current_Delta_T = collideGizmos(b, Current_Delta_T);
+				b.move(Current_Delta_T);
 			}
-		}.run();
+		}
 	}
 
 	
@@ -172,7 +147,6 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			
 			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
 			else{
 				((Absorber)closestGizmo).captureBall(b);
@@ -210,6 +184,15 @@ public class PhysicsController implements IController {
 			return Current_Delta_T;
 		}else{
 			return Current_Delta_T;
+		}
+	}
+
+	@Override
+	public void pause() {
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
 		}
 	}
 

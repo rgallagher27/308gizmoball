@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.Point;
-
 import model.physics.Angle;
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -9,6 +7,8 @@ import model.physics.LineSegment;
 import model.physics.Vect;
 
 public class LeftFlipper extends Flipper {
+	
+	public static final String _TYPE = "LF";
 
 	public LeftFlipper(String identifier, GizPoint p, double row, double column, double width, double height) {
 		super(identifier, p, row, column, width, height);
@@ -16,29 +16,38 @@ public class LeftFlipper extends Flipper {
 		maxRotation = -90;
 		fillLineSegments();
 	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return LeftFlipper._TYPE;
+	}
 
 	@Override
-	public void move()
+	public void move(double Delta_T)
 	{
+		if(rotation < maxRotation){
+			rotation = maxRotation;
+		}
+		if(rotation > minRotation){
+			rotation = minRotation;
+		}
 		if(active){
 			if(rotation > maxRotation){
-				rotation -= rotationIncrement;
-				if(rotation > maxRotation){
-					rotation = maxRotation;
-				}
+				super.flipperVelocity = (rotationVelocity * Delta_T);
+				rotation = rotation - super.flipperVelocity;
+
 				angularVel = -angularVel;  // these may be wrong
-				fillLineSegments();
 			}
 		}else{
 			if(rotation < minRotation){
-				rotation += rotationIncrement;
-				if(rotation < minRotation){
-					rotation = minRotation;
-				}
+				super.flipperVelocity = (rotationVelocity * Delta_T);
+				rotation = rotation + super.flipperVelocity;
+
 				angularVel = +angularVel; // these may be wrong + / - dependant on direction.
-				fillLineSegments();
 			}
 		}
+		fillLineSegments();
 	}
 	
 	public void setLocation(GizPoint p) {
@@ -59,25 +68,10 @@ public class LeftFlipper extends Flipper {
 		lineSegments.clear();
 		circles.clear();
 		
-		/*double topLX = (point.getX() * cellWidth) - (cellWidth / 2);
-		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
-		
-		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth) - (cellWidth );
-		double topRY = topLY;
-		
-		double bottomLX = topLX;
-		double bottomLY = (point.getY() * cellHeight) + (columnHeight * cellHeight) - (cellHeight / 2);
-		
-		double bottomRX = topRX;
-		double bottomRY = bottomLY;
-		
-		double centerX = topLX - topRX;
-		double centerY = topLY - bottomLY;
-		*/
-		double topLX = (point.getX() * cellWidth);
+		double topLX = point.getX() * cellWidth;
 		double topLY = (point.getY() * cellHeight) + (cellWidth/4);
 		
-		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth/2);
+		double topRX = topLX + (cellWidth/2);
 		double topRY = topLY;
 		
 		double bottomLX = topLX;
@@ -87,71 +81,48 @@ public class LeftFlipper extends Flipper {
 		double bottomRY = bottomLY;
 		
 		double centerXTop = (topLX + cellWidth/4);
-		double centerYTop = topLY + 1;
+		double centerYTop = topLY;
 		rotationCenter = new Vect(centerXTop, centerYTop);
 		
-		double centerXBot = (bottomLX + cellWidth/4);
-		double centerYBot = bottomLY + 1;
+		double centerXBot = centerXTop;
+		double centerYBot = bottomLY;
 		
 		Vect centerTop = new Vect(centerXTop, centerYTop);  // center point of rotation
 		
 		nonRotationalCircle = new Circle(centerXTop, centerYTop, cellWidth/4);
 		Circle bot = new Circle(centerXBot, centerYBot, cellWidth/4);
 		
-		
-	//	LineSegment line1 = new LineSegment(topLX, topLY, topRX, topRY);
-	//	LineSegment line2 = new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY);
 		LineSegment line3 = new LineSegment(topLX, topLY, bottomLX, bottomLY);
+		
+		Circle topL = new Circle(topLX, topLY, 0);
+		
+		Circle botL = new Circle(bottomLX, bottomLY, 0);
+		
 		LineSegment line4 = new LineSegment(topRX, topRY, bottomRX, bottomRY);
 		
-		/*Geometry.rotateAround(line1, 
-				new Vect(centerX, centerY), 
-				new Angle(Math.toRadians(rotation))
-			 );
-
-		Geometry.rotateAround(line2, 
-				new Vect(centerX, centerY), 
-				new Angle(Math.toRadians(rotation))
-			);
+		Circle topR = new Circle(topRX,topRY, 0);
 		
-		Geometry.rotateAround(line3, 
-				new Vect(centerX, centerY), 
-				new Angle(Math.toRadians(rotation))
-			);
+		Circle botR = new Circle(bottomRX,bottomRY, 0);
 		
-		Geometry.rotateAround(line4, 
-				new Vect(centerX, centerY), 
-				new Angle(Math.toRadians(rotation))
-			);
-		*/
 		Angle rotationA = new Angle(Math.toRadians(rotation));
 		line3 = Geometry.rotateAround(line3, centerTop, rotationA);
 		line4 = Geometry.rotateAround(line4, centerTop, rotationA);
 		bot = Geometry.rotateAround(bot, centerTop, rotationA);
+		topL = Geometry.rotateAround(topL, centerTop, rotationA);
+		topR = Geometry.rotateAround(topR, centerTop, rotationA);
+		botL = Geometry.rotateAround(botL, centerTop, rotationA);
+		botR = Geometry.rotateAround(botR, centerTop, rotationA);
 		
-		//lineSegments.add(line1);  -- remove top line
-		//lineSegments.add(line2);  -- remove bot line, inside circle.
 		lineSegments.add(line3);
 		lineSegments.add(line4);
 		
-		//circles.add(top);
+		circles.add(nonRotationalCircle);
 		circles.add(bot);
+		circles.add(topR);
+		circles.add(topL);
+		circles.add(botR);
+		circles.add(botL);
 		
-		/*this.lineSegments.add(new LineSegment(topLX, topLY, topRX, topRY));
-		
-		this.lineSegments.add(new LineSegment(bottomLX, bottomLY, bottomRX, bottomRY));
-		
-		this.lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
-		
-		this.lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
-		
-		this.circles.add(new Circle(topLX, topLY, 0));
-		
-		this.circles.add(new Circle(bottomLX, bottomLY, 0));
-		
-		this.circles.add(new Circle(topRX, topRY, 0));
-		
-		this.circles.add(new Circle(bottomRX, bottomRY, 0));*/
 	}
 
 	@Override

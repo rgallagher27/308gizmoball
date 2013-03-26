@@ -1,0 +1,133 @@
+
+Circle cir1 3 0 
+Circle cir2 2 1 
+Circle cir3 1 2 
+Circle cir4 1 3 
+Circle cir5 1 4 
+Circle cir6 1 5 
+Circle cir7 2 6 
+Circle cir8 3 7 
+Circle cir9 4 8 
+Circle cir10 5 8 
+Circle cir11 6 8 
+Circle cir12 7 7 
+Circle cir13 8 6 
+Circle cir14 9 5 
+Circle cir15 9 4 
+Circle cir16 9 3 
+Circle cir17 9 2 
+Circle cir18 8 1 
+Circle cir19 7 0 
+Circle cir20 6 0 
+Circle cir21 5 0 
+Circle cir22 4 0 
+Circle cir23 3 1 
+Circle cir24 2 2 
+Circle cir25 2 4 
+Circle cir26 2 3 
+Circle cir27 2 5 
+Circle cir28 3 6 
+Circle cir29 4 7 
+Circle cir30 5 7 
+Circle cir31 6 7 
+Circle cir32 7 6 
+Circle cir33 8 5 
+Circle cir34 8 4 
+Circle cir35 8 3 
+Circle cir36 8 2 
+Circle cir37 7 1 
+Circle cir38 6 1 
+Circle cir39 5 1 
+Circle cir40 4 1 
+Circle cir41 3 2 
+Circle cir42 7 2 
+Square sqr1 11 1 
+Square sqr2 13 1 
+Square sqr3 12 1 
+Square sqr4 14 1 
+Square sqr5 15 1 
+Square sqr6 16 1 
+Square sqr7 17 1 
+Square sqr8 18 1 
+Square sqr9 18 2 
+Square sqr10 18 3 
+Square sqr11 18 4 
+Square sqr12 18 5 
+Square sqr13 18 6 
+Square sqr14 18 7 
+Square sqr15 17 7 
+Square sqr16 16 7 
+Square sqr17 15 7 
+Square sqr18 14 7 
+Square sqr19 13 7 
+Square sqr20 12 7 
+Square sqr21 11 7 
+Square sqr22 11 6 
+Square sqr23 11 5 
+Square sqr24 11 4 
+Square sqr25 11 3 
+Square sqr26 11 2 
+Square sqr27 12 2 
+Square sqr28 13 2 
+Square sqr29 14 2 
+Square sqr30 15 2 
+Square sqr31 16 2 
+Square sqr32 17 2 
+Square sqr33 17 3 
+Square sqr34 17 4 
+Square sqr35 17 5 
+Square sqr36 17 6 
+Square sqr37 16 6 
+Square sqr38 15 6 
+Square sqr39 14 6 
+Square sqr40 13 6 
+Square sqr41 12 6 
+Square sqr42 12 5 
+Square sqr43 12 4 
+Square sqr44 12 3 
+Triangle tri1 6 11 
+Triangle tri2 10 11 
+Rotate tri2
+Triangle tri3 10 15 
+Rotate tri3
+Rotate tri3
+Triangle tri4 6 15 
+Rotate tri4
+Rotate tri4
+Rotate tri4
+Square sqr45 5 11 
+Square sqr46 5 12 
+Square sqr47 5 13 
+Square sqr48 5 14 
+Square sqr49 5 15 
+Square sqr50 5 16 
+Square sqr51 6 16 
+Square sqr52 7 16 
+Square sqr53 8 16 
+Square sqr54 9 16 
+Square sqr55 10 16 
+Square sqr56 11 16 
+Square sqr57 11 15 
+Square sqr58 11 14 
+Square sqr59 11 13 
+Square sqr60 11 12 
+Square sqr61 11 11 
+Square sqr62 11 10 
+Square sqr63 10 10 
+Square sqr64 9 10 
+Square sqr65 8 10 
+Square sqr66 7 10 
+Square sqr67 6 10 
+Square sqr68 5 10 
+Ball b1 7.0 12.0 1.0 1.0
+Ball b2 9.0 14.0 -1.0 -1.0
+Ball b3 4.0 3.0 1.0 1.0
+Ball b4 6.0 5.0 -1.0 -1.0
+Ball b5 14.0 3.0 1.0 1.0
+Ball b6 15.0 4.0 -1.0 -1.0
+Ball b1 4.0 5.0 1.0 1.0
+Ball b2 7.0 14.0 1.0 1.0
+Ball b3 9.0 12.0 1.0 1.0
+Ball b4 14.0 5.0 1.0 1.0
+Ball b5 16.0 3.0 1.0 1.0
+Ball b6 16.0 5.0 1.0 1.0

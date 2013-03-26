@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.awt.Color;
 import java.util.List;
 
-import model.iGizmo;
 import model.iOverlord;
+import model.physics.Circle;
+import model.physics.LineSegment;
 import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DObject;
@@ -16,22 +16,18 @@ public class GraphicsController {
 	private GizmoFactory gizFactory;
 	
 	public GraphicsController(iOverlord ov){
-		overlord = ov;
-		gizFactory = new GizmoFactory(this);
+		overlord 	= ov;
+		gizFactory 	= new GizmoFactory(this);
 		
 	}
 	
-	public ArrayList<String> getGizTriggers(){
-		return overlord.getConnects();
+	public String getGizType(String name)
+	{
+		return overlord.getGizmo(name).getGizType();
 	}
-	public ArrayList<String> getGizTriggers(String name){
-		ArrayList<String> tmp = new ArrayList<String>();
-		for(iGizmo giz : overlord.getGizmo(name).getTriggers()){
-			tmp.add(giz.getIdentifier());
-		}
-		return tmp;
-	}
-	public int getGizX(String name){
+	
+	public int getGizX(String name)
+	{
 		return overlord.getGizmo(name).getLocation().getX();
 	}
 
@@ -49,6 +45,10 @@ public class GraphicsController {
 	
 	public double getGizHeight(String name){
 		return overlord.getGizmo(name).getCellHeight();
+	}
+	
+	public Color getGizColour(String name){
+		return overlord.getGizmo(name).getColour();
 	}
 	
 	public float getBallX(String name){
@@ -75,7 +75,15 @@ public class GraphicsController {
 		return overlord.getGizmo(name).getColumnHeight();
 	}
 	
+	public List<LineSegment> getLines(String name)
+	{
+		return overlord.getGizmo(name).getSegments();
+	}
 	
+	public List<Circle> getCircles(String name)
+	{
+		return overlord.getGizmo(name).getCircles();
+	}
 	
 	public double getBallCellHeight(String name){
 		return overlord.getBall(name).getCellHeight();
@@ -83,20 +91,19 @@ public class GraphicsController {
 	
 	public G2DObject getGraphicsGizmo(String gizmo){
 		if(overlord.getGizmo(gizmo) != null){
-		return gizFactory.draw(gizmo);
+			return gizFactory.draw(gizmo);
 		}
 		return null;
 	}
 	
 	public G2DObject getGraphicsBall(String ball){
 		if(overlord.getBall(ball) != null){
-		return gizFactory.drawBall(ball);
+			return gizFactory.drawBall(ball);
 		} 
 		return null;
 	}
 	
-	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
-			double rowWidth, double columnHeight) {
+	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight) {
 		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
 		
 	}

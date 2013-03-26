@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.geom.Point2D;
-
 import model.physics.Circle;
 import model.physics.Vect;
 
