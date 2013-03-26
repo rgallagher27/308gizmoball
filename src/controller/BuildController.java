@@ -232,6 +232,8 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e.getActionCommand());
+		frame.unselectAll();
+		frame.select(e.getActionCommand());
 		frame.focusView();
 		switch (e.getActionCommand()) {
 		

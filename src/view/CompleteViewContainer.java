@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 
 import java.io.File;
+import java.util.LinkedList;
 
 import javax.swing.*;
 
@@ -38,6 +39,8 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton removeKeyTrigger;
 	private JRadioButton moveGizmos;
 	
+	private LinkedList<JRadioButton> buttons;
+	
 	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
@@ -66,6 +69,7 @@ public class CompleteViewContainer extends JFrame {
 		control = ic;
 		buildCont = bc;
 		view.addController(ic, gc, bc);
+		buttons = new LinkedList<JRadioButton>();
 		buildInitial();
 		switchPlay();
 		
@@ -208,6 +212,22 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(ballInfo);
 		buildButtonsPanel.add(load);
 		buildButtonsPanel.add(save);
+		
+		buttons.add(absorber);
+		buttons.add(square);
+		buttons.add(triangle);
+		buttons.add(circle);
+		buttons.add(leftFlipper);
+		buttons.add(rightFlipper);
+		buttons.add(remove);
+		buttons.add(rotate);
+		buttons.add(moveGizmos);
+		buttons.add(addTrigger);
+		buttons.add(removeTrigger);
+		buttons.add(addKeyTrigger);
+		buttons.add(removeKeyTrigger);
+		buttons.add(addBall);
+	
 		
 		
 	}
@@ -380,23 +400,19 @@ public class CompleteViewContainer extends JFrame {
 	
 	
 	public void unselectAll(){
-		square.setSelected(false);
-		triangle.setSelected(false);
-		leftFlipper.setSelected(false);
-		rightFlipper.setSelected(false);
-		absorber.setSelected(false);
-		remove.setSelected(false);
-		rotate.setSelected(false);
-		addTrigger.setSelected(false);
-		removeTrigger.setSelected(false);
-		circle.setSelected(false);
-		addBall.setSelected(false);
-		removeKeyTrigger.setSelected(false);
-		addKeyTrigger.setSelected(false);
-		moveGizmos.setSelected(false);
+		for(JRadioButton j : buttons){
+			j.setSelected(false);
+		}
 		showBallInfo(false);
 		showAbsInfo(false);
 		showKeyInfo(false);
+	}
+	
+	public void select(String t){
+		for(JRadioButton j : buttons){
+			if(j.getActionCommand().equals(t))
+				j.setSelected(true);
+		}
 	}
 	
 	public void focusView(){

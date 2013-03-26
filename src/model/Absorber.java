@@ -36,6 +36,11 @@ public class Absorber extends Gizmo implements iGizmo {
 	{
 		active = a;
 	}
+	
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
 
 	@Override
 	public void move() {

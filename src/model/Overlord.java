@@ -342,12 +342,12 @@ public class Overlord extends Observable implements iOverlord {
 		iGizmo temp = getGizmo(gizmoName);
 		if(temp == null) return false;
 		
-		if (canPlace(gizmoName, x, y, x + (temp.getWidth() - 1),
-				y + (temp.getHeight() - 1))) {
+		if (canPlace(gizmoName, x, y, x + (temp.getWidth()),
+				y + (temp.getHeight()))) {
 			temp.setLocation(new GizPoint(x, y));
 			removeFromBoard(gizmoName);
-			setPlace(gizmoName, x, y, x + (temp.getWidth() - 1),
-					y + (temp.getHeight() - 1));
+			setPlace(gizmoName, x, y, x + (temp.getWidth()),
+					y + (temp.getHeight()));
 			setChanged();
 			notifyObservers(gizmoName);
 			return true;
