@@ -503,6 +503,8 @@ public class Overlord extends Observable implements iOverlord {
 			return false;
 		producer.addTrigger(consumer);
 		connects.add(producerGizmo);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 	
@@ -518,6 +520,8 @@ public class Overlord extends Observable implements iOverlord {
 		if(producer.getTriggerCount() == 0){
 		connects.remove(producerGizmo);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 		
 	}
