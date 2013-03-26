@@ -585,6 +585,17 @@ public class Overlord extends Observable implements iOverlord {
 	public String getNextName(String name){
 		int maxNo = 0;
 		int no;
+		if(name.length() == 2){
+			for(iGizmo giz: getGizmos()){
+				if(giz.getIdentifier().contains(name)){
+					if(giz.getIdentifier().length() != 2){
+					no = Integer.parseInt(giz.getIdentifier().substring(2));
+					if(no > maxNo) maxNo = no;
+					}
+				}
+			}
+			return name + (maxNo+1);
+		}
 		if(name.contains("B")){
 			for(iBall ball: balls.values()){
 				no = Integer.parseInt(ball.getIdentifier().substring(1));

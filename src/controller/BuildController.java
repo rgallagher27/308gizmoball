@@ -19,6 +19,8 @@ public class BuildController implements MouseListener, ActionListener {
 	private ViewCanvas view;
 	private CompleteViewContainer frame;
 	private int currentSelectedMode;
+	private String oldName;
+	private String gizName;
 	
 	private final int BUILD_SQUARE = 2;
 	private final int BUILD_TRIANGLE = 3;
@@ -38,6 +40,8 @@ public class BuildController implements MouseListener, ActionListener {
 		this.frame = frame;
 		overlord = ov;
 		currentSelectedMode = 0;
+		oldName = "";
+		gizName = "";
 	
 	}
 
@@ -46,6 +50,7 @@ public class BuildController implements MouseListener, ActionListener {
 		int x = view.mouseX(e.getX());
 		int y = view.mouseY(e.getY());
 		
+		String oldName = gizName;
 		String gizName = overlord.getGizName(x, y);
 		String ballName = overlord.getBallName(x, y);
 		System.out.println("gizName: " + gizName);
@@ -95,6 +100,16 @@ public class BuildController implements MouseListener, ActionListener {
 			case BUILD_REMOVE:
 				type = "remove";
 				success = overlord.removeGizmo(gizName);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_LEFT_FLIPPER:
+				type = "add LFlip";
+				success = overlord.addFlipper(overlord.getNextName("LF"), x, y, false);
+				currentSelectedMode = 0;
+				break;
+			case BUILD_RIGHT_FLIPPER:
+				type = "add RFlip";
+				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, false);
 				currentSelectedMode = 0;
 				break;
 	
