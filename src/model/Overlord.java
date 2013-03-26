@@ -444,9 +444,28 @@ public class Overlord extends Observable implements iOverlord {
 	}
 	
 	@Override
-	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean removeKeyConnect(int keyNum, boolean direction, String gizName) {
+		ArrayList<iGizmo> tmp;
+		iGizmo con = getGizmo(gizName);
+		if (con == null)
+			return false;
+		if (direction) {
+			tmp = (ArrayList<iGizmo>) keyTriggersUp.get(keyNum);
+			if (tmp == null) {
+				return false;
+			}
+			tmp.remove(con);
+			keyTriggersUp.put(keyNum, tmp);
+			return true;
+		} else {
+			tmp = (ArrayList<iGizmo>) keyTriggersDown.get(keyNum);
+			if (tmp == null) {
+				return false;
+			}
+			tmp.remove(con);
+			keyTriggersDown.put(keyNum, tmp);
+			return true;
+		}
 	}
 
 	@Override

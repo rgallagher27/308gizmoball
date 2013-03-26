@@ -133,9 +133,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				currentSelectedMode = 0;
 				break;
 			case BUILD_REMOVE_KEY_TRIGGER_2:
-				success = overlord.keyConnect(keyPressed, false, gizName);
+				success = overlord.removeKeyConnect(keyPressed, false, gizName);
 				if(success){
-					success = overlord.keyConnect(keyPressed, true, gizName);
+					success = overlord.removeKeyConnect(keyPressed, true, gizName);
 				}
 				type = "remove the key connection ";
 				currentSelectedMode = 0;
