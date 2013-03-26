@@ -9,19 +9,9 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import model.Absorber;
-import model.CircleBumper;
-import model.Flipper;
-import model.Overlord;
-import model.SquareBumper;
-import model.TriangleBumper;
-import model.iBall;
-import model.iGizmo;
-import model.iOverlord;
-import view.framework.*;
+import view.framework.G2DAbstractCanvas;
 import controller.BuildController;
 import controller.GraphicsController;
-import controller.PhysicsController;
 import controller.IController;
 
 public class ViewCanvas extends JPanel implements Observer {
@@ -99,8 +89,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	}
 	
 	private Image bufferImage;
-
-	private Object G2DObject;
 	
 	@Override 
 	public void paint(Graphics g)
@@ -129,7 +117,6 @@ public class ViewCanvas extends JPanel implements Observer {
 		for(String ball : eventListener.getBalls()){
 			graphics.getGraphicsBall(ball).draw(abstractCanvas);
 		}
-		
             
 		g.drawImage(bufferImage, 0, 0, null);
 	}

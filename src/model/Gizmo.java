@@ -12,6 +12,8 @@ import model.physics.LineSegment;
 
 public class Gizmo implements iGizmo {
 	
+	public static final String _TYPE = "G";
+	
 	protected GizPoint point;
 	protected double rowWidth, columnHeight, cellWidth, cellHeight;
 	protected double rotation, rotationVelocity;
@@ -29,8 +31,6 @@ public class Gizmo implements iGizmo {
 		height   = 0;
 		colour   = this.setColour();
 	}
-	
-	
 
 	public int getTriggerCount(){
 		return triggers.size();
@@ -220,5 +220,11 @@ public class Gizmo implements iGizmo {
 	{
 		Random rand = new Random();
 		return this.colour = new Color(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+	}
+
+	@Override
+	public String getGizType() 
+	{
+		return Gizmo._TYPE;
 	}
 }

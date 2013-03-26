@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Color;
 
+import model.LeftFlipper;
 import model.physics.Circle;
 import model.physics.LineSegment;
 import view.framework.G2DAbstractCanvas;
@@ -36,12 +37,102 @@ public class GizmoFactory {
     }
 	
 	public G2DObject draw(String giz){
-		if(giz.contains("F")) return drawFlipper(giz);
-		if(giz.contains("A")) return drawAbsorber(giz);
-		if(giz.contains("S")) return drawSquareBumper(giz);
-		if(giz.contains("T")) return drawTriangleBumper(giz);
-		if(giz.contains("C")) return drawCircleBumper(giz);
-		return null;
+		switch (controller.getGizType(giz)) {
+			case "LF":
+				return drawLeftFlipper(giz);
+			case "RF":
+				return drawRightFlipper(giz);
+			case "A":
+				return drawAbsorber(giz);
+			case "S":
+				return drawSquareBumper(giz);
+			case "T":
+				return drawTriangleBumper(giz);
+			case "C":
+				return drawCircleBumper(giz);
+	
+			default:
+				return null;
+		}
+	}
+	
+	public G2DObject drawLeftFlipper(String flipper)
+	{
+		double flipperX = 0;
+		double flipperY = 0;
+		double cellWidth 			= controller.getGizWidth(flipper);
+		double cellheight			= controller.getGizHeight(flipper);
+		double flipperGridX			= controller.getGizX(flipper);
+		double flipperGridY			= controller.getGizY(flipper);
+		double flipperGridWidth		= controller.getGizRowWidth(flipper);
+		double flipperGridHeight	= controller.getGizColumnHeight(flipper);
+
+		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+		double flipperHeight 		= (flipperGridHeight * cellheight);
+		
+		flipperX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
+		flipperY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		
+		
+		G2DGroup flipperGroup = new G2DGroup();
+		
+		G2DObject flipperMain = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
+        
+		rotateObjectAroundSelf(controller.getGizRotation(flipper),
+									flipperGroup,
+									flipperX,
+									flipperY);
+		
+		flipperGroup.add(flipperMain);
+		
+		for(LineSegment l : controller.getLines(flipper)){
+			flipperGroup.add(new G2DLine(new G2DPoint(l.p1().x(), l.p1().y()), new G2DPoint(l.p2().x(), l.p2().y()), Color.green));
+		}
+		
+		for(Circle c : controller.getCircles(flipper)){
+			flipperGroup.add(new G2DCircle(new G2DPoint(c.getCenter().x(), c.getCenter().y()), c.getRadius(), Color.green));
+		}
+		
+		return flipperGroup;
+	}
+	
+	public G2DObject drawRightFlipper(String flipper)
+	{
+		double flipperX = 0;
+		double flipperY = 0;
+		double cellWidth 			= controller.getGizWidth(flipper);
+		double cellheight			= controller.getGizHeight(flipper);
+		double flipperGridX			= controller.getGizX(flipper);
+		double flipperGridY			= controller.getGizY(flipper);
+		double flipperGridWidth		= controller.getGizRowWidth(flipper);
+		double flipperGridHeight	= controller.getGizColumnHeight(flipper);
+
+		double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
+		double flipperHeight 		= (flipperGridHeight * cellheight);
+		
+		flipperX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
+		flipperY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
+		
+		G2DGroup flipperGroup = new G2DGroup();
+		
+		G2DObject flipperMain = new G2DFlipper(flipperX, flipperY, (int)flipperWidth, (int)flipperHeight, controller.getGizColour(flipper));
+        
+		rotateObjectAroundSelf(controller.getGizRotation(flipper),
+									flipperGroup,
+									flipperX,
+									flipperY);
+		
+		flipperGroup.add(flipperMain);
+		
+		for(LineSegment l : controller.getLines(flipper)){
+			flipperGroup.add(new G2DLine(new G2DPoint(l.p1().x(), l.p1().y()), new G2DPoint(l.p2().x(), l.p2().y()), Color.green));
+		}
+		
+		for(Circle c : controller.getCircles(flipper)){
+			flipperGroup.add(new G2DCircle(new G2DPoint(c.getCenter().x(), c.getCenter().y()), c.getRadius(), Color.green));
+		}
+		
+		return flipperGroup;
 	}
 	
 	public G2DObject drawFlipper(String flipper)

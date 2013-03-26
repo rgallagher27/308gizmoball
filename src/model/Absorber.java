@@ -8,6 +8,8 @@ import model.physics.LineSegment;
 import model.physics.Vect;
 
 public class Absorber extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "A";
 
 	protected List<iBall> capturedBalls;
 	protected boolean active;
@@ -29,6 +31,12 @@ public class Absorber extends Gizmo implements iGizmo {
 		this.height 		= (int) height;
 		
 		this.fillLineSegments();
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return Absorber._TYPE;
 	}
 	
 	@Override
@@ -101,8 +109,6 @@ public class Absorber extends Gizmo implements iGizmo {
 				break;
 			}
 		}
-		
-		
 	}
 
 	@Override

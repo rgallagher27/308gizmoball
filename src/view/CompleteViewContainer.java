@@ -1,17 +1,27 @@
 package view;
 
-import java.awt.*;
-
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.TextField;
 import java.io.File;
 import java.util.LinkedList;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import controller.BuildController;
-// import controller.GUIController;
-import controller.GUIListener;
 import controller.GraphicsController;
 import controller.IController;
+// import controller.GUIController;
 
 public class CompleteViewContainer extends JFrame {
 	

@@ -6,6 +6,8 @@ import model.physics.Circle;
 import model.physics.LineSegment;
 
 public class SquareBumper extends Gizmo implements iGizmo {
+	
+	public static final String _TYPE = "S";
 
 	public SquareBumper(String identifier, GizPoint p, double rowWidth, double columnHeight, double cellWidth, double cellHeight) {
 		super();
@@ -23,6 +25,12 @@ public class SquareBumper extends Gizmo implements iGizmo {
 		
 		fillLineSegments();
 		
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return SquareBumper._TYPE;
 	}
 
 	private void fillLineSegments()

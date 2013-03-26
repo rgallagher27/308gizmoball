@@ -10,6 +10,8 @@ import model.physics.Vect;
 
 public class Flipper extends Gizmo implements iGizmo {
 	
+	public static final String _TYPE = "F";
+	
 	protected double maxRotation, minRotation;
 	protected boolean active;
 	protected Vect rotationCenter;
@@ -32,6 +34,12 @@ public class Flipper extends Gizmo implements iGizmo {
 		this.identifier 		= identifier;
 		this.width 				= 2;
 		this.height 			= 2;
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return Flipper._TYPE;
 	}
 
 	@Override

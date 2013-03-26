@@ -7,12 +7,20 @@ import model.physics.LineSegment;
 import model.physics.Vect;
 
 public class RightFlipper extends Flipper {
+	
+	public static final String _TYPE = "RF";
 
 	public RightFlipper(String identifier, GizPoint p,  double row, double column, double width, double height) {
 		super(identifier, p, row, column, width, height);
 		minRotation = 0;
 		maxRotation = 90;
 		fillLineSegments();
+	}
+	
+	@Override
+	public String getGizType() 
+	{
+		return RightFlipper._TYPE;
 	}
 	
 	@Override

@@ -192,4 +192,13 @@ public class PhysicsController implements IController {
 		}
 	}
 
+	@Override
+	public void pause() {
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
+	}
+
 }

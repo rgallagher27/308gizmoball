@@ -11,6 +11,8 @@ public interface iGizmo {
 	
 	public String getIdentifier();
 	
+	public String getGizType();
+	
 	public GizPoint getLocation();
 	
 	public void setLocation(GizPoint p);

@@ -1,8 +1,6 @@
 package model;
 
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,13 +9,10 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import model.physics.Vect;
 import exception.CannotRotateException;
 
-import model.physics.Vect;
-
 public class Overlord extends Observable implements iOverlord {
-
-	private Dimension gridDimentions, canvasDimentions;
 
 	private HashMap<String, iGizmo> gizmos;
 	private HashMap<Integer, ArrayList<iGizmo>> keyTriggersDown;
@@ -33,19 +28,14 @@ public class Overlord extends Observable implements iOverlord {
 
 	public Overlord(Dimension gridDimentions, Dimension canvasDimentions) {
 
-		this.gridDimentions = gridDimentions;
-		this.canvasDimentions = canvasDimentions;
-		cellWidth = canvasDimentions.getWidth() / gridDimentions.getWidth();
-		cellHeight = canvasDimentions.getHeight() / gridDimentions.getHeight();
-		gizmos = new HashMap<String, iGizmo>();
-		balls = new HashMap<String, iBall>();
-		keyTriggersDown = new HashMap<Integer, ArrayList<iGizmo>>();
-		keyTriggersUp = new HashMap<Integer, ArrayList<iGizmo>>();
-		connects = new ArrayList<String>();
-		board = new String[gridDimentions.height][gridDimentions.width]; // x
-																			// along,
-																			// y
-																			// up
+		cellWidth 			= canvasDimentions.getWidth() / gridDimentions.getWidth();
+		cellHeight			= canvasDimentions.getHeight() / gridDimentions.getHeight();
+		gizmos 				= new HashMap<String, iGizmo>();
+		balls 				= new HashMap<String, iBall>();
+		keyTriggersDown 	= new HashMap<Integer, ArrayList<iGizmo>>();
+		keyTriggersUp 		= new HashMap<Integer, ArrayList<iGizmo>>();
+		connects 			= new ArrayList<String>();
+		board 				= new String[gridDimentions.height][gridDimentions.width]; 
 
 		for (int x = 0; x < gridDimentions.width; x++) {
 			for (int y = 0; y < gridDimentions.height; y++) {
@@ -60,22 +50,25 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean removeGizmo(String gizmoName) {
 		iGizmo gizRem = getGizmo(gizmoName);
 		if(gizRem != null){
-		for (iGizmo giz : getGizmos()) {
-			giz.removeTrigger(gizRem);
-		}
-		for (Integer keyVal : keyTriggersDown.keySet()) {
-			keyTriggersDown.get(keyVal).remove(gizRem);
-
-		}
-		for (Integer keyVal : keyTriggersUp.keySet()) {
-			keyTriggersUp.get(keyVal).remove(gizRem);
-		}
-		gizmos.remove(gizmoName);
-		connects.remove(gizmoName);
-		removeFromBoard(gizmoName);
-		setChanged();
-		notifyObservers(gizmoName);
-		return true;
+			for (iGizmo giz : getGizmos()) {
+				giz.removeTrigger(gizRem);
+			}
+			for (Integer keyVal : keyTriggersDown.keySet()) {
+				keyTriggersDown.get(keyVal).remove(gizRem);
+	
+			}
+			for (Integer keyVal : keyTriggersUp.keySet()) {
+				keyTriggersUp.get(keyVal).remove(gizRem);
+			}
+			
+			gizmos.remove(gizmoName);
+			connects.remove(gizmoName);
+			removeFromBoard(gizmoName);
+			
+			setChanged();
+			notifyObservers(gizmoName);
+			
+			return true;
 		}
 		return false;
 	}
@@ -92,8 +85,8 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public List<iBall> getBalls() {
-		ArrayList<iBall> tmp = new ArrayList<iBall>(balls.values());
-		ArrayList<iBall> returned = new ArrayList<iBall>();
+		ArrayList<iBall> tmp 		= new ArrayList<iBall>(balls.values());
+		ArrayList<iBall> returned 	= new ArrayList<iBall>();
 		for (iBall b : tmp) {
 			if (!b.isCaptured())
 				returned.add(b);
@@ -112,7 +105,6 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public void setGravity(float newGrav) {
 		gravity = newGrav;
-
 	}
 
 	@Override
@@ -163,13 +155,12 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public void setFriction(float mu, float mu2) {
-		this.mu = mu;
-		this.mu2 = mu2;
+		this.mu 	= mu;
+		this.mu2 	= mu2;
 
 	}
 
-	private boolean canPlace(String ex, int startX, int startY, int endX,
-			int endY) {
+	private boolean canPlace(String ex, int startX, int startY, int endX, int endY) {
 		 if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
 					0 > endX || endX > 20 || 0 > endY || endY > 20){
 					 return false;
@@ -616,9 +607,9 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void moveAllGizmos() {
+	public void moveAllGizmos(double Delta_T) {
 		for (iGizmo giz : getGizmos()) {
-			giz.move();
+			giz.move(Delta_T);
 		}
 		setChanged();
 		notifyObservers();

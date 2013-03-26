@@ -16,11 +16,18 @@ public class GraphicsController {
 	private GizmoFactory gizFactory;
 	
 	public GraphicsController(iOverlord ov){
-		overlord = ov;
-		gizFactory = new GizmoFactory(this);
+		overlord 	= ov;
+		gizFactory 	= new GizmoFactory(this);
 		
 	}
-	public int getGizX(String name){
+	
+	public String getGizType(String name)
+	{
+		return overlord.getGizmo(name).getGizType();
+	}
+	
+	public int getGizX(String name)
+	{
 		return overlord.getGizmo(name).getLocation().getX();
 	}
 
@@ -84,20 +91,19 @@ public class GraphicsController {
 	
 	public G2DObject getGraphicsGizmo(String gizmo){
 		if(overlord.getGizmo(gizmo) != null){
-		return gizFactory.draw(gizmo);
+			return gizFactory.draw(gizmo);
 		}
 		return null;
 	}
 	
 	public G2DObject getGraphicsBall(String ball){
 		if(overlord.getBall(ball) != null){
-		return gizFactory.drawBall(ball);
+			return gizFactory.drawBall(ball);
 		} 
 		return null;
 	}
 	
-	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns,
-			double rowWidth, double columnHeight) {
+	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight) {
 		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
 		
 	}
