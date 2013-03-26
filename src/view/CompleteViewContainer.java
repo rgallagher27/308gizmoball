@@ -38,7 +38,7 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel buttonsPanel;
 	private JPanel content;
 	private JPanel ballInfo;
-	
+	private JPanel absorberInfo;
 	
 	
 	private JButton load;
@@ -47,7 +47,8 @@ public class CompleteViewContainer extends JFrame {
 	
 	private TextField tfVX;
 	private TextField tfVY;
-	
+	private TextField absHeight;
+	private TextField absWidth;
 	
 	public CompleteViewContainer(){
 		view = new ViewCanvas();
@@ -143,8 +144,23 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.add(tfVY);
 		ballInfo.setVisible(false);
 		
+		
+		absorberInfo = new JPanel();
+		absorberInfo.setLayout(new BoxLayout(absorberInfo, BoxLayout.Y_AXIS));
+		absorberInfo.add(new JLabel("Absorber Width:"));
+		absWidth = new TextField();
+		absWidth.setMaximumSize(new Dimension(100,30));
+		absorberInfo.add(absWidth);
+		absorberInfo.add(new JLabel("Absorber Height:"));
+		absHeight = new TextField();
+		absHeight.setMaximumSize(new Dimension(100,30));
+		absorberInfo.add(absHeight);
+		absorberInfo.setVisible(false);
+		
+		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
+		buildButtonsPanel.add(absorberInfo);
 		buildButtonsPanel.add(square);
 		buildButtonsPanel.add(triangle);
 		buildButtonsPanel.add(circle);
@@ -264,6 +280,32 @@ public class CompleteViewContainer extends JFrame {
 		return Double.MIN_VALUE;
 	}
 	
+	public int getAbsorberWidth(){
+		int in;
+		try{
+			in = Integer.parseInt(absWidth.getText());
+		}catch(NumberFormatException nfe){
+			error("The absorber width must be atleast 1 wide");
+			in = Integer.MIN_VALUE;
+		}
+		if(in > 0) return in;
+		
+		return Integer.MIN_VALUE;
+	}
+	
+	public int getAbsorberHeight(){
+		int in;
+		try{
+			in = Integer.parseInt(absHeight.getText());
+		}catch(NumberFormatException nfe){
+			error("The absorber height must be atleast 1 high");
+			in = Integer.MIN_VALUE;
+		}
+		if(in > 0) return in;
+		
+		return Integer.MIN_VALUE;
+	}
+	
 	public void showBallInfo(boolean b){
 		if(b == false){
 			tfVX.setText("");
@@ -272,6 +314,16 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.setVisible(b);
 		pack();
 	}
+	
+	public void showAbsInfo(boolean b){
+		if(b == false){
+			absWidth.setText("");
+			absHeight.setText("");
+		}
+		absorberInfo.setVisible(b);
+		pack();
+	}
+	
 	
 	public void unselectAll(){
 		square.setSelected(false);
@@ -286,6 +338,7 @@ public class CompleteViewContainer extends JFrame {
 		circle.setSelected(false);
 		addBall.setSelected(false);
 		showBallInfo(false);
+		showAbsInfo(false);
 	}
 	
 	public boolean getMode(){

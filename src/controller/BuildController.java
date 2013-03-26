@@ -70,6 +70,13 @@ public class BuildController implements MouseListener, ActionListener {
 					}
 				}
 				break;
+			case BUILD_ABSORBER:
+				type = "absorber";
+				if(frame.getAbsorberHeight() != Integer.MIN_VALUE && frame.getAbsorberWidth() != Integer.MIN_VALUE){
+					success = overlord.addAbsorber(overlord.getNextName("A"), x, y, (x +frame.getAbsorberWidth()), (y + frame.getAbsorberHeight()));
+					frame.showAbsInfo(false);
+				}
+				break;
 			case BUILD_SQUARE:
 				type = "square";
 				success = overlord.addSquare(overlord.getNextName("S"), x, y);
@@ -202,6 +209,7 @@ public class BuildController implements MouseListener, ActionListener {
 			break;
 		case "Absorber": // TODO Implement with model
 			currentSelectedMode = BUILD_ABSORBER;
+			frame.showAbsInfo(true);
 			// buildView.addAbsorber();
 			break;
 		case "Remove": // TODO Implement with model
