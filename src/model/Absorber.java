@@ -12,12 +12,14 @@ public class Absorber extends Gizmo implements iGizmo {
 	public static final String _TYPE = "A";
 
 	protected List<iBall> capturedBalls;
+	protected List<iBall> originalBalls;
 	protected boolean active;
 	
 	public Absorber( String identifier, GizPoint p, double row, double column, double width, double height) {
 		lineSegments 		= new ArrayList<LineSegment>();
 		circles				= new ArrayList<Circle>();
 		capturedBalls 		= new ArrayList<iBall>();
+		originalBalls		= new ArrayList<iBall>();
 		
 		point 				= p;
 		rowWidth 			= row;
@@ -97,9 +99,17 @@ public class Absorber extends Gizmo implements iGizmo {
 		
 	}
 	
-	public void captureBall(iBall ball)
+	public void captureBall(iBall ball, boolean b)
 	{
 		capturedBalls.add(ball);
+		if(b){
+			originalBalls.add(ball);
+		}
+	}
+	
+	public void reset(){
+		capturedBalls.clear();
+		capturedBalls.addAll(originalBalls);
 	}
 
 	public void removeStoredBall(String ballName) {

@@ -30,6 +30,12 @@ public class TriangleBumper extends Gizmo implements iGizmo {
 		fillLineSegments();
 	}
 	
+	@Override
+	public String getGizType() 
+	{
+		return TriangleBumper._TYPE;  
+	}
+	
 	public void setLocation(GizPoint p) {
 		point = p;
 		fillLineSegments();

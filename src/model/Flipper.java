@@ -48,6 +48,11 @@ public class Flipper extends Gizmo implements iGizmo {
 		super.setColour();
 	}
 	
+	public void rotate(){
+		
+	}
+	
+	
 	
 	
 	@Override

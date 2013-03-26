@@ -306,7 +306,7 @@ public class Overlord extends Observable implements iOverlord {
 
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
-				((Absorber) absorb).captureBall(newBall);
+				((Absorber) absorb).captureBall(newBall, true);
 				return true;
 			}
 		} else {
@@ -571,7 +571,7 @@ public class Overlord extends Observable implements iOverlord {
 				temp.setLocation(new BallPoint(19, 19));
 				removeFromBoard(ballName);
 				temp.setCaptured(true);
-				((Absorber) absorb).captureBall(temp);
+				((Absorber) absorb).captureBall(temp, true);
 				// setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the
 				// ball is inside the absorber, dont place on map
 				setChanged();
@@ -650,6 +650,8 @@ public class Overlord extends Observable implements iOverlord {
 			if (giz instanceof Flipper) {
 				giz.setRotation(0);
 				giz.performAction(false);
+			}else if(giz instanceof Absorber){
+				((Absorber) giz).reset();
 			}
 		}
 		setChanged();
