@@ -18,13 +18,14 @@ public class Ball implements iBall {
 	protected double i = 0;
 	protected double radius;
 	protected Vect velocityOrig;
+	protected boolean origCapture;
 
-	public Ball(String identifier, BallPoint p, double row, double column, double width, double height, double velocityX, double velocityY) {
+	public Ball(String identifier, BallPoint p, double row, double column, double width, double height, double velocityX, double velocityY, boolean isCaptured) {
 		point 			= p;
 		startPoint		= new BallPoint(p.getX(), p.getY());
-		this.row 			= row;
-		this.column 		= column;
-		this.identifier 	= identifier;
+		this.row 		= row;
+		this.column 	= column;
+		this.identifier = identifier;
 		cellWidth		= width;
 		cellHeight		= height;
 		
@@ -32,10 +33,11 @@ public class Ball implements iBall {
 		velocity 		= new Vect(velocityX, velocityY);
 		velocityOrig    = new Vect(velocityX, velocityY);
 		
-		isCaptured		= false;
+		this.isCaptured	= isCaptured;
+		origCapture 	= isCaptured;
 		radius = 0.25F;
 		//physicsCircle	= new Circle(point.getX(), point.getY(), cellWidth/4);
-		physicsCircle = new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
+		physicsCircle 	= new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
 		System.out.println("new " + identifier);
 	}
 
@@ -193,4 +195,9 @@ public class Ball implements iBall {
 	public Vect getOrigVelocity(){
 		return velocityOrig;
 	}
+	
+	public boolean getOrigCapture(){
+		return origCapture;
+	}
+	
 }

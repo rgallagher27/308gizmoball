@@ -1,30 +1,17 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
-import java.awt.TextField;
-import java.io.File;
+import java.awt.*;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.LayoutStyle;
+import java.io.File;
+import java.util.LinkedList;
+
+import javax.swing.*;
 
 import controller.BuildController;
+// import controller.GUIController;
+import controller.GUIListener;
 import controller.GraphicsController;
 import controller.IController;
-// import controller.GUIController;
 
 public class CompleteViewContainer extends JFrame {
 	
@@ -34,6 +21,8 @@ public class CompleteViewContainer extends JFrame {
 	private boolean mode;
 	private JMenuBar menuBar;
 	private JMenu menu;
+	
+	private JFileChooser chooser = new JFileChooser();
 	
 	private JRadioButton square;
 	private JRadioButton triangle;
@@ -45,12 +34,23 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton addTrigger;
 	private JRadioButton removeTrigger;
 	private JRadioButton addBall;
+	private JRadioButton circle;
+	private JRadioButton addKeyTrigger;
+	private JRadioButton removeKeyTrigger;
+	private JRadioButton moveGizmos;
+	private JRadioButton deleteBall;
+	private JRadioButton moveBall;
+	
+	private LinkedList<JRadioButton> buttons;
+	
 	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
 	private JPanel buttonsPanel;
 	private JPanel content;
 	private JPanel ballInfo;
+	private JPanel absorberInfo;
+	private JPanel keyInfo;
 	
 	private JButton load;
 	private JButton save;
@@ -58,7 +58,9 @@ public class CompleteViewContainer extends JFrame {
 	
 	private TextField tfVX;
 	private TextField tfVY;
-	
+	private TextField absHeight;
+	private TextField absWidth;
+	private JLabel keyPressed;
 	
 	public CompleteViewContainer(){
 		view = new ViewCanvas();
@@ -69,28 +71,26 @@ public class CompleteViewContainer extends JFrame {
 		control = ic;
 		buildCont = bc;
 		view.addController(ic, gc, bc);
+		buttons = new LinkedList<JRadioButton>();
 		buildInitial();
 		switchPlay();
+		
 	}
 	
 	public ViewCanvas getPlayView() {
 		return view;
 	}
 	
+	public void pause(){
+		control.pause();
+	}
+	
 	private void playButtons(){
 		playButtonsPanel = new JPanel();
-		load = new JButton("Load");
-		load.setActionCommand("Load");
-		load.addActionListener(buildCont);
-		save = new JButton("Save");
-		save.addActionListener(buildCont);
-		save.setActionCommand("Save");
-		play = new JButton("Play");
+		play = new JButton("Pause");
 		play.addActionListener(buildCont);
-		play.setActionCommand("Play");
+		play.setActionCommand("Pause");
 		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.Y_AXIS));
-		playButtonsPanel.add(load);
-		playButtonsPanel.add(save);
 		playButtonsPanel.add(play);
 		
 	}
@@ -109,6 +109,11 @@ public class CompleteViewContainer extends JFrame {
 		triangle.addActionListener(buildCont);
 		triangle.setActionCommand("Triangle");
 		
+		circle = new JRadioButton("Add Circle");
+		circle.addActionListener(buildCont);
+		circle.setActionCommand("Circle");
+		
+		
 		leftFlipper = new JRadioButton("Add Left Flipper");
 		leftFlipper.addActionListener(buildCont);
 		leftFlipper.setActionCommand("LeftFlipper");
@@ -125,6 +130,10 @@ public class CompleteViewContainer extends JFrame {
 		rotate.addActionListener(buildCont);
 		rotate.setActionCommand("Rotate");
 		
+		moveGizmos = new JRadioButton("Move Gizmo");
+		moveGizmos.addActionListener(buildCont);
+		moveGizmos.setActionCommand("Move");
+		
 		addTrigger = new JRadioButton("Add Trigger");
 		addTrigger.addActionListener(buildCont);
 		addTrigger.setActionCommand("AddTrigger");
@@ -132,6 +141,21 @@ public class CompleteViewContainer extends JFrame {
 		removeTrigger = new JRadioButton("Remove Trigger");
 		removeTrigger.addActionListener(buildCont);
 		removeTrigger.setActionCommand("RemoveTrigger");
+		
+		addKeyTrigger = new JRadioButton("Add Key Trigger");
+		addKeyTrigger.addActionListener(buildCont);
+		addKeyTrigger.setActionCommand("AddKeyTrigger");
+		
+		keyInfo = new JPanel();
+		keyInfo.setLayout(new BoxLayout(keyInfo, BoxLayout.Y_AXIS));
+		keyInfo.add(new JLabel("Key Pressed:"));
+		keyPressed = new JLabel();
+		keyInfo.add(keyPressed);
+		keyInfo.setVisible(false);
+		
+		removeKeyTrigger = new JRadioButton("Remove Key Trigger");
+		removeKeyTrigger.addActionListener(buildCont);
+		removeKeyTrigger.setActionCommand("RemoveKeyTrigger");
 		
 		addBall = new JRadioButton("Add Ball");
 		addBall.addActionListener(buildCont);
@@ -149,18 +173,76 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.add(tfVY);
 		ballInfo.setVisible(false);
 		
+		moveBall = new JRadioButton("Move Ball");
+		moveBall.addActionListener(buildCont);
+		moveBall.setActionCommand("MoveBall");
+		
+		deleteBall = new JRadioButton("Delete Ball");
+		deleteBall.addActionListener(buildCont);
+		deleteBall.setActionCommand("DeleteBall");
+		
+		
+		absorberInfo = new JPanel();
+		absorberInfo.setLayout(new BoxLayout(absorberInfo, BoxLayout.Y_AXIS));
+		absorberInfo.add(new JLabel("Absorber Width:"));
+		absWidth = new TextField();
+		absWidth.setMaximumSize(new Dimension(100,30));
+		absorberInfo.add(absWidth);
+		absorberInfo.add(new JLabel("Absorber Height:"));
+		absHeight = new TextField();
+		absHeight.setMaximumSize(new Dimension(100,30));
+		absorberInfo.add(absHeight);
+		absorberInfo.setVisible(false);
+		
+		load = new JButton("Load");
+		load.setActionCommand("Load");
+		load.addActionListener(buildCont);
+		save = new JButton("Save");
+		save.addActionListener(buildCont);
+		save.setActionCommand("Save");
+		
+		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
+		buildButtonsPanel.add(absorberInfo);
 		buildButtonsPanel.add(square);
 		buildButtonsPanel.add(triangle);
+		buildButtonsPanel.add(circle);
 		buildButtonsPanel.add(leftFlipper);
 		buildButtonsPanel.add(rightFlipper);
 		buildButtonsPanel.add(remove);
 		buildButtonsPanel.add(rotate);
+		buildButtonsPanel.add(moveGizmos);
 		buildButtonsPanel.add(addTrigger);
 		buildButtonsPanel.add(removeTrigger);
+		buildButtonsPanel.add(addKeyTrigger);
+		buildButtonsPanel.add(keyInfo);
+		buildButtonsPanel.add(removeKeyTrigger);
 		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
+		buildButtonsPanel.add(moveBall);
+		buildButtonsPanel.add(deleteBall);
+		buildButtonsPanel.add(load);
+		buildButtonsPanel.add(save);
+		
+		buttons.add(absorber);
+		buttons.add(square);
+		buttons.add(triangle);
+		buttons.add(circle);
+		buttons.add(leftFlipper);
+		buttons.add(rightFlipper);
+		buttons.add(remove);
+		buttons.add(rotate);
+		buttons.add(moveGizmos);
+		buttons.add(addTrigger);
+		buttons.add(removeTrigger);
+		buttons.add(addKeyTrigger);
+		buttons.add(removeKeyTrigger);
+		buttons.add(addBall);
+		buttons.add(moveBall);
+		buttons.add(deleteBall);
+	
+		
 		
 	}
 	private void buildInitial(){
@@ -195,6 +277,8 @@ public class CompleteViewContainer extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		/* setup content area */
+
+
 		getContentPane().add(view, BorderLayout.WEST);
 		getContentPane().add(buttonsPanel, BorderLayout.EAST);
 		setVisible(true);
@@ -205,8 +289,14 @@ public class CompleteViewContainer extends JFrame {
 	}
 	
 	public File askForMapFile() {
-		JFileChooser chooser = new JFileChooser();
-		if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+		if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+			return chooser.getSelectedFile();
+		} else{
+			return null;
+		}
+	}
+	public File askForMapFileSave() {
+		if(chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
 			return chooser.getSelectedFile();
 		} else{
 			return null;
@@ -227,17 +317,15 @@ public class CompleteViewContainer extends JFrame {
 		mode = false;
 		view.setMode(false);
 		pack();
-		revalidate();
 		repaint();
 	}
 
 	public void switchPlay() {
 		buildButtonsPanel.setVisible(false);
 		playButtonsPanel.setVisible(true);
-		mode = false;
+		mode = true;
 		view.setMode(true);
 		pack();
-		revalidate();
 		repaint();
 	}
 	
@@ -268,6 +356,32 @@ public class CompleteViewContainer extends JFrame {
 		return Double.MIN_VALUE;
 	}
 	
+	public int getAbsorberWidth(){
+		int in;
+		try{
+			in = Integer.parseInt(absWidth.getText());
+		}catch(NumberFormatException nfe){
+			error("The absorber width must be atleast 1L wide");
+			in = Integer.MIN_VALUE;
+		}
+		if(in > 0) return in;
+		error("The absorber width must be atleast 1L wide");
+		return Integer.MIN_VALUE;
+	}
+	
+	public int getAbsorberHeight(){
+		int in;
+		try{
+			in = Integer.parseInt(absHeight.getText());
+		}catch(NumberFormatException nfe){
+			error("The absorber height must be atleast 1L high");
+			in = Integer.MIN_VALUE;
+		}
+		if(in > 0) return in;
+		error("The absorber height must be atleast 1L high");
+		return Integer.MIN_VALUE;
+	}
+	
 	public void showBallInfo(boolean b){
 		if(b == false){
 			tfVX.setText("");
@@ -277,18 +391,50 @@ public class CompleteViewContainer extends JFrame {
 		pack();
 	}
 	
+	public void showKeyInfo(boolean b){
+		if(b == false){
+			keyPressed.setText("");
+		}
+		keyInfo.setVisible(b);
+		pack();
+	}
+	
+	public void showAbsInfo(boolean b){
+		if(b == false){
+			absWidth.setText("");
+			absHeight.setText("");
+		}
+		absorberInfo.setVisible(b);
+		pack();
+	}
+	
+	public void setKey(int key){
+		keyPressed.setText(""+key);
+	}
+	
+	
 	public void unselectAll(){
-		square.setSelected(false);
-		triangle.setSelected(false);
-		leftFlipper.setSelected(false);
-		rightFlipper.setSelected(false);
-		absorber.setSelected(false);
-		remove.setSelected(false);
-		rotate.setSelected(false);
-		addTrigger.setSelected(false);
-		removeTrigger.setSelected(false);
-		addBall.setSelected(false);
+		for(JRadioButton j : buttons){
+			j.setSelected(false);
+		}
 		showBallInfo(false);
+		showAbsInfo(false);
+		showKeyInfo(false);
+	}
+	
+	public void select(String t){
+		for(JRadioButton j : buttons){
+			if(j.getActionCommand().equals(t))
+				j.setSelected(true);
+		}
+	}
+	
+	public void focusView(){
+		view.requestFocus();
+	}
+	
+	public boolean getMode(){
+		return mode;
 	}
 
 	private static final long serialVersionUID = 1L;

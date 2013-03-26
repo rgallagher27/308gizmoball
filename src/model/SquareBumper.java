@@ -57,6 +57,11 @@ public class SquareBumper extends Gizmo implements iGizmo {
 		
 		
 	}
+	
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
 
 	@Override
 	public String toString() {

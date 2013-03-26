@@ -42,6 +42,11 @@ public class LeftFlipper extends Flipper {
 		fillLineSegments();
 	}
 	
+	public void setLocation(GizPoint p) {
+		point = p;
+		fillLineSegments();
+	}
+	
 	@Override
 	public void setRotation(double r) {
 		rotation    = -r;
