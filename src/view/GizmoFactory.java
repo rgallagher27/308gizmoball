@@ -1,11 +1,9 @@
 package view;
 
 import java.awt.Color;
-import java.util.List;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
-
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DCircle;
 import view.framework.G2DFlipper;
