@@ -1,3 +1,5 @@
+Gravity 25
+
 Triangle T 19 0
 Rotate T
 
@@ -65,4 +67,4 @@ Connect C183 RF137
 Absorber A 0 19 20 20
 KeyConnect key 84 down A
 
-Ball B1 0 15 0 0
+Ball B1 0 15 0 -25

@@ -124,7 +124,7 @@ public class FileParser {
                 }
                 break;
             case "Gravity":
-                overlord.setGravity(Float.parseFloat(tok[1]));
+                overlord.setGravity(((double)1) / Float.parseFloat(tok[1]));
                 break;
             case "Friction":
                 overlord.setFriction(Float.parseFloat(tok[1]), Float.parseFloat(tok[2]));

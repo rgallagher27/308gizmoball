@@ -24,7 +24,7 @@ public interface iOverlord {
 	public boolean moveGizmo(String gizmoName, int x, int y);
 	public boolean moveBall(String ballName, String absorberName, float x, float y);
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException;
-	public void setGravity(float newGrav);
+	public void setGravity(double newGrav);
 	public void setFriction(float mu, float mu2);
 	public double getGravity();
 	public float getFrictionMu();

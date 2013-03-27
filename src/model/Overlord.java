@@ -102,11 +102,10 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void setGravity(float newGrav) {
-		System.out.println("Setting Gravity");
-		gravity = ((double)1)/newGrav;
+	public void setGravity(double newGrav) {
+		gravity = newGrav;
 		
-		for(iBall b : getBalls()){
+		for(iBall b : getBalls()) { 
 			b.setgravity(gravity);
 		}
 	}

@@ -94,8 +94,6 @@ public class Ball implements iBall {
 			double mu  = 0.015F;
 			double mu2 = 0.015F;
 			
-			System.err.println(gravity);
-			
 			double friction = (1 - mu * deltaT - mu2 * Math.abs(velocity.length()) * deltaT);
 			
 			Vect newVelocity = new Vect(velocity.x() * friction, velocity.y() * friction + gravity * deltaT);
@@ -198,6 +196,8 @@ public class Ball implements iBall {
 	@Override
 	public void setgravity(double g) {
 		this.gravity = g;
+		
+		System.err.println("Gravity set to: " + g);
 	}
 	
 }

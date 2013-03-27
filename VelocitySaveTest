@@ -22,6 +22,7 @@ Square S42 4 2
 Square S02 0 2
 Square S72 7 2
 Square S22 2 2
+Portal P1 1 9 17 1
 Circle C129 12 9
 Triangle T2 1 1
 Circle C109 10 9
@@ -50,7 +51,6 @@ Connect C156 RF137
 Connect C165 RF137
 Connect C174 RF137
 Connect C183 RF137
-Connect A A
 KeyConnect Key 84 down A
 KeyConnect Key 87 down RF137
 KeyConnect Key 32 down LF92
@@ -60,4 +60,5 @@ KeyConnect Key 87 up RF137
 KeyConnect Key 32 up LF92
 KeyConnect Key 32 up RF112
 KeyConnect Key 81 up LF87
-Ball B1 0.0 15.0 0.0 0.0
+Ball B2 6.0 12.0 50 25
+Ball B1 0.0 15.0 0 -25
