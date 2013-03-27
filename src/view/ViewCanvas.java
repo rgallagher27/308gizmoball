@@ -113,7 +113,6 @@ public class ViewCanvas extends JPanel implements Observer {
 				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
 			if(graphics.getGizSelected(gizmo) == true){
-				System.out.println("gizmo " + gizmo + " is selected");
 				for(G2DObject ob : graphics.getGraphicsBounds(gizmo)){
 					ob.draw(abstractCanvas);
 				}

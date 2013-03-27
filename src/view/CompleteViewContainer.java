@@ -342,7 +342,7 @@ public class CompleteViewContainer extends JFrame {
 	public double getBallVX(){
 		double in;
 		try{
-			in = Double.parseDouble(tfVX.getText());
+			in = ( Double.parseDouble(tfVX.getText()) / 25 );
 		}catch(NumberFormatException nfe){
 			error("The ball X velocity must be between -200 and 200L");
 			in = Double.MIN_VALUE;
@@ -356,7 +356,7 @@ public class CompleteViewContainer extends JFrame {
 	public double getBallVY(){
 		double in;
 		try{
-			in = Double.parseDouble(tfVY.getText());
+			in = ( Double.parseDouble(tfVY.getText()) / 25 );
 		}catch(NumberFormatException nfe){
 			error("The ball Y velocity must be between -200 and 200L");
 			in = Double.MIN_VALUE;

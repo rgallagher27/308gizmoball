@@ -155,7 +155,6 @@ public class PhysicsController implements IController {
 				b.setCaptured(true);
 			}
 			else if(closestGizmo.getGizType() == Portal._TYPE){
-				System.out.println(closestGizmo.toString());
 				overlord.setBallLocation(b.getIdentifier(), 
 										 ((Portal) closestGizmo).getSecondLocation().getX(), 
 										 ((Portal) closestGizmo).getSecondLocation().getY());

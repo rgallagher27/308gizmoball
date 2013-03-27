@@ -89,7 +89,7 @@ public class Ball implements iBall {
 
 	@Override
 	public void move(double deltaT) {
-		if(!isCaptured){	
+		if(!isCaptured){		
 			deltaT /= 2;
 			double mu  = 0.015F;
 			double mu2 = 0.015F;

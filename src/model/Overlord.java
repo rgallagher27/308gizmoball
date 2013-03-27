@@ -434,7 +434,6 @@ public class Overlord extends Observable implements iOverlord {
 			}
 			tmp.add(con);
 			keyTriggersDown.put(keyNum, tmp);
-			System.out.println("added");
 			return true;
 		}
 
@@ -626,9 +625,7 @@ public class Overlord extends Observable implements iOverlord {
 	public void resetGame() {
 		for (iBall ball : balls.values()) {
 			ball.setLocation(ball.getOrigLocation());
-			System.out.println(ball.getIdentifier() + " : "
-					+ ball.getOrigLocation().getX() + " - "
-					+ ball.getOrigLocation().getY());
+
 			ball.setVelocity(ball.getOrigVelocity());
 			ball.setCaptured(ball.getOrigCapture());
 		}
@@ -642,13 +639,6 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		setChanged();
 		notifyObservers();
-
-		for (int i = 0; i < 20; i++) {
-			for (int y = 0; y < 20; y++) {
-				System.out.print(board[i][y]);
-			}
-			System.out.println();
-		}
 	}
 
 	public String getGizName(int x, int y) {
