@@ -16,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.KeyStroke;
 
 import controller.BuildController;
 import controller.GraphicsController;
@@ -29,7 +30,7 @@ public class CompleteViewContainer extends JFrame {
 	private ViewCanvas view;
 	private BuildController buildCont;
 	private JMenuBar menuBar;
-	private JMenuItem playMenu;
+	private JMenu playMenu;
 	private JMenu mapMenu;
 	private JMenu buildGizmoMenu;
 	private JMenu buildBallMenu;
@@ -124,9 +125,14 @@ public class CompleteViewContainer extends JFrame {
 	
 	private void buildInitial() 
 	{
-		playMenu = new JMenuItem("Pause");
-		playMenu.addActionListener(buildCont);
-		playMenu.setActionCommand("Pause");
+		playMenu = new JMenu("Game Menu");
+		
+		JMenuItem playButton = new JMenuItem("Pause");
+				  playButton.addActionListener(buildCont);
+				  playButton.setActionCommand("Pause");
+				  playButton.setAccelerator(KeyStroke.getKeyStroke('p'));
+				 
+		playMenu.add(playButton);
 		
 		mapMenu = new JMenu("Map Control");
 		
