@@ -154,9 +154,5 @@ public class Flipper extends Gizmo implements iGizmo {
 			giz.performAction(true);
 			giz.move(min);
 		}
-		
-		if(closestLine != null) System.out.println("Line Hit");
-		if(closestCircle != null && stationaryCircle) System.out.println("Stat Circle Hit");
-		if(closestCircle != null && !stationaryCircle) System.out.println("Moving Circle Hit");
 	}
 }
