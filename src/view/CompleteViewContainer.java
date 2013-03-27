@@ -98,10 +98,12 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.add(new JLabel("Ball X Velocity:"));
 		tfVX = new TextField();
 		tfVX.setMaximumSize(new Dimension(100,30));
+		tfVX.setText("0");
 		ballInfo.add(tfVX);
 		ballInfo.add(new JLabel("Ball Y Velocity:"));
 		tfVY = new TextField();
 		tfVY.setMaximumSize(new Dimension(100,30));
+		tfVY.setText("0");
 		ballInfo.add(tfVY);
 		ballInfo.setVisible(false);
 		
@@ -348,15 +350,18 @@ public class CompleteViewContainer extends JFrame {
 	public double getBallVX(){
 		double in;
 		try{
-			in = ( Double.parseDouble(tfVX.getText()) / 25 );
+			in = ( Double.parseDouble(tfVX.getText())  );
 		}catch(NumberFormatException nfe){
 			error("The ball X velocity must be between -200 and 200L");
-			in = Double.MIN_VALUE;
+			in = 0;
 		}
-		if(in >= -200 && in <= 200) return in;
-	
+		if(in >= -200 && in <= 200) {
+			return in / 25;
+		}
+
+		error("The ball X velocity must be between -200L and 200L, setting to default value of 0");
 		
-		return Double.MIN_VALUE;
+		return 0;
 	}
 	
 	public double getBallVY(){
@@ -365,11 +370,15 @@ public class CompleteViewContainer extends JFrame {
 			in = ( Double.parseDouble(tfVY.getText()) / 25 );
 		}catch(NumberFormatException nfe){
 			error("The ball Y velocity must be between -200 and 200L");
-			in = Double.MIN_VALUE;
+			in = 0;
 		}
-		if(in >= -200 && in <= 200) return in;
+		if(in >= -200 && in <= 200) {
+			return in / 25;
+		}
+		
+		error("The ball Y velocity must be between -200L and 200L, setting to default value of 0");
 	
-		return Double.MIN_VALUE;
+		return 0;
 	}
 	
 	public int getAbsorberWidth(){
@@ -400,8 +409,8 @@ public class CompleteViewContainer extends JFrame {
 	
 	public void showBallInfo(boolean b){
 		if(b == false){
-			tfVX.setText("");
-			tfVY.setText("");
+			tfVX.setText("0");
+			tfVY.setText("0");
 		}
 		ballInfo.setVisible(b);
 		pack();
@@ -417,8 +426,8 @@ public class CompleteViewContainer extends JFrame {
 	
 	public void showAbsInfo(boolean b){
 		if(b == false){
-			absWidth.setText("");
-			absHeight.setText("");
+			absWidth.setText("0");
+			absHeight.setText("0");
 		}
 		absorberInfo.setVisible(b);
 		pack();
