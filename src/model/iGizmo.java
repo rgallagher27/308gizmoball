@@ -66,6 +66,9 @@ public interface iGizmo {
 	
 	public int getTriggerCount();
 
+	public boolean getSelected();
+	
+	public void setSelected(boolean b);
 	
 
 }

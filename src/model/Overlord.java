@@ -736,5 +736,15 @@ public class Overlord extends Observable implements iOverlord {
 		return connects;
 	}
 
+	@Override
+	public void setGizSelected(String giz, boolean sel) {
+		if(getGizmo(giz) != null){
+		getGizmo(giz).setSelected(sel);
+		setChanged();
+		notifyObservers();
+		}
+		
+	}
+
 	
 }

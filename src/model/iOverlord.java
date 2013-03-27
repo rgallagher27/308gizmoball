@@ -43,5 +43,6 @@ public interface iOverlord {
 	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName);
 	public ArrayList<String> getConnects();
 	public void fileError();
+	public void setGizSelected(String giz, boolean sel);
 	
 }

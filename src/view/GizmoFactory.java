@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import model.Absorber;
@@ -109,6 +111,65 @@ public class GizmoFactory {
 		}
 		
 		return new G2DLine(conX, conY, toX, toY, new Color(rnd.nextInt(155) + 100, rnd.nextInt(155) + 100, rnd.nextInt(155) + 100));
+		
+	}
+	
+	public List<G2DObject> drawBounds(String giz){
+		LinkedList<G2DObject> tmp = new LinkedList<G2DObject>();
+		tmp.clear();
+		
+		double cellWidth 			= controller.getGizWidth(giz);
+		double cellHeight			= controller.getGizHeight(giz);
+		double GridX				= controller.getGizX(giz);
+		double GridY				= controller.getGizY(giz);
+		double width				= controller.getGizRowWidth(giz);
+		double height				= controller.getGizColumnHeight(giz);
+		double topLX;
+		double topLY;
+		double topRX;
+		double topRY;
+		double bottomLX;
+		double bottomLY;
+		double bottomRX;
+		double bottomRY;
+		
+		if(!giz.contains("F")){
+			topLX = GridX * cellWidth;
+			topLY = GridY * cellHeight;
+		
+			topRX = topLX + (width * cellWidth);
+			topRY = topLY;
+		
+			bottomLX = topLX;
+			bottomLY = topLY + (height * cellHeight);
+		
+			bottomRX = topRX;
+			bottomRY = bottomLY;
+		
+		}else{
+			topLX = GridX * cellWidth;
+			topLY = GridY * cellHeight;
+			
+			topRX = topLX + ((2 *width) * cellWidth);
+			topRY = topLY;
+			
+			bottomLX = topLX;
+			bottomLY = topLY + (height * cellHeight);
+			
+			bottomRX = topRX;
+			bottomRY = bottomLY;
+		}
+		
+		tmp.add(new G2DLine(topLX, topLY, topRX, topRY, Color.CYAN));
+	
+		tmp.add(new G2DLine(bottomLX, bottomLY, bottomRX, bottomRY, Color.CYAN));
+	
+		tmp.add(new G2DLine(topLX, topLY, bottomLX, bottomLY, Color.CYAN));
+	
+		tmp.add(new G2DLine(topRX, topRY, bottomRX, bottomRY, Color.CYAN));
+		
+		return tmp;
+		
 		
 	}
 	

@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import javax.sound.sampled.*;
 
 import model.physics.Circle;
@@ -31,6 +29,7 @@ public class Gizmo implements iGizmo {
 	protected AudioInputStream audio;
 	protected Clip clip;
 	private long timeTrig;
+	protected boolean selected;
 	
 	public Gizmo() {
 		rotation = 0;
@@ -38,6 +37,7 @@ public class Gizmo implements iGizmo {
 		width    = 0;
 		height   = 0;
 		colour   = this.setColour();
+		selected = false;
 	}
 
 	public int getTriggerCount(){
@@ -253,6 +253,17 @@ public class Gizmo implements iGizmo {
 	public String getGizType() 
 	{
 		return Gizmo._TYPE;
+	}
+	
+	@Override
+	public boolean getSelected() {
+		// TODO Auto-generated method stub
+		return selected;
+	}
+
+	@Override
+	public void setSelected(boolean b) {
+		selected = b;
 	}
 
 
