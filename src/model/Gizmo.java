@@ -1,14 +1,12 @@
 package model;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.Clip;
+import java.io.File;
+import javax.sound.sampled.*;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -31,6 +29,7 @@ public class Gizmo implements iGizmo {
 	protected AudioInputStream audio;
 	protected Clip clip;
 	private long timeTrig;
+	protected boolean selected;
 	
 	public Gizmo() {
 		rotation = 0;
@@ -38,6 +37,7 @@ public class Gizmo implements iGizmo {
 		width    = 0;
 		height   = 0;
 		colour   = this.setColour();
+		selected = false;
 	}
 
 	public int getTriggerCount(){
@@ -160,8 +160,8 @@ public class Gizmo implements iGizmo {
 		//sound
 		if(clip != null){
 			if(timeTrig == 0){
-				timeTrig = System.currentTimeMillis();
-				clip.start();
+			timeTrig = System.currentTimeMillis();
+			clip.start();
 			}
 		}
 		for(iGizmo giz: triggers){
@@ -235,7 +235,9 @@ public class Gizmo implements iGizmo {
 	public List<Circle> getCircles() {
 		return circles;
 	}
-	
+
+
+
 	@Override
 	public Color getColour() {
 		return this.colour;
@@ -252,4 +254,17 @@ public class Gizmo implements iGizmo {
 	{
 		return Gizmo._TYPE;
 	}
+	
+	@Override
+	public boolean getSelected() {
+		// TODO Auto-generated method stub
+		return selected;
+	}
+
+	@Override
+	public void setSelected(boolean b) {
+		selected = b;
+	}
+
+
 }

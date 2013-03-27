@@ -737,21 +737,13 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addPortal(String id, int x, int y, int x2, int y2)
-	{
-		System.out.println("portal...");
-		if (canPlace(id, x, y, x, y)) {
-			System.out.println("portal time!");
-			gizmos.put(id, new Portal(id, new GizPoint(x, y), new GizPoint(x2, y2), 1, 1, cellWidth, cellHeight));
-			setPlace(id, x, y, x, y);
-			setPlace(id, x2, y2, x2, y2);
-			if (!loadingFile) {
-				setChanged();
-				notifyObservers(id);
-			}
-			return true;
+	public void setGizSelected(String giz, boolean sel) {
+		if(getGizmo(giz) != null){
+		getGizmo(giz).setSelected(sel);
+		setChanged();
+		notifyObservers();
 		}
-		return false;
+		
 	}
 
 	

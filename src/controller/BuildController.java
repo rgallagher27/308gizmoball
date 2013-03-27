@@ -51,6 +51,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private String oldGizName;
 	private String oldBall;
 	private int keyPressed;
+	private String selected = "";
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -58,7 +59,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		this.frame = frame;
 		overlord = ov;
 		currentSelectedMode = 0;
-	
+		
 	}
 
 	@Override
@@ -71,6 +72,17 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		int y = view.mouseY(e.getY());
 		
 		gizName = overlord.getGizName(x, y);
+		
+		if(!gizName.equals("")){
+			if(!selected.equals("")){
+			overlord.setGizSelected(selected, false);
+			overlord.setGizSelected(gizName, true);
+			selected = gizName;
+			}else{
+			overlord.setGizSelected(gizName, true);
+			selected = gizName;
+			}
+		}
 		String ballName = overlord.getBallName(x, y);
 		System.out.println("gizName: " + gizName);
 		String type = "";

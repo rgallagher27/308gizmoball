@@ -27,6 +27,7 @@ public class GraphicsController {
 	public ArrayList<String> getGizTriggers(){
 		return overlord.getConnects();
 	}
+	
 	public ArrayList<String> getGizTriggers(String name){
 		ArrayList<String> tmp = new ArrayList<String>();
 		for(iGizmo giz : overlord.getGizmo(name).getTriggers()){
@@ -38,6 +39,13 @@ public class GraphicsController {
 	public String getGizType(String name)
 	{
 		return overlord.getGizmo(name).getGizType();
+	}
+	
+	public boolean getGizSelected(String giz){
+		if(overlord.getGizmo(giz) != null){
+		return overlord.getGizmo(giz).getSelected();
+		}
+		return false;
 	}
 	
 	public int getGizX(String name)
@@ -132,6 +140,13 @@ public class GraphicsController {
 	public G2DObject getGraphicsLine(String connect, String to){
 		if(overlord.getGizmo(connect) != null && overlord.getGizmo(to) != null){
 			return gizFactory.drawLine(connect, to);
+		}
+		return null;
+	}
+	
+	public List<G2DObject> getGraphicsBounds(String giz){
+		if((overlord.getGizmo(giz) != null)){
+			return gizFactory.drawBounds(giz);
 		}
 		return null;
 	}
