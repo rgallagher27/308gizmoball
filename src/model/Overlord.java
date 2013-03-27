@@ -242,6 +242,9 @@ public class Overlord extends Observable implements iOverlord {
 					}
 				}
 			}
+		}else if(place.contains("P")) {
+			board[startY][startX] = place;
+			board[endY][endX] = place;
 		}
 	}
 
@@ -401,9 +404,7 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException {
 		iGizmo tmp = getGizmo(gizmoName);
 		if (tmp != null) {
-			if ((tmp.getWidth() == 1 && tmp.getHeight() == 1)
-					|| (tmp.getWidth() == 2 && tmp.getHeight() == 2)) {
-
+			if ((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)) {
 				tmp.rotate(); // 90
 				setChanged();
 				notifyObservers(gizmoName);
@@ -542,8 +543,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean moveBall(String ballName, String absorberName, float x,
-			float y) {
+	public boolean moveBall(String ballName, String absorberName, float x, float y) {
 		iBall temp = getBall(ballName);
 		if(temp == null) return false;
 		iGizmo absorb = null;

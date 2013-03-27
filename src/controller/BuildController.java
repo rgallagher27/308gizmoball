@@ -67,6 +67,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		
 		if(frame.getMode()){
 			//ignore mouse clicks during play mode.
+			return;
 		}else{
 			int x = view.mouseX(e.getX());
 			int y = view.mouseY(e.getY());
