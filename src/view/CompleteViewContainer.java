@@ -21,7 +21,6 @@ import javax.swing.JRadioButton;
 import controller.BuildController;
 import controller.GraphicsController;
 import controller.IController;
-// import controller.GUIController;
 
 public class CompleteViewContainer extends JFrame {
 	
@@ -39,6 +38,7 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton leftFlipper;
 	private JRadioButton rightFlipper;
 	private JRadioButton absorber;
+	private JRadioButton portal;
 	private JRadioButton remove;
 	private JRadioButton rotate;
 	private JRadioButton addTrigger;
@@ -52,7 +52,6 @@ public class CompleteViewContainer extends JFrame {
 	private JRadioButton moveBall;
 	
 	private LinkedList<JRadioButton> buttons;
-	
 	
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
@@ -110,6 +109,10 @@ public class CompleteViewContainer extends JFrame {
 		absorber = new JRadioButton("Add Absorber");
 		absorber.addActionListener(buildCont);
 		absorber.setActionCommand("Absorber");
+		
+		portal = new JRadioButton("Add Portal");
+		portal.addActionListener(buildCont);
+		portal.setActionCommand("Portal");
 		
 		square = new JRadioButton("Add Square");
 		square.addActionListener(buildCont);
@@ -214,6 +217,7 @@ public class CompleteViewContainer extends JFrame {
 		
 		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
 		buildButtonsPanel.add(absorber);
+		buildButtonsPanel.add(portal);
 		buildButtonsPanel.add(absorberInfo);
 		buildButtonsPanel.add(square);
 		buildButtonsPanel.add(triangle);
@@ -236,6 +240,7 @@ public class CompleteViewContainer extends JFrame {
 		buildButtonsPanel.add(save);
 		
 		buttons.add(absorber);
+		buttons.add(portal);
 		buttons.add(square);
 		buttons.add(triangle);
 		buttons.add(circle);

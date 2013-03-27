@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,12 +7,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import exception.CannotRotateException;
-
+import model.iOverlord;
 import view.CompleteViewContainer;
 import view.ViewCanvas;
-
-import model.iOverlord;
+import exception.CannotRotateException;
 
 public class BuildController implements MouseListener, ActionListener, KeyListener {
 
@@ -21,6 +18,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private ViewCanvas view;
 	private CompleteViewContainer frame;
 	private int currentSelectedMode;
+	
+	private int oldX;
+	private int oldY;
 	
 	private final int BUILD_SQUARE = 2;
 	private final int BUILD_TRIANGLE = 3;
@@ -44,6 +44,8 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private final int BUILD_MOVE_BALL_1 = 20;
 	private final int BUILD_MOVE_BALL_2 = 21;
 	private final int BUILD_REMOVE_BALL = 22;
+	private final int BUILD_PORTAL_1 = 23;
+	private final int BUILD_PORTAL_2 = 24;
 	
 	private String gizName;
 	private String oldGizName;
@@ -216,27 +218,41 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 				type = "remove ball";
 				success = overlord.removeBall(ballName);
 				break;
+			case BUILD_PORTAL_1:
+				type = "portal";
+				oldX = x;
+				oldY = y;
+				currentSelectedMode = BUILD_PORTAL_2;
+				break;
+			case BUILD_PORTAL_2:
+				success = overlord.addPortal(overlord.getNextName("P"), oldX, oldY, x, y);
+				currentSelectedMode = -1;
+				break;
 			default:
 				currentSelectedMode = 0;
 				break;
 			}
 			
-			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2
-					&& currentSelectedMode != BUILD_MOVE_BALL_2){
-			frame.unselectAll();
-			
-			if(!success && currentSelectedMode != 0 && 
-					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
-					|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2)){
-				frame.error("The " + type + " gizmo could not be added at that location!");
-			}else if(!success && currentSelectedMode == -1){
-				frame.error("Could not " + type + " between the selected gizmos.");
-			}
-			currentSelectedMode = 0;
-			success = false;
-			type = "";
-			oldGizName = "";
-			oldBall = "";
+			if(currentSelectedMode      != BUILD_ADD_TRIGGER_2    && 
+					currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && 
+					currentSelectedMode != BUILD_MOVE_2           && 
+					currentSelectedMode != BUILD_MOVE_BALL_2      && 
+					currentSelectedMode != BUILD_PORTAL_2) {
+				frame.unselectAll();
+				
+				if(!success && currentSelectedMode != 0 && 
+						!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
+						|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2
+						)){
+					frame.error("The " + type + " gizmo could not be added at that location!");
+				}else if(!success && currentSelectedMode == -1){
+					frame.error("Could not " + type + " between the selected gizmos.");
+				}
+				currentSelectedMode = 0;
+				success = false;
+				type = "";
+				oldGizName = "";
+				oldBall = "";
 			}
 
 		}
@@ -372,6 +388,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 			break;
 		case "Move":
 			currentSelectedMode = BUILD_MOVE_1;
+			break;
+		case "Portal":
+			currentSelectedMode = BUILD_PORTAL_1;
 			break;
 			
 		default:
