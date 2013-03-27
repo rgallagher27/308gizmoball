@@ -35,8 +35,6 @@ Circle C165 16 5
 Circle C174 17 4
 Circle C183 18 3
 
-Portal P1 1 9 17 1
-
 LeftFlipper LF92 9 2
 KeyConnect key 32 down LF92
 KeyConnect key 32 up LF92
