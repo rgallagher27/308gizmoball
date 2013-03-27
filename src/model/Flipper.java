@@ -71,9 +71,6 @@ public class Flipper extends Gizmo implements iGizmo {
 		
 	}
 	
-	
-	
-	
 	@Override
 	public double timeUntilCollision(iBall ball) {
 		double min = Double.POSITIVE_INFINITY;

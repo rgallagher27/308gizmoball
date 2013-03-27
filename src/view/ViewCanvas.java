@@ -6,12 +6,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
 import javax.swing.JPanel;
 
 import view.framework.G2DAbstractCanvas;
-import view.framework.G2DLine;
+import view.framework.G2DObject;
 import controller.BuildController;
 import controller.GraphicsController;
 import controller.IController;
@@ -28,7 +27,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	private IController eventListener;
 	private GraphicsController graphics;
 	private BuildController buildCont;
-	private Random rnd = new Random();
 	
 	private G2DAbstractCanvas abstractCanvas;
 
@@ -79,7 +77,6 @@ public class ViewCanvas extends JPanel implements Observer {
 			addKeyListener(buildCont);
 			requestFocus();
 			requestFocusInWindow();
-			
 		}
 	}
 	
@@ -115,7 +112,6 @@ public class ViewCanvas extends JPanel implements Observer {
 			if(graphics.getGraphicsGizmo(gizmo) != null){
 				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
-			
 			if(graphics.getGizSelected(gizmo) == true){
 				System.out.println("gizmo " + gizmo + " is selected");
 				for(G2DObject ob : graphics.getGraphicsBounds(gizmo)){
@@ -128,12 +124,6 @@ public class ViewCanvas extends JPanel implements Observer {
 			graphics.getGraphicsBall(ball).draw(abstractCanvas);
 		}
 		
-		for(String gizmo : eventListener.getGizmos()){
-			
-			
-		}
-		
-		
 		if(!runningMode){
 			if(graphics.getGizTriggers().size() > 0){
 				for(String connect : graphics.getGizTriggers()){
@@ -144,11 +134,7 @@ public class ViewCanvas extends JPanel implements Observer {
 					}
 				}
 			}
-			
-			
-		}
-		
-            
+		}   
 		g.drawImage(bufferImage, 0, 0, null);
 	}
 
@@ -157,8 +143,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	{
 		repaint();
 	}
-    
-    
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }

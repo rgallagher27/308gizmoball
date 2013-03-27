@@ -62,20 +62,7 @@ public class Absorber extends Gizmo implements iGizmo {
 	}
 
 	private void fillLineSegments()
-	{
-		/*double topLX = (point.getX() * cellWidth) - (cellWidth / 2);
-		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
-		
-		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth)- (cellWidth / 2);
-		double topRY = topLY;
-		
-		double bottomLX = topLX;
-		double bottomLY = (point.getY() * cellHeight) + (columnHeight * cellHeight) - (cellHeight / 2);
-		
-		double bottomRX = topRX;
-		double bottomRY = bottomLY;
-		*/
-		
+	{	
 		double topLX = point.getX() * cellWidth;
 		double topLY = point.getY() * cellHeight;
 		
@@ -95,8 +82,6 @@ public class Absorber extends Gizmo implements iGizmo {
 		lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
 		
 		lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
-		
-		
 	}
 	
 	public void captureBall(iBall ball, boolean b)

@@ -55,9 +55,7 @@ public class GizmoFactory {
 			double flipperGridX			= controller.getGizX(connect);
 			double flipperGridY			= controller.getGizY(connect);
 			double flipperGridWidth		= controller.getGizRowWidth(connect);
-			double flipperGridHeight	= controller.getGizColumnHeight(connect);
 			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-			double flipperHeight 		= (flipperGridHeight * cellheight);
 			
 			conX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
 			conY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
@@ -67,10 +65,8 @@ public class GizmoFactory {
 			double flipperGridX			= controller.getGizX(connect);
 			double flipperGridY			= controller.getGizY(connect);
 			double flipperGridWidth		= controller.getGizRowWidth(connect);
-			double flipperGridHeight	= controller.getGizColumnHeight(connect);
 
 			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-			double flipperHeight 		= (flipperGridHeight * cellheight);
 			
 			conX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
 			conY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
@@ -85,9 +81,7 @@ public class GizmoFactory {
 			double flipperGridX			= controller.getGizX(to);
 			double flipperGridY			= controller.getGizY(to);
 			double flipperGridWidth		= controller.getGizRowWidth(to);
-			double flipperGridHeight	= controller.getGizColumnHeight(to);
 			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-			double flipperHeight 		= (flipperGridHeight * cellheight);
 			
 			toX = ((flipperGridX * cellWidth)  + (cellWidth  / 2)) - flipperWidth;
 			toY = ((flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;
@@ -97,10 +91,8 @@ public class GizmoFactory {
 			double flipperGridX			= controller.getGizX(to);
 			double flipperGridY			= controller.getGizY(to);
 			double flipperGridWidth		= controller.getGizRowWidth(to);
-			double flipperGridHeight	= controller.getGizColumnHeight(to);
 
 			double flipperWidth 		= (flipperGridWidth  * cellWidth) / 4;
-			double flipperHeight 		= (flipperGridHeight * cellheight);
 			
 			toX = (((flipperGridX + (flipperGridWidth / 2)) * cellWidth) + (cellWidth)) + flipperWidth;
 			toY = (( flipperGridY * cellheight) + (cellheight / 2)) - flipperWidth;

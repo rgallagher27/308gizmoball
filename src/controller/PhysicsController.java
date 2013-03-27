@@ -38,7 +38,6 @@ public class PhysicsController implements IController {
 		overlord.resetGame();
 	}
 	
-	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
 		for(iGizmo giz : overlord.getGizmos()){
@@ -66,13 +65,10 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		
 		int keyPressed = event.getKeyCode();
-		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
-		
 	}
 
 	/*
@@ -86,9 +82,7 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		
-		int keyPressed = event.getKeyCode();
-		
+		int keyPressed = event.getKeyCode();	
 		for(iGizmo giz : overlord.getGizmoUpKeytriggers(keyPressed)){
 			giz.performAction(false);
 		}
@@ -147,8 +141,6 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			System.out.println(closestGizmo.toString());
-			
 			if(closestGizmo.getGizType() == Absorber._TYPE){
 				((Absorber)closestGizmo).captureBall(b, false);
 				b.setCaptured(true);
@@ -185,7 +177,6 @@ public class PhysicsController implements IController {
 				closestBall = b2;
 			}
 		}
-		
 		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
 			b.move(Current_Delta_T);
 			closestBall.collide(b);

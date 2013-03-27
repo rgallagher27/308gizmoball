@@ -43,7 +43,6 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel buildButtonsPanel;
 	private JPanel playButtonsPanel;
 	private JPanel buttonsPanel;
-	private JPanel content;
 	private JPanel ballInfo;
 	private JPanel absorberInfo;
 	private JPanel keyInfo;
@@ -241,23 +240,27 @@ public class CompleteViewContainer extends JFrame {
 		triggerMenu.add(RGTMenu);
 		triggerMenu.add(RKTMenu);
 		
+		menu = new JMenu("Options");
+		
+		JMenuItem item = new JMenuItem("Build Mode");
+				  item.addActionListener(buildCont);
+				  item.setActionCommand("Build");
+		menu.add(item);
+		
+				  item = new JMenuItem("Play Mode");
+				  item.addActionListener(buildCont);
+				  item.setActionCommand("Play");
+		menu.add(item);
+		
+				  item = new JMenuItem("Exit");
+				  item.addActionListener(buildCont);
+				  item.setActionCommand("Exit");
+		menu.add(item);
+		
 		/* menu bar setup */
 		menuBar = new JMenuBar();
-		menu = new JMenu("Options");
-		JMenuItem item = new JMenuItem("Build Mode");
-		item.addActionListener(buildCont);
-		item.setActionCommand("Build");
-		menu.add(item);
-		item = new JMenuItem("Play Mode");
-		item.addActionListener(buildCont);
-		item.setActionCommand("Play");
-		menu.add(item);
-		item = new JMenuItem("Exit");
-		item.addActionListener(buildCont);
-		item.setActionCommand("Exit");
-		menu.add(item);
-		menuBar.add(menu);
 		
+		menuBar.add(menu);
 		menuBar.add(mapMenu);
 		menuBar.add(buildGizmoMenu);
 		menuBar.add(buildBallMenu);
@@ -270,24 +273,21 @@ public class CompleteViewContainer extends JFrame {
 		playButtons();
 		buildButtons();
 		
-		buttonsPanel = new JPanel();
-		content = new JPanel();
+		buttonsPanel 	= new JPanel();
+		
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
 		buttonsPanel.add(playButtonsPanel);
 		buttonsPanel.add(buildButtonsPanel);
-		setContentPane(content);
-		content.setLayout(new BorderLayout());
 		
 		/* setup content area */
 
-
 		getContentPane().add(view, BorderLayout.WEST);
 		getContentPane().add(buttonsPanel, BorderLayout.NORTH);
-		setVisible(true);
-		pack();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 		
-		
+		pack();
 	}
 	
 	public File askForMapFile() {
@@ -450,7 +450,4 @@ public class CompleteViewContainer extends JFrame {
 	}
 
 	private static final long serialVersionUID = 1L;
-	
-
-
 }

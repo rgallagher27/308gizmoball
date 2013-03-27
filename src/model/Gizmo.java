@@ -43,6 +43,7 @@ public class Gizmo implements iGizmo {
 	public int getTriggerCount(){
 		return triggers.size();
 	}
+	
 	@Override
 	public String getIdentifier() {
 		return identifier;
@@ -113,16 +114,14 @@ public class Gizmo implements iGizmo {
 		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		
-		for(LineSegment l : lineSegments){
+		for(LineSegment l : lineSegments) {
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
-		
-		for(Circle c : circles){
+		for(Circle c : circles) {
 			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
-		
 		return min;
 	}
 
@@ -155,9 +154,9 @@ public class Gizmo implements iGizmo {
 		if(closestCircle != null)ball.setVelocity(
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
 				);
-		//trigger.
+
 		this.performAction(false);
-		//sound
+
 		if(clip != null){
 			if(timeTrig == 0){
 			timeTrig = System.currentTimeMillis();
@@ -173,13 +172,11 @@ public class Gizmo implements iGizmo {
 
 	private void rebuildSound(){
 		if(clip != null){
-		//clip.stop();
 			if((timeTrig + 500) < System.currentTimeMillis()){
 				timeTrig = 0;
 				clip.setFramePosition(0);
 			}
 		}
-		//clip.open(audio);
 	}
 
 	@Override
@@ -236,8 +233,6 @@ public class Gizmo implements iGizmo {
 		return circles;
 	}
 
-
-
 	@Override
 	public Color getColour() {
 		return this.colour;
@@ -265,6 +260,4 @@ public class Gizmo implements iGizmo {
 	public void setSelected(boolean b) {
 		selected = b;
 	}
-
-
 }
