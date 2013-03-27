@@ -23,7 +23,6 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected Vect rotationCenter;
 	protected double flipperVelocity, angularVel;
 	protected Circle nonRotationalCircle;
-	protected final double DELTA_T = ((double)1) /30;
 
 	public Flipper(String identifier, GizPoint p, double row, double column, double width, double height) {
 		point 					= p;
@@ -32,7 +31,7 @@ public class Flipper extends Gizmo implements iGizmo {
 		cellHeight				= height;
 		rowWidth				= row;
 		rotation 				= 0;
-		rotationVelocity 		= 1000;
+		rotationVelocity 		= 900;
 		lineSegments 			= new ArrayList<LineSegment>();
 		circles					= new ArrayList<Circle>();
 		active 					= false;
