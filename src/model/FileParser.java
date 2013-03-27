@@ -69,7 +69,7 @@ public class FileParser {
                 break;
             case "Ball":
                 if(!checkIDs(ids, tok[1])) {
-                    overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4]), Double.parseDouble(tok[5]));
+                    overlord.addBall(tok[1], "", Float.parseFloat(tok[2]), Float.parseFloat(tok[3]), Double.parseDouble(tok[4])/25, Double.parseDouble(tok[5])/25);
                     ids.add(tok[1]);
                 } else {
                     overlord.fileError();

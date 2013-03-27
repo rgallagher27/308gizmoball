@@ -23,7 +23,7 @@ public class Overlord extends Observable implements iOverlord {
 	private FileParser fileParse;
 	private String[][] board;
 	private double cellWidth, cellHeight;
-	private float gravity;
+	private double gravity;
 	private float mu, mu2;
 	private boolean loadingFile;
 
@@ -37,6 +37,7 @@ public class Overlord extends Observable implements iOverlord {
 		keyTriggersUp 		= new HashMap<Integer, ArrayList<iGizmo>>();
 		connects 			= new ArrayList<String>();
 		board 				= new String[gridDimentions.height][gridDimentions.width]; 
+		gravity 			= ((double)1) / 25;
 
 		for (int x = 0; x < gridDimentions.width; x++) {
 			for (int y = 0; y < gridDimentions.height; y++) {
@@ -102,7 +103,12 @@ public class Overlord extends Observable implements iOverlord {
 
 	@Override
 	public void setGravity(float newGrav) {
-		gravity = newGrav;
+		System.out.println("Setting Gravity");
+		gravity = ((double)1)/newGrav;
+		
+		for(iBall b : getBalls()){
+			b.setgravity(gravity);
+		}
 	}
 
 	@Override
@@ -288,7 +294,7 @@ public class Overlord extends Observable implements iOverlord {
 		}
 		if (absorb != null) {
 			if (canPlaceBall(absorberName, x, y, x, y)) {
-				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, true);
+				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, gravity, true);
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
 				((Absorber) absorb).captureBall(newBall, true);
@@ -296,7 +302,7 @@ public class Overlord extends Observable implements iOverlord {
 			}
 		} else {
 			if (canPlaceBall("", x, y, x, y)) {
-				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, false);
+				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, gravity, false);
 				newBall.setCaptured(false);
 				balls.put(ballName, newBall);
 				setPlace(ballName, (int) x, (int) y, (int) x, (int) y);
@@ -576,7 +582,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public float getGravity() {
+	public double getGravity() {
 		return gravity;
 	}
 

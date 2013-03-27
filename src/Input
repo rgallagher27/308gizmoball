@@ -1,3 +1,5 @@
+Gravity 25
+
 Triangle T 19 0
 Rotate T
 
@@ -64,4 +66,4 @@ Absorber A 0 19 20 20
 KeyConnect key 84 down A
 Connect A A
 
-Ball B1 0 15 0 0
+Ball B1 0 15 0 -1
