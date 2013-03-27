@@ -37,6 +37,15 @@ public class PhysicsController implements IController {
 		gameLoop.stop();
 		overlord.resetGame();
 	}
+
+	@Override
+	public void pause() {
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
+	}
 	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
@@ -186,14 +195,4 @@ public class PhysicsController implements IController {
 			return Current_Delta_T;
 		}
 	}
-
-	@Override
-	public void pause() {
-		if(gameLoop.isRunning()){
-			gameLoop.stop();
-		}else{
-			gameLoop.start();
-		}
-	}
-
 }

@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.LinkedList;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +29,7 @@ public class CompleteViewContainer extends JFrame {
 	private ViewCanvas view;
 	private BuildController buildCont;
 	private JMenuBar menuBar;
+	private JMenuItem playMenu;
 	private JMenu mapMenu;
 	private JMenu buildGizmoMenu;
 	private JMenu buildBallMenu;
@@ -41,13 +41,10 @@ public class CompleteViewContainer extends JFrame {
 	private LinkedList<JRadioButton> buttons;
 	
 	private JPanel buildButtonsPanel;
-	private JPanel playButtonsPanel;
 	private JPanel buttonsPanel;
 	private JPanel ballInfo;
 	private JPanel absorberInfo;
 	private JPanel keyInfo;
-	
-	private JButton play;
 	
 	private TextField tfVX;
 	private TextField tfVY;
@@ -55,19 +52,22 @@ public class CompleteViewContainer extends JFrame {
 	private TextField absWidth;
 	private JLabel keyPressed;
 	
+	private boolean isRunning;
+	
 	public CompleteViewContainer(){
 		view = new ViewCanvas();
 		mode = true; //true = play, false = build
 	}
 	
 	public void addController(IController ic, GraphicsController gc, BuildController bc){
-		control = ic;
-		buildCont = bc;
+		control 	= ic;
+		buildCont	= bc;
+		buttons 	= new LinkedList<JRadioButton>();
+		isRunning	= true;
+		
 		view.addController(ic, gc, bc);
-		buttons = new LinkedList<JRadioButton>();
 		buildInitial();
 		switchPlay();
-		
 	}
 	
 	public ViewCanvas getPlayView() {
@@ -76,15 +76,10 @@ public class CompleteViewContainer extends JFrame {
 	
 	public void pause(){
 		control.pause();
-	}
-	
-	private void playButtons(){
-		playButtonsPanel = new JPanel();
-		play = new JButton("Pause");
-		play.addActionListener(buildCont);
-		play.setActionCommand("Pause");
-		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.X_AXIS));
-		playButtonsPanel.add(play);
+		isRunning = !isRunning;
+		
+		if(!isRunning)playMenu.setText("Play");
+		else playMenu.setText("Pause");
 	}
 	
 	private void buildButtons(){
@@ -129,6 +124,10 @@ public class CompleteViewContainer extends JFrame {
 	
 	private void buildInitial() 
 	{
+		playMenu = new JMenuItem("Pause");
+		playMenu.addActionListener(buildCont);
+		playMenu.setActionCommand("Pause");
+		
 		mapMenu = new JMenu("Map Control");
 		
 		JMenuItem loadMenu = new JMenuItem("Load Game Map");
@@ -261,6 +260,7 @@ public class CompleteViewContainer extends JFrame {
 		menuBar = new JMenuBar();
 		
 		menuBar.add(menu);
+		menuBar.add(playMenu);
 		menuBar.add(mapMenu);
 		menuBar.add(buildGizmoMenu);
 		menuBar.add(buildBallMenu);
@@ -270,13 +270,11 @@ public class CompleteViewContainer extends JFrame {
 		setJMenuBar(menuBar);
 		
 		/* menu bar setup */
-		playButtons();
 		buildButtons();
 		
 		buttonsPanel 	= new JPanel();
 		
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
-		buttonsPanel.add(playButtonsPanel);
 		buttonsPanel.add(buildButtonsPanel);
 		
 		/* setup content area */
@@ -315,9 +313,9 @@ public class CompleteViewContainer extends JFrame {
 
 	public void switchBuild() {
 		buildButtonsPanel.setVisible(true);
-		playButtonsPanel.setVisible(false);
 		mode = false;
 		view.setMode(false);
+		playMenu.setVisible(false);
 		mapMenu.setVisible(true);
 		buildGizmoMenu.setVisible(true);
 		buildBallMenu.setVisible(true);
@@ -329,9 +327,9 @@ public class CompleteViewContainer extends JFrame {
 
 	public void switchPlay() {
 		buildButtonsPanel.setVisible(false);
-		playButtonsPanel.setVisible(true);
 		mode = true;
 		view.setMode(true);
+		playMenu.setVisible(true);
 		mapMenu.setVisible(false);
 		buildGizmoMenu.setVisible(false);
 		buildBallMenu.setVisible(false);
