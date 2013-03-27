@@ -65,6 +65,10 @@ public interface iGizmo {
 	public List<Circle> getCircles();
 	
 	public int getTriggerCount();
+
+	public boolean getSelected();
+	
+	public void setSelected(boolean b);
 	
 
 }

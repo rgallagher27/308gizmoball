@@ -12,12 +12,14 @@ public class Absorber extends Gizmo implements iGizmo {
 	public static final String _TYPE = "A";
 
 	protected List<iBall> capturedBalls;
+	protected List<iBall> originalBalls;
 	protected boolean active;
 	
 	public Absorber( String identifier, GizPoint p, double row, double column, double width, double height) {
 		lineSegments 		= new ArrayList<LineSegment>();
 		circles				= new ArrayList<Circle>();
 		capturedBalls 		= new ArrayList<iBall>();
+		originalBalls		= new ArrayList<iBall>();
 		
 		point 				= p;
 		rowWidth 			= row;
@@ -60,20 +62,7 @@ public class Absorber extends Gizmo implements iGizmo {
 	}
 
 	private void fillLineSegments()
-	{
-		/*double topLX = (point.getX() * cellWidth) - (cellWidth / 2);
-		double topLY = (point.getY() * cellHeight) - (cellHeight / 2);
-		
-		double topRX = (point.getX() * cellWidth) + (rowWidth * cellWidth)- (cellWidth / 2);
-		double topRY = topLY;
-		
-		double bottomLX = topLX;
-		double bottomLY = (point.getY() * cellHeight) + (columnHeight * cellHeight) - (cellHeight / 2);
-		
-		double bottomRX = topRX;
-		double bottomRY = bottomLY;
-		*/
-		
+	{	
 		double topLX = point.getX() * cellWidth;
 		double topLY = point.getY() * cellHeight;
 		
@@ -93,13 +82,19 @@ public class Absorber extends Gizmo implements iGizmo {
 		lineSegments.add(new LineSegment(topLX, topLY, bottomLX, bottomLY));
 		
 		lineSegments.add(new LineSegment(topRX, topRY, bottomRX, bottomRY));
-		
-		
 	}
 	
-	public void captureBall(iBall ball)
+	public void captureBall(iBall ball, boolean b)
 	{
 		capturedBalls.add(ball);
+		if(b){
+			originalBalls.add(ball);
+		}
+	}
+	
+	public void reset(){
+		capturedBalls.clear();
+		capturedBalls.addAll(originalBalls);
 	}
 
 	public void removeStoredBall(String ballName) {

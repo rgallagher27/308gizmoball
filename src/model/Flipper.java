@@ -1,7 +1,13 @@
 package model;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -17,7 +23,6 @@ public class Flipper extends Gizmo implements iGizmo {
 	protected Vect rotationCenter;
 	protected double flipperVelocity, angularVel;
 	protected Circle nonRotationalCircle;
-	protected final double DELTA_T = ((double)1) /30;
 
 	public Flipper(String identifier, GizPoint p, double row, double column, double width, double height) {
 		point 					= p;
@@ -34,6 +39,19 @@ public class Flipper extends Gizmo implements iGizmo {
 		this.identifier 		= identifier;
 		this.width 				= 2;
 		this.height 			= 2;
+		
+		url = new File("bloop_x.wav");
+		try {
+			audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -48,7 +66,9 @@ public class Flipper extends Gizmo implements iGizmo {
 		super.setColour();
 	}
 	
-	
+	public void rotate(){
+		
+	}
 	
 	@Override
 	public double timeUntilCollision(iBall ball) {
@@ -134,11 +154,5 @@ public class Flipper extends Gizmo implements iGizmo {
 			giz.performAction(true);
 			giz.move(min);
 		}
-		
-		if(closestLine != null) System.out.println("Line Hit");
-		if(closestCircle != null && stationaryCircle) System.out.println("Stat Circle Hit");
-		if(closestCircle != null && !stationaryCircle) System.out.println("Moving Circle Hit");
-		System.err.println("Ball Velocity after Flipper Collision: " + ball.getVelocity().toString());
-		System.out.println("Flipper.collide()");
 	}
 }

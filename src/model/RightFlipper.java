@@ -116,12 +116,12 @@ public class RightFlipper extends Flipper {
 		lineSegments.add(line3);
 		lineSegments.add(line4);
 		
-		circles.add(nonRotationalCircle);
+		circles.add(botR);
+		circles.add(botL);
 		circles.add(bot);
 		circles.add(topR);
 		circles.add(topL);
-		circles.add(botR);
-		circles.add(botL);
+		circles.add(nonRotationalCircle);
 		
 	}
 

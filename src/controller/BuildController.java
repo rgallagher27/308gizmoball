@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -8,12 +7,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import exception.CannotRotateException;
-
+import model.iOverlord;
 import view.CompleteViewContainer;
 import view.ViewCanvas;
-
-import model.iOverlord;
+import exception.CannotRotateException;
 
 public class BuildController implements MouseListener, ActionListener, KeyListener {
 
@@ -21,6 +18,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private ViewCanvas view;
 	private CompleteViewContainer frame;
 	private int currentSelectedMode;
+	
+	private int oldX;
+	private int oldY;
 	
 	private final int BUILD_SQUARE = 2;
 	private final int BUILD_TRIANGLE = 3;
@@ -44,11 +44,14 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 	private final int BUILD_MOVE_BALL_1 = 20;
 	private final int BUILD_MOVE_BALL_2 = 21;
 	private final int BUILD_REMOVE_BALL = 22;
+	private final int BUILD_PORTAL_1 = 23;
+	private final int BUILD_PORTAL_2 = 24;
 	
 	private String gizName;
 	private String oldGizName;
 	private String oldBall;
 	private int keyPressed;
+	private String selected = "";
 
 	public BuildController(iOverlord ov, ViewCanvas v,
 			CompleteViewContainer frame) {
@@ -56,7 +59,7 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		this.frame = frame;
 		overlord = ov;
 		currentSelectedMode = 0;
-	
+		
 	}
 
 	@Override
@@ -64,191 +67,208 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		
 		if(frame.getMode()){
 			//ignore mouse clicks during play mode.
+			return;
 		}else{
-		int x = view.mouseX(e.getX());
-		int y = view.mouseY(e.getY());
-		
-		gizName = overlord.getGizName(x, y);
-		String ballName = overlord.getBallName(x, y);
-		System.out.println("gizName: " + gizName);
-		String type = "";
-		boolean success = false;
-
-		if (x < 20 && y < 20) {
-			switch (currentSelectedMode) {
-			case ADD_BALL:
-				type = "ball";
-				if(gizName.contains("A")){
-					success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
-					frame.showBallInfo(false); 
-					
+			int x = view.mouseX(e.getX());
+			int y = view.mouseY(e.getY());
+			
+			gizName = overlord.getGizName(x, y);
+			
+			if(!gizName.equals("")){
+				if(!selected.equals("")){
+				overlord.setGizSelected(selected, false);
+				overlord.setGizSelected(gizName, true);
+				selected = gizName;
 				}else{
-					if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
-					success = overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
-					frame.showBallInfo(false);
-					
+				overlord.setGizSelected(gizName, true);
+				selected = gizName;
+				}
+			}
+			String ballName = overlord.getBallName(x, y);
+			String type = "";
+			boolean success = false;
+	
+			if (x < 20 && y < 20) {
+				switch (currentSelectedMode) {
+				case ADD_BALL:
+					type = "ball";
+					if(gizName.contains("A")){
+						success = overlord.addBall(overlord.getNextName("B"), gizName, x, y, 0.0, 0.0);
+						frame.showBallInfo(false); 
+						
+					}else{
+						if(frame.getBallVX() != Double.MIN_VALUE && frame.getBallVY() != Double.MIN_VALUE){
+						success = overlord.addBall(overlord.getNextName("B"), "", x, y, frame.getBallVX(), frame.getBallVY());
+						frame.showBallInfo(false);
+						
+						}
 					}
-				}
-				break;
-			case BUILD_ABSORBER:
-				type = "absorber";
-				if(frame.getAbsorberHeight() != Integer.MIN_VALUE && frame.getAbsorberWidth() != Integer.MIN_VALUE){
-					success = overlord.addAbsorber(overlord.getNextName("A"), x, y, (x +frame.getAbsorberWidth()), (y + frame.getAbsorberHeight()));
-					frame.showAbsInfo(false);
-				}
-				break;
-			case BUILD_SQUARE:
-				type = "square";
-				success = overlord.addSquare(overlord.getNextName("S"), x, y);
-				break;
-			case BUILD_TRIANGLE:
-				type = "triangle";
-				success = overlord.addTriangle(overlord.getNextName("T"), x, y);
-				break;
-			case BUILD_CIRCLE:
-				type = "circle";
-				success = overlord.addCircle(overlord.getNextName("C"), x, y);
-				break; 	
-			case BUILD_ADD_TRIGGER_1:
-				type = "trigger";
-				oldGizName = gizName;
-				if(gizName.equals("")){
-					currentSelectedMode = 0;
-				}else{
-				currentSelectedMode = BUILD_ADD_TRIGGER_2;
-				}
-				break;
-			case BUILD_ADD_TRIGGER_2:
-				success = overlord.connect(oldGizName, gizName);
-				oldGizName = "";
-				type = "add a trigger";
-				currentSelectedMode = -1;
-				break;
-			case BUILD_ROTATE:
-				type = "rotate";
-				try {
-					success = overlord.rotateGizmo(gizName);
-				} catch (CannotRotateException e1) {
-					e1.printStackTrace();
-				}
-				break;
-			case BUILD_REMOVE:
-				type = "remove";
-				success = overlord.removeGizmo(gizName);
-				break;
-			case BUILD_LEFT_FLIPPER:
-				type = "Left Flipper";
-				success = overlord.addFlipper(overlord.getNextName("LF"), x, y, false);
-				
-				break;
-			case BUILD_RIGHT_FLIPPER:
-				type = "Right Flipper";
-				success = overlord.addFlipper(overlord.getNextName("RF"), x, y, true);
-				
-				break;
-			case BUILD_MOVE_1:
-				type = "moved";
-				oldGizName = gizName;
-				if(gizName.equals("")){
-					currentSelectedMode = 0;
-				}else{
-				currentSelectedMode = BUILD_MOVE_2;
-				}
-				break;
-			case BUILD_MOVE_2:
-				if(gizName.equals("")){
+					break;
+				case BUILD_ABSORBER:
+					type = "absorber";
+					if(frame.getAbsorberHeight() != Integer.MIN_VALUE && frame.getAbsorberWidth() != Integer.MIN_VALUE){
+						success = overlord.addAbsorber(overlord.getNextName("A"), x, y, (x +frame.getAbsorberWidth()), (y + frame.getAbsorberHeight()));
+						frame.showAbsInfo(false);
+					}
+					break;
+				case BUILD_SQUARE:
+					type = "square";
+					success = overlord.addSquare(overlord.getNextName("S"), x, y);
+					break;
+				case BUILD_TRIANGLE:
+					type = "triangle";
+					success = overlord.addTriangle(overlord.getNextName("T"), x, y);
+					break;
+				case BUILD_CIRCLE:
+					type = "circle";
+					success = overlord.addCircle(overlord.getNextName("C"), x, y);
+					break; 	
+				case BUILD_ADD_TRIGGER_1:
+					type = "trigger";
+					oldGizName = gizName;
+					if(gizName.equals("")){
+						currentSelectedMode = 0;
+					}else{
+					currentSelectedMode = BUILD_ADD_TRIGGER_2;
+					}
+					break;
+				case BUILD_ADD_TRIGGER_2:
+					success = overlord.connect(oldGizName, gizName);
+					oldGizName = "";
+					type = "add a trigger";
+					currentSelectedMode = -1;
+					break;
+				case BUILD_ROTATE:
+					type = "rotate";
+					try {
+						success = overlord.rotateGizmo(gizName);
+					} catch (CannotRotateException e1) {
+						e1.printStackTrace();
+					}
+					break;
+				case BUILD_REMOVE:
+					type = "remove";
+					success = overlord.removeGizmo(gizName);
+					break;
+				case BUILD_LEFT_FLIPPER:
+					type = "Left Flipper";
+					success = overlord.addFlipper(overlord.getNextName("LF"), x, y, false);
+					
+					break;
+				case BUILD_RIGHT_FLIPPER:
+					type = "Right Flipper";
+					success = overlord.addFlipper(overlord.getNextName("RF"), x, y, true);
+					
+					break;
+				case BUILD_MOVE_1:
+					type = "moved";
+					oldGizName = gizName;
+					if(gizName.equals("")){
+						currentSelectedMode = 0;
+					}else{
+					currentSelectedMode = BUILD_MOVE_2;
+					}
+					break;
+				case BUILD_MOVE_2:
 					success = overlord.moveGizmo(oldGizName, x, y);
-				}else{
-					success = false;
+					currentSelectedMode = -1;
+					break;
+				case BUILD_MOVE_BALL_1:
+					type = "moved";
+					oldBall = ballName;
+					if(oldBall.equals("")) {
+						currentSelectedMode = 0;
+						success = false;
+					}else{
+					currentSelectedMode = BUILD_MOVE_BALL_2;
+					}
+					break;
+				case BUILD_MOVE_BALL_2:
+					success = overlord.moveBall(oldBall, gizName, x, y);
+					currentSelectedMode = -1;
+					break;
+				case BUILD_REMOVE_TRIGGER_1:
+					type = "trigger";
+					oldGizName = gizName;
+					if(gizName.equals("")){
+						currentSelectedMode = 0;
+					}else{
+					currentSelectedMode = BUILD_REMOVE_TRIGGER_2;
+					}
+					break;
+				case BUILD_REMOVE_TRIGGER_2:
+					success = overlord.disconnect(oldGizName, gizName);
+					oldGizName = "";
+					type = "remove the trigger";
+					currentSelectedMode = -1;
+					break;
+				case BUILD_ADD_KEY_TRIGGER_2:
+					if(gizName.equals("")){
+						currentSelectedMode = 0;
+					}else{
+					success = overlord.keyConnect(keyPressed, false, gizName);
+					if(success){
+						success = overlord.keyConnect(keyPressed, true, gizName);
+					}
+					type = "add a key connection ";
+					currentSelectedMode = -1;
+					}
+					break;
+				case BUILD_REMOVE_KEY_TRIGGER_2:
+					if(gizName.equals("")){
+						currentSelectedMode = 0;
+					}else{
+					success = overlord.removeKeyConnect(keyPressed, false, gizName);
+					if(success){
+						success = overlord.removeKeyConnect(keyPressed, true, gizName);
+					}
+					type = "remove the key connection ";
+					currentSelectedMode = -1;
+					}
+					break;
+				case BUILD_REMOVE_BALL:
+					type = "remove ball";
+					success = overlord.removeBall(ballName);
+					break;
+				case BUILD_PORTAL_1:
+					type = "portal";
+					oldX = x;
+					oldY = y;
+					currentSelectedMode = BUILD_PORTAL_2;
+					break;
+				case BUILD_PORTAL_2:
+					success = overlord.addPortal(overlord.getNextName("P"), oldX, oldY, x, y);
+					currentSelectedMode = -1;
+					break;
+				default:
+					currentSelectedMode = 0;
+					break;
 				}
-				currentSelectedMode = -1;
-				break;
-			case BUILD_MOVE_BALL_1:
-				type = "moved";
-				oldBall = ballName;
-				if(oldBall.equals("")) {
+				
+				if(currentSelectedMode      != BUILD_ADD_TRIGGER_2    && 
+						currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && 
+						currentSelectedMode != BUILD_MOVE_2           && 
+						currentSelectedMode != BUILD_MOVE_BALL_2      && 
+						currentSelectedMode != BUILD_PORTAL_2) {
+					frame.unselectAll();
+					
+					if(!success && currentSelectedMode != 0 && 
+							!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
+							|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2
+							)){
+						frame.error("The " + type + " gizmo could not be added at that location!");
+					}else if(!success && currentSelectedMode == -1){
+						frame.error("Could not " + type + " between the selected gizmos.");
+					}
 					currentSelectedMode = 0;
 					success = false;
-				}else{
-				currentSelectedMode = BUILD_MOVE_BALL_2;
+					type = "";
+					oldGizName = "";
+					oldBall = "";
 				}
-				break;
-			case BUILD_MOVE_BALL_2:
-				success = overlord.moveBall(oldBall, gizName, x, y);
-				currentSelectedMode = -1;
-				break;
-			case BUILD_REMOVE_TRIGGER_1:
-				type = "trigger";
-				oldGizName = gizName;
-				if(gizName.equals("")){
-					currentSelectedMode = 0;
-				}else{
-				currentSelectedMode = BUILD_REMOVE_TRIGGER_2;
-				}
-				break;
-			case BUILD_REMOVE_TRIGGER_2:
-				success = overlord.disconnect(oldGizName, gizName);
-				oldGizName = "";
-				type = "remove the trigger";
-				currentSelectedMode = -1;
-				break;
-			case BUILD_ADD_KEY_TRIGGER_2:
-				if(gizName.equals("")){
-					currentSelectedMode = 0;
-				}else{
-				success = overlord.keyConnect(keyPressed, false, gizName);
-				if(success){
-					success = overlord.keyConnect(keyPressed, true, gizName);
-				}
-				type = "add a key connection ";
-				currentSelectedMode = -1;
-				}
-				break;
-			case BUILD_REMOVE_KEY_TRIGGER_2:
-				if(gizName.equals("")){
-					currentSelectedMode = 0;
-				}else{
-				success = overlord.removeKeyConnect(keyPressed, false, gizName);
-				if(success){
-					success = overlord.removeKeyConnect(keyPressed, true, gizName);
-				}
-				type = "remove the key connection ";
-				currentSelectedMode = -1;
-				}
-				break;
-			case BUILD_REMOVE_BALL:
-				type = "remove ball";
-				success = overlord.removeBall(ballName);
-				break;
-			default:
-				currentSelectedMode = 0;
-				break;
+	
 			}
-			
-			if(currentSelectedMode != BUILD_ADD_TRIGGER_2 && currentSelectedMode != BUILD_REMOVE_TRIGGER_2 && currentSelectedMode != BUILD_MOVE_2
-					&& currentSelectedMode != BUILD_MOVE_BALL_2){
-			frame.unselectAll();
-			
-			if(!success && currentSelectedMode != 0 && 
-					!(currentSelectedMode == BUILD_ADD_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_TRIGGER_2
-					|| currentSelectedMode == BUILD_ADD_KEY_TRIGGER_2 || currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_2)){
-				frame.error("The " + type + " gizmo could not be added at that location!");
-			}else if(!success && currentSelectedMode == -1){
-				frame.error("Could not " + type + " between the selected gizmos.");
-			}
-			currentSelectedMode = 0;
-			success = false;
-			type = "";
-			oldGizName = "";
-			oldBall = "";
-			}
-
 		}
-		}
-
-		System.out.println(view.mouseX(e.getX()) + " : "
-				+ view.mouseY(e.getY()));
-
 	}
 
 	@Override
@@ -277,7 +297,6 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getActionCommand());
 		frame.unselectAll();
 		frame.select(e.getActionCommand());
 		frame.focusView();
@@ -377,6 +396,9 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 		case "Move":
 			currentSelectedMode = BUILD_MOVE_1;
 			break;
+		case "Portal":
+			currentSelectedMode = BUILD_PORTAL_1;
+			break;
 			
 		default:
 		}
@@ -385,8 +407,6 @@ public class BuildController implements MouseListener, ActionListener, KeyListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println(e.getKeyCode());
 		if(currentSelectedMode == BUILD_REMOVE_KEY_TRIGGER_1){
 			keyPressed = e.getKeyCode();
 			frame.setKey(keyPressed);

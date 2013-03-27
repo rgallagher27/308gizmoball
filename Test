@@ -59,4 +59,4 @@ KeyConnect Key 87 up RF137
 KeyConnect Key 32 up LF92
 KeyConnect Key 32 up RF112
 KeyConnect Key 81 up LF87
-Ball B1 0.0 15.0 0.0 0.0
+Ball B1 0.0 15.0 0 0

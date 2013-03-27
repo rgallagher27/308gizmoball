@@ -12,6 +12,7 @@ import java.util.Set;
 import model.physics.Vect;
 import exception.CannotRotateException;
 
+
 public class Overlord extends Observable implements iOverlord {
 
 	private HashMap<String, iGizmo> gizmos;
@@ -22,7 +23,7 @@ public class Overlord extends Observable implements iOverlord {
 	private FileParser fileParse;
 	private String[][] board;
 	private double cellWidth, cellHeight;
-	private float gravity;
+	private double gravity;
 	private float mu, mu2;
 	private boolean loadingFile;
 
@@ -36,6 +37,7 @@ public class Overlord extends Observable implements iOverlord {
 		keyTriggersUp 		= new HashMap<Integer, ArrayList<iGizmo>>();
 		connects 			= new ArrayList<String>();
 		board 				= new String[gridDimentions.height][gridDimentions.width]; 
+		gravity 			= ((double)1) / 25;
 
 		for (int x = 0; x < gridDimentions.width; x++) {
 			for (int y = 0; y < gridDimentions.height; y++) {
@@ -43,7 +45,6 @@ public class Overlord extends Observable implements iOverlord {
 			}
 		}
 		gizmos.put("Wall", new Wall(cellWidth, cellHeight));
-
 	}
 
 	@Override
@@ -60,7 +61,6 @@ public class Overlord extends Observable implements iOverlord {
 			for (Integer keyVal : keyTriggersUp.keySet()) {
 				keyTriggersUp.get(keyVal).remove(gizRem);
 			}
-			
 			gizmos.remove(gizmoName);
 			connects.remove(gizmoName);
 			removeFromBoard(gizmoName);
@@ -88,8 +88,7 @@ public class Overlord extends Observable implements iOverlord {
 		ArrayList<iBall> tmp 		= new ArrayList<iBall>(balls.values());
 		ArrayList<iBall> returned 	= new ArrayList<iBall>();
 		for (iBall b : tmp) {
-			//if (!b.isCaptured())
-				returned.add(b);
+			returned.add(b);
 		}
 		return returned;
 	}
@@ -103,8 +102,12 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public void setGravity(float newGrav) {
+	public void setGravity(double newGrav) {
 		gravity = newGrav;
+		
+		for(iBall b : getBalls()) { 
+			b.setgravity(gravity);
+		}
 	}
 
 	@Override
@@ -153,33 +156,40 @@ public class Overlord extends Observable implements iOverlord {
 		fileParse = null;
 	}
 
+	public void fileError() {
+		javax.swing.JOptionPane.showMessageDialog(
+			null, 
+			"The file you tried to load from was found to have an error.\n" +
+			"You will be returned to the build screen with the Corruptted gizmo missing.\n" +
+			"You can now try and rebuild it.",
+			"Corrupt File",
+			javax.swing.JOptionPane.WARNING_MESSAGE);
+	}
+
 	@Override
 	public void setFriction(float mu, float mu2) {
 		this.mu 	= mu;
 		this.mu2 	= mu2;
-
 	}
 
 	private boolean canPlace(String ex, int startX, int startY, int endX, int endY) {
-		 if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
-					0 > endX || endX > 20 || 0 > endY || endY > 20){
+		if(startX < 0 || startX > 19 || startY < 0 || startY > 19 || endX < 0 || endX > 19 || endY < 0 || endY > 19) {
 					 return false;
-				 }
+		}
 		if (startX == endX && startY == endY) {
-			if (!board[startY][startX].equals("")
-					&& !board[startY][startX].equals(ex))
+			if (!board[startY][startX].equals("") && !board[startY][startX].equals(ex)){
 				return false;
+			}
 			return true;
 		} else if(ex.contains("F")){
-			if(0 > startX || startX > 20 || 0 > startY || startY > 20 || 
-					0 > endX || endX > 19 || 0 > endY || endY > 19){
+			if(startX < 0 || startX > 18 || startY < 0 || startY > 18 || endX < 0 || endX > 19 || endY < 0 || endY > 19){
 					 return false;
-				 }
+			}
 			if ((!board[startY][startX].equals("") && !board[startY][startX].equals(ex)) ||
-				(!board[startY][endX].equals("") && !board[startY][endX].equals(ex)) ||
-				(!board[endY][startX].equals("") && !board[endY][startX].equals(ex)) ||
-				(!board[endY][endX].equals("") && !board[endY][endX].equals(ex)))
-				return false;
+				(!board[startY][startX+1].equals("") && !board[startY][startX+1].equals(ex)) ||
+				(!board[startY+1][startX].equals("") && !board[startY+1][startX].equals(ex)) ||
+				(!board[startY+1][startX+1].equals("") && !board[startY+1][startX+1].equals(ex)))
+				return false;	
 		} else {
 			for (int y = startY; y < endY; y++) {
 				for (int x = startX; x < endX; x++) {
@@ -196,53 +206,45 @@ public class Overlord extends Observable implements iOverlord {
 		return true;
 	}
 
-	private boolean canPlaceBall(String ex, float startX, float startY,
-			float endX, float endY) {
+	private boolean canPlaceBall(String ex, float startX, float startY, float endX, float endY) {
 
 		int x = (int) Math.floor(startX);
 		int y = (int) Math.floor(startY);
-		System.out.println("x: " + x + " y: " + y);
-
+		
 		if (ex.length() > 0) {
-			System.out.println("t : " + !board[y][x].equals(""));
-			System.out.println("t2: " + !board[y][x].equals(ex));
 			if (!board[y][x].equals("") && !board[y][x].equals(ex)) {
-				System.out.println("returning false");
 				return false;
 			}
 		} else {
-			System.out.println("t : " + !board[y][x].equals(""));
-			System.out.println("t2: " + !board[y][x].equals(ex));
 			if (!board[y][x].equals(""))
 				return false;
 		}
-
 		return true;
 	}
 
-	private void setPlace(String place, int startX, int startY, int endX,
-			int endY) {
-
-		if (startY == endY && endX == startX) {
+	private void setPlace(String place, int startX, int startY, int endX, int endY) {
+		if(place.contains("S") || place.contains("T") || place.contains("C")){
 			board[startY][startX] = place;
-			System.out.println("placed " + place);
-		} else {
-
-			if (startY != endY) {
-				System.out.println("-------" + place);
-				System.out.println("---- " + startY + " -- " + endY);
-				for (int y = startY; y < endY; y++) {
-					for (int x = startX; x < endX; x++) {
-						board[y][x] = place;
-						System.out.println("placing " + place);
+		}else if(place.contains("F")){
+			board[startY][startX] = place;
+			board[startY][startX+1] = place;
+			board[startY+1][startX] = place;
+			board[startY+1][startX+1] = place;
+		}else if(place.contains("A")){
+			if(startY == endY){
+				for(int i = startX; i < endX; i++){
+					board[startY][i] = place;
+				}
+			}else{
+				for(int y = startY; y < endY; y++){
+					for(int i = startX; i < endX; i++){
+						board[y][i] = place;
 					}
 				}
-			} else {
-				for (int x = startX; x < endX; x++) {
-					board[startY][x] = place;
-				}
-				System.out.println("placed " + place);
 			}
+		}else if(place.contains("P")) {
+			board[startY][startX] = place;
+			board[endY][endX] = place;
 		}
 	}
 
@@ -260,7 +262,6 @@ public class Overlord extends Observable implements iOverlord {
 		for (int x = 0; x < board[0].length; x++) {
 			for (int y = 0; y < board.length; y++) {
 					board[y][x] = "";
-				
 			}
 		}
 	}
@@ -269,15 +270,13 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean addAbsorber(String id, int x, int y, int x2, int y2) {
 		int height = Math.abs(y - y2);
 		int width = Math.abs(x - x2);
-		
 		if(height < 1 || width < 1){
 			return false;
 		}
 		
-		if (canPlace(id, x, y, x2, y2)) {
-			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height,
-					cellWidth, cellHeight));
-			setPlace(id, x, y, x2, y2);
+		if (canPlace(id, x, y, (x + width-1), (y + height-1))) {
+			gizmos.put(id, new Absorber(id, new GizPoint(x, y), width, height, cellWidth, cellHeight));
+			setPlace(id, x, y, (x + width-1), (y + height-1));
 
 			if (!loadingFile) {
 				setChanged();
@@ -290,30 +289,22 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean addBall(String ballName, String absorberName, float x,
-			float y, double vx, double vy) {
-
+	public boolean addBall(String ballName, String absorberName, float x, float y, double vx, double vy) {
 		iGizmo absorb = null;
 		if (absorberName.length() > 0) {
 			absorb = getGizmo(absorberName);
 		}
-		System.out.println("vx : " + vx + " vy: " + vy);
 		if (absorb != null) {
 			if (canPlaceBall(absorberName, x, y, x, y)) {
-				System.out.println("placing in absorber");
-				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-						cellWidth, cellHeight, vx, vy, true);
-
+				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, gravity, true);
 				newBall.setCaptured(true);
 				balls.put(ballName, newBall);
-				((Absorber) absorb).captureBall(newBall);
+				((Absorber) absorb).captureBall(newBall, true);
 				return true;
 			}
 		} else {
 			if (canPlaceBall("", x, y, x, y)) {
-				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1,
-						cellWidth, cellHeight, vx, vy, false);
-
+				iBall newBall = new Ball(ballName, new BallPoint(x, y), 1, 1, cellWidth, cellHeight, vx, vy, gravity, false);
 				newBall.setCaptured(false);
 				balls.put(ballName, newBall);
 				setPlace(ballName, (int) x, (int) y, (int) x, (int) y);
@@ -332,9 +323,7 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean moveGizmo(String gizmoName, int x, int y) {
 		iGizmo temp = getGizmo(gizmoName);
 		if(temp == null) return false;
-		
-		if (canPlace(gizmoName, x, y, x + (temp.getWidth()),
-				y + (temp.getHeight()))) {
+		if (canPlace(gizmoName, x, y, x + (temp.getWidth()-1), y + (temp.getHeight()-1))) {
 			temp.setLocation(new GizPoint(x, y));
 			removeFromBoard(gizmoName);
 			setPlace(gizmoName, x, y, x + (temp.getWidth()),
@@ -344,14 +333,11 @@ public class Overlord extends Observable implements iOverlord {
 			return true;
 		}
 		return false;
-
 	}
 
 	@Override
 	public boolean addCircle(String id, int x, int y) {
-		System.out.println("circle...");
 		if (canPlace(id, x, y, x, y)) {
-			System.out.println("circle time!");
 			gizmos.put(id, new CircleBumper(id, new GizPoint(x, y), 1, 1,
 					cellWidth, cellHeight));
 			setPlace(id, x, y, x, y);
@@ -418,9 +404,7 @@ public class Overlord extends Observable implements iOverlord {
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException {
 		iGizmo tmp = getGizmo(gizmoName);
 		if (tmp != null) {
-			if ((tmp.getWidth() == 1 && tmp.getHeight() == 1)
-					|| (tmp.getWidth() == 2 && tmp.getHeight() == 2)) {
-
+			if ((tmp.getWidth() == 1 && tmp.getHeight() == 1) || (tmp.getWidth() == 2 && tmp.getHeight() == 2)) {
 				tmp.rotate(); // 90
 				setChanged();
 				notifyObservers(gizmoName);
@@ -451,7 +435,6 @@ public class Overlord extends Observable implements iOverlord {
 			}
 			tmp.add(con);
 			keyTriggersDown.put(keyNum, tmp);
-			System.out.println("added");
 			return true;
 		}
 
@@ -489,10 +472,11 @@ public class Overlord extends Observable implements iOverlord {
 		iGizmo consumer = getGizmo(consumerGizmo);
 		tmp[0] = producerGizmo;
 		tmp[1] = consumerGizmo;
-		if (producer == null || consumer == null)
-			return false;
+		if (producer == null || consumer == null) return false;
 		producer.addTrigger(consumer);
 		connects.add(producerGizmo);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 	
@@ -508,6 +492,8 @@ public class Overlord extends Observable implements iOverlord {
 		if(producer.getTriggerCount() == 0){
 		connects.remove(producerGizmo);
 		}
+		setChanged();
+		notifyObservers();
 		return true;
 		
 	}
@@ -557,8 +543,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public boolean moveBall(String ballName, String absorberName, float x,
-			float y) {
+	public boolean moveBall(String ballName, String absorberName, float x, float y) {
 		iBall temp = getBall(ballName);
 		if(temp == null) return false;
 		iGizmo absorb = null;
@@ -571,7 +556,7 @@ public class Overlord extends Observable implements iOverlord {
 				temp.setLocation(new BallPoint(19, 19));
 				removeFromBoard(ballName);
 				temp.setCaptured(true);
-				((Absorber) absorb).captureBall(temp);
+				((Absorber) absorb).captureBall(temp, true);
 				// setPlace(ballName, (int)x, (int)y, (int)x, (int)y); //if the
 				// ball is inside the absorber, dont place on map
 				setChanged();
@@ -595,7 +580,7 @@ public class Overlord extends Observable implements iOverlord {
 	}
 
 	@Override
-	public float getGravity() {
+	public double getGravity() {
 		return gravity;
 	}
 
@@ -640,9 +625,7 @@ public class Overlord extends Observable implements iOverlord {
 	public void resetGame() {
 		for (iBall ball : balls.values()) {
 			ball.setLocation(ball.getOrigLocation());
-			System.out.println(ball.getIdentifier() + " : "
-					+ ball.getOrigLocation().getX() + " - "
-					+ ball.getOrigLocation().getY());
+
 			ball.setVelocity(ball.getOrigVelocity());
 			ball.setCaptured(ball.getOrigCapture());
 		}
@@ -650,17 +633,12 @@ public class Overlord extends Observable implements iOverlord {
 			if (giz instanceof Flipper) {
 				giz.setRotation(0);
 				giz.performAction(false);
+			}else if(giz instanceof Absorber){
+				((Absorber) giz).reset();
 			}
 		}
 		setChanged();
 		notifyObservers();
-
-		for (int i = 0; i < 20; i++) {
-			for (int y = 0; y < 20; y++) {
-				System.out.print(board[i][y]);
-			}
-			System.out.println();
-		}
 	}
 
 	public String getGizName(int x, int y) {
@@ -718,6 +696,31 @@ public class Overlord extends Observable implements iOverlord {
 	@Override
 	public ArrayList<String> getConnects() {
 		return connects;
+	}
+
+	@Override
+	public void setGizSelected(String giz, boolean sel) {
+		if(getGizmo(giz) != null){
+		getGizmo(giz).setSelected(sel);
+		setChanged();
+		notifyObservers();
+		}
+		
+	}
+
+	@Override
+	public boolean addPortal(String id, int x, int y, int x2, int y2) {
+		if (canPlace(id, x, y, x, y)) {
+			gizmos.put(id, new Portal(id, new GizPoint(x, y), new GizPoint(x2, y2), 1, 1, cellWidth, cellHeight));
+			setPlace(id, x, y, x, y);
+			setPlace(id, x2, y2, x2, y2);
+			if (!loadingFile) {
+				setChanged();
+				notifyObservers(id);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	

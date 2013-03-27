@@ -10,22 +10,20 @@ public class Ball implements iBall {
 	protected BallPoint point;
 	protected BallPoint startPoint;
 	protected double row, column, cellWidth, cellHeight;
-	protected float gravity;
+	protected double gravity;
 	protected Vect velocity;
 	protected Circle physicsCircle;
 	protected String identifier;
 	protected boolean isCaptured;
-	protected double i = 0;
 	protected double radius;
 	protected Vect velocityOrig;
 	protected boolean origCapture;
 
-	public Ball(String identifier, BallPoint p, double row, double column, double width, double height, double velocityX, double velocityY, boolean isCaptured) {
+	public Ball(String identifier, BallPoint p, double row, double column, double width, double height, double velocityX, double velocityY, double gravity, boolean isCaptured) {
 		point 			= p;
 		startPoint		= new BallPoint(p.getX(), p.getY());
 		cellWidth		= width;
 		cellHeight		= height;
-		gravity 		= (float)1/25;
 		velocity 		= new Vect(velocityX, velocityY);
 		velocityOrig    = new Vect(velocityX, velocityY);
 		origCapture 	= isCaptured;
@@ -35,6 +33,7 @@ public class Ball implements iBall {
 		this.column 	= column;
 		this.identifier = identifier;
 		this.isCaptured	= isCaptured;
+		this.gravity	= gravity;
 		
 		physicsCircle 	= new Circle((point.getX() * cellWidth) + (cellWidth/2), (point.getY() * cellHeight) + (cellWidth/2), cellWidth/4);
 	}
@@ -90,7 +89,7 @@ public class Ball implements iBall {
 
 	@Override
 	public void move(double deltaT) {
-		if(!isCaptured){	
+		if(!isCaptured){		
 			deltaT /= 2;
 			double mu  = 0.015F;
 			double mu2 = 0.015F;
@@ -177,7 +176,7 @@ public class Ball implements iBall {
 	}
 
 	public String toString() {
-		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " " + velocityOrig.x() + " " + velocityOrig.y());
+		return ("Ball " + identifier + " " + startPoint.getX() + " " + startPoint.getY() + " " + (int)(velocityOrig.x()*25) + " " + (int)(velocityOrig.y()*25) );
 	}
 
 	@Override
@@ -192,6 +191,13 @@ public class Ball implements iBall {
 	
 	public boolean getOrigCapture(){
 		return origCapture;
+	}
+
+	@Override
+	public void setgravity(double g) {
+		this.gravity = g;
+		
+		System.err.println("Gravity set to: " + g);
 	}
 	
 }

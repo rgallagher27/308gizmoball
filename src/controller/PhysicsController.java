@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import model.Absorber;
+import model.Portal;
 import model.iBall;
 import model.iGizmo;
 import model.iOverlord;
@@ -36,7 +37,15 @@ public class PhysicsController implements IController {
 		gameLoop.stop();
 		overlord.resetGame();
 	}
-	
+
+	@Override
+	public void pause() {
+		if(gameLoop.isRunning()){
+			gameLoop.stop();
+		}else{
+			gameLoop.start();
+		}
+	}
 	
 	public List<String> getGizmos(){
 		LinkedList<String> list = new LinkedList<String>();
@@ -65,13 +74,10 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyPressed(KeyEvent event) 
 	{	
-		
 		int keyPressed = event.getKeyCode();
-		
 		for(iGizmo giz : overlord.getGizmoDownKeytriggers(keyPressed)){
 			giz.performAction(true);
 		}
-		
 	}
 
 	/*
@@ -85,9 +91,7 @@ public class PhysicsController implements IController {
 	@Override
 	public void keyReleased(KeyEvent event) 
 	{
-		
-		int keyPressed = event.getKeyCode();
-		
+		int keyPressed = event.getKeyCode();	
 		for(iGizmo giz : overlord.getGizmoUpKeytriggers(keyPressed)){
 			giz.performAction(false);
 		}
@@ -129,7 +133,6 @@ public class PhysicsController implements IController {
 			}
 		}
 	}
-
 	
 	private double collideGizmos(iBall b, double Current_Delta_T) {
 		double lowestTime = Double.POSITIVE_INFINITY;
@@ -147,12 +150,18 @@ public class PhysicsController implements IController {
 		}
 		
 		if(lowestTime < Current_Delta_T  && closestGizmo != null && !b.isCaptured()){
-			if(!(closestGizmo instanceof Absorber))closestGizmo.collide(b);
-			else{
-				((Absorber)closestGizmo).captureBall(b);
+			if(closestGizmo.getGizType() == Absorber._TYPE){
+				((Absorber)closestGizmo).captureBall(b, false);
 				b.setCaptured(true);
+			}
+			else if(closestGizmo.getGizType() == Portal._TYPE){
+				overlord.setBallLocation(b.getIdentifier(), 
+										 ((Portal) closestGizmo).getSecondLocation().getX(), 
+										 ((Portal) closestGizmo).getSecondLocation().getY());
+			}else {
 				closestGizmo.collide(b);
 			}
+			
 			b.move(Current_Delta_T);
 			Current_Delta_T -= lowestTime;
 			return Current_Delta_T;
@@ -176,7 +185,6 @@ public class PhysicsController implements IController {
 				closestBall = b2;
 			}
 		}
-		
 		if(lowestTime < Current_Delta_T  && closestBall != null && !b.isCaptured()){
 			b.move(Current_Delta_T);
 			closestBall.collide(b);
@@ -186,14 +194,4 @@ public class PhysicsController implements IController {
 			return Current_Delta_T;
 		}
 	}
-
-	@Override
-	public void pause() {
-		if(gameLoop.isRunning()){
-			gameLoop.stop();
-		}else{
-			gameLoop.start();
-		}
-	}
-
 }

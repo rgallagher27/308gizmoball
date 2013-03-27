@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Portal;
 import model.iGizmo;
 import model.iOverlord;
 import model.physics.Circle;
@@ -12,21 +13,25 @@ import view.GizmoFactory;
 import view.framework.G2DAbstractCanvas;
 import view.framework.G2DObject;
 
-public class GraphicsController {
+public class GraphicsController 
+{
 	
 	private iOverlord overlord;
 	private GizmoFactory gizFactory;
 	
-	public GraphicsController(iOverlord ov){
+	public GraphicsController(iOverlord ov)
+	{
 		overlord 	= ov;
 		gizFactory 	= new GizmoFactory(this);
-		
 	}
 	
-	public ArrayList<String> getGizTriggers(){
+	public ArrayList<String> getGizTriggers()
+	{
 		return overlord.getConnects();
 	}
-	public ArrayList<String> getGizTriggers(String name){
+	
+	public ArrayList<String> getGizTriggers(String name)
+	{
 		ArrayList<String> tmp = new ArrayList<String>();
 		for(iGizmo giz : overlord.getGizmo(name).getTriggers()){
 			tmp.add(giz.getIdentifier());
@@ -39,6 +44,14 @@ public class GraphicsController {
 		return overlord.getGizmo(name).getGizType();
 	}
 	
+	public boolean getGizSelected(String giz)
+	{
+		if(overlord.getGizmo(giz) != null){
+		return overlord.getGizmo(giz).getSelected();
+		}
+		return false;
+	}
+	
 	public int getGizX(String name)
 	{
 		return overlord.getGizmo(name).getLocation().getX();
@@ -48,7 +61,20 @@ public class GraphicsController {
 		return overlord.getGizmo(name).getLocation().getY();
 	}
 	
-	public double getGizRotation(String name){
+	public int getPortalX2(String name)
+	{
+		iGizmo giz = overlord.getGizmo(name);
+		return giz.getGizType() == Portal._TYPE ? ((Portal)giz).getSecondLocation().getX() : 0;
+	}
+
+	public int getPortalY2(String name)
+	{
+		iGizmo giz = overlord.getGizmo(name);
+		return giz.getGizType() == Portal._TYPE ? ((Portal)giz).getSecondLocation().getY() : 0;
+	}
+	
+	public double getGizRotation(String name)
+	{
 		return overlord.getGizmo(name).getRotation();
 	}
 	
@@ -116,8 +142,21 @@ public class GraphicsController {
 		return null;
 	}
 	
+	public G2DObject getGraphicsLine(String connect, String to){
+		if(overlord.getGizmo(connect) != null && overlord.getGizmo(to) != null){
+			return gizFactory.drawLine(connect, to);
+		}
+		return null;
+	}
+	
+	public List<G2DObject> getGraphicsBounds(String giz){
+		if((overlord.getGizmo(giz) != null)){
+			return gizFactory.drawBounds(giz);
+		}
+		return null;
+	}
+	
 	public void factoryDraw(G2DAbstractCanvas canvas, int rows, int columns, double rowWidth, double columnHeight) {
 		gizFactory.drawGrid(canvas, rows, columns, rowWidth, columnHeight);
-		
 	}
 }

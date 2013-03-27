@@ -6,23 +6,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 
 import javax.swing.JPanel;
 
-import model.Absorber;
-import model.CircleBumper;
-import model.Flipper;
-import model.Overlord;
-import model.SquareBumper;
-import model.TriangleBumper;
-import model.iBall;
-import model.iGizmo;
-import model.iOverlord;
-import view.framework.*;
+import view.framework.G2DAbstractCanvas;
+import view.framework.G2DObject;
 import controller.BuildController;
 import controller.GraphicsController;
-import controller.PhysicsController;
 import controller.IController;
 
 public class ViewCanvas extends JPanel implements Observer {
@@ -37,7 +27,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	private IController eventListener;
 	private GraphicsController graphics;
 	private BuildController buildCont;
-	private Random rnd = new Random();
 	
 	private G2DAbstractCanvas abstractCanvas;
 
@@ -88,7 +77,6 @@ public class ViewCanvas extends JPanel implements Observer {
 			addKeyListener(buildCont);
 			requestFocus();
 			requestFocusInWindow();
-			
 		}
 	}
 	
@@ -101,8 +89,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	}
 	
 	private Image bufferImage;
-
-	private Object G2DObject;
 	
 	@Override 
 	public void paint(Graphics g)
@@ -126,6 +112,11 @@ public class ViewCanvas extends JPanel implements Observer {
 			if(graphics.getGraphicsGizmo(gizmo) != null){
 				graphics.getGraphicsGizmo(gizmo).draw(abstractCanvas);
 			}
+			if(graphics.getGizSelected(gizmo) == true){
+				for(G2DObject ob : graphics.getGraphicsBounds(gizmo)){
+					ob.draw(abstractCanvas);
+				}
+			}
 		}
 		
 		for(String ball : eventListener.getBalls()){
@@ -136,19 +127,13 @@ public class ViewCanvas extends JPanel implements Observer {
 			if(graphics.getGizTriggers().size() > 0){
 				for(String connect : graphics.getGizTriggers()){
 					for(String to : graphics.getGizTriggers(connect)){
-						new G2DLine((graphics.getGizX(connect) * graphics.getGizWidth(connect)) + (graphics.getGizWidth(connect) / 2), 
-								(graphics.getGizY(connect) * graphics.getGizHeight(connect)) + (graphics.getGizHeight(connect) / 2), 
-								(graphics.getGizX(to) * graphics.getGizWidth(to)) + (graphics.getGizWidth(to) / 2), 
-								(graphics.getGizY(to) * graphics.getGizHeight(to)) + (graphics.getGizHeight(to) / 2), 
-								new Color(rnd.nextInt(155) + 100, rnd.nextInt(155) + 100, rnd.nextInt(155) + 100)).draw(abstractCanvas);
+						if(graphics.getGraphicsLine(connect, to) != null){
+							graphics.getGraphicsLine(connect, to).draw(abstractCanvas);
+						}
 					}
 				}
 			}
-			
-			
-		}
-		
-            
+		}   
 		g.drawImage(bufferImage, 0, 0, null);
 	}
 
@@ -157,8 +142,6 @@ public class ViewCanvas extends JPanel implements Observer {
 	{
 		repaint();
 	}
-    
-    
 	
 	// This is just here so that we can accept the keyboard focus
 	public boolean isFocusable() { return true; }

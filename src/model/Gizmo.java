@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.io.File;
+import javax.sound.sampled.*;
 
 import model.physics.Circle;
 import model.physics.Geometry;
@@ -23,6 +25,11 @@ public class Gizmo implements iGizmo {
 	protected List<iGizmo> triggers;
 	protected int width, height;
 	protected Color colour;
+	protected File url;
+	protected AudioInputStream audio;
+	protected Clip clip;
+	private long timeTrig;
+	protected boolean selected;
 	
 	public Gizmo() {
 		rotation = 0;
@@ -30,11 +37,13 @@ public class Gizmo implements iGizmo {
 		width    = 0;
 		height   = 0;
 		colour   = this.setColour();
+		selected = false;
 	}
 
 	public int getTriggerCount(){
 		return triggers.size();
 	}
+	
 	@Override
 	public String getIdentifier() {
 		return identifier;
@@ -105,16 +114,14 @@ public class Gizmo implements iGizmo {
 		double min = Double.POSITIVE_INFINITY;
 		double newMin;
 		
-		for(LineSegment l : lineSegments){
+		for(LineSegment l : lineSegments) {
 			newMin = Geometry.timeUntilWallCollision(l, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
-		
-		for(Circle c : circles){
+		for(Circle c : circles) {
 			newMin = Geometry.timeUntilCircleCollision(c, ball.returnBounds(), ball.getVelocity());
 			if(newMin < min)min = newMin;
 		}
-		
 		return min;
 	}
 
@@ -147,11 +154,28 @@ public class Gizmo implements iGizmo {
 		if(closestCircle != null)ball.setVelocity(
 					Geometry.reflectCircle(closestCircle.getCenter(), ball.returnBounds().getCenter(), ball.getVelocity())
 				);
-		//trigger.
+
 		this.performAction(false);
+
+		if(clip != null){
+			if(timeTrig == 0){
+			timeTrig = System.currentTimeMillis();
+			clip.start();
+			}
+		}
 		for(iGizmo giz: triggers){
 			giz.performAction(true);
 			giz.move(min);
+		}
+		rebuildSound();
+	}
+
+	private void rebuildSound(){
+		if(clip != null){
+			if((timeTrig + 500) < System.currentTimeMillis()){
+				timeTrig = 0;
+				clip.setFramePosition(0);
+			}
 		}
 	}
 
@@ -209,8 +233,6 @@ public class Gizmo implements iGizmo {
 		return circles;
 	}
 
-
-
 	@Override
 	public Color getColour() {
 		return this.colour;
@@ -226,5 +248,16 @@ public class Gizmo implements iGizmo {
 	public String getGizType() 
 	{
 		return Gizmo._TYPE;
+	}
+	
+	@Override
+	public boolean getSelected() {
+		// TODO Auto-generated method stub
+		return selected;
+	}
+
+	@Override
+	public void setSelected(boolean b) {
+		selected = b;
 	}
 }

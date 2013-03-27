@@ -14,6 +14,7 @@ public interface iOverlord {
 	public boolean addFlipper(String gizmoName, int x, int y, boolean orient); //true = right, false = left
 	public boolean addAbsorber(String id, int x, int y, int width, int height);
 	public boolean addBall(String ballName, String absorberName, float x, float y, double vx, double vy);
+	public boolean addPortal(String id, int x, int y, int x2, int y2);
 	public boolean removeGizmo(String gizmoName);
 	public boolean removeBall(String ballName);
 	public List<iGizmo> getGizmos();
@@ -23,9 +24,9 @@ public interface iOverlord {
 	public boolean moveGizmo(String gizmoName, int x, int y);
 	public boolean moveBall(String ballName, String absorberName, float x, float y);
 	public boolean rotateGizmo(String gizmoName) throws CannotRotateException;
-	public void setGravity(float newGrav);
+	public void setGravity(double newGrav);
 	public void setFriction(float mu, float mu2);
-	public float getGravity();
+	public double getGravity();
 	public float getFrictionMu();
 	public float getFrictionMu2();
 	public boolean keyConnect(int keyNum, boolean direction, String consumer); //up = true, false = down.
@@ -42,5 +43,7 @@ public interface iOverlord {
 	public boolean disconnect(String oldGizName, String gizName);
 	public boolean removeKeyConnect(int keyPressed, boolean b, String gizName);
 	public ArrayList<String> getConnects();
+	public void fileError();
+	public void setGizSelected(String giz, boolean sel);
 	
 }

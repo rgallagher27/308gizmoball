@@ -1,6 +1,12 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import model.physics.Circle;
 import model.physics.LineSegment;
@@ -22,6 +28,19 @@ public class SquareBumper extends Gizmo implements iGizmo {
 		
 		lineSegments 		= new ArrayList<LineSegment>();
 		circles 			= new ArrayList<Circle>();
+		
+		url = new File("boing_x.wav");
+		try {
+			audio = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(audio);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		fillLineSegments();
 		

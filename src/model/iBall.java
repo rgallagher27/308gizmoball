@@ -54,5 +54,7 @@ public interface iBall {
 	public double getRadius();
 
 	public boolean getOrigCapture();
+	
+	public void setgravity(double g);
 
 }
