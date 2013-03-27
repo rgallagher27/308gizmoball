@@ -24,33 +24,20 @@ import controller.IController;
 
 public class CompleteViewContainer extends JFrame {
 	
+	private boolean mode;
+	
 	private IController control;
 	private ViewCanvas view;
 	private BuildController buildCont;
-	private boolean mode;
 	private JMenuBar menuBar;
+	private JMenu mapMenu;
+	private JMenu buildGizmoMenu;
+	private JMenu buildBallMenu;
+	private JMenu moveMenu;
+	private JMenu triggerMenu;
 	private JMenu menu;
 	
 	private JFileChooser chooser = new JFileChooser();
-	
-	private JRadioButton square;
-	private JRadioButton triangle;
-	private JRadioButton leftFlipper;
-	private JRadioButton rightFlipper;
-	private JRadioButton absorber;
-	private JRadioButton portal;
-	private JRadioButton remove;
-	private JRadioButton rotate;
-	private JRadioButton addTrigger;
-	private JRadioButton removeTrigger;
-	private JRadioButton addBall;
-	private JRadioButton circle;
-	private JRadioButton addKeyTrigger;
-	private JRadioButton removeKeyTrigger;
-	private JRadioButton moveGizmos;
-	private JRadioButton deleteBall;
-	private JRadioButton moveBall;
-	
 	private LinkedList<JRadioButton> buttons;
 	
 	private JPanel buildButtonsPanel;
@@ -61,8 +48,6 @@ public class CompleteViewContainer extends JFrame {
 	private JPanel absorberInfo;
 	private JPanel keyInfo;
 	
-	private JButton load;
-	private JButton save;
 	private JButton play;
 	
 	private TextField tfVX;
@@ -99,83 +84,22 @@ public class CompleteViewContainer extends JFrame {
 		play = new JButton("Pause");
 		play.addActionListener(buildCont);
 		play.setActionCommand("Pause");
-		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.Y_AXIS));
+		playButtonsPanel.setLayout(new BoxLayout(playButtonsPanel, BoxLayout.X_AXIS));
 		playButtonsPanel.add(play);
-		
 	}
 	
 	private void buildButtons(){
 		buildButtonsPanel = new JPanel();
-		absorber = new JRadioButton("Add Absorber");
-		absorber.addActionListener(buildCont);
-		absorber.setActionCommand("Absorber");
-		
-		portal = new JRadioButton("Add Portal");
-		portal.addActionListener(buildCont);
-		portal.setActionCommand("Portal");
-		
-		square = new JRadioButton("Add Square");
-		square.addActionListener(buildCont);
-		square.setActionCommand("Square");
-		
-		triangle = new JRadioButton("Add Triangle");
-		triangle.addActionListener(buildCont);
-		triangle.setActionCommand("Triangle");
-		
-		circle = new JRadioButton("Add Circle");
-		circle.addActionListener(buildCont);
-		circle.setActionCommand("Circle");
-		
-		
-		leftFlipper = new JRadioButton("Add Left Flipper");
-		leftFlipper.addActionListener(buildCont);
-		leftFlipper.setActionCommand("LeftFlipper");
-		
-		rightFlipper = new JRadioButton("Add Right Flipper");
-		rightFlipper.addActionListener(buildCont);
-		rightFlipper.setActionCommand("RightFlipper");
-		
-		remove = new JRadioButton("Remove Gizmo");
-		remove.addActionListener(buildCont);
-		remove.setActionCommand("Remove");
-		
-		rotate = new JRadioButton("Rotate Gizmo");
-		rotate.addActionListener(buildCont);
-		rotate.setActionCommand("Rotate");
-		
-		moveGizmos = new JRadioButton("Move Gizmo");
-		moveGizmos.addActionListener(buildCont);
-		moveGizmos.setActionCommand("Move");
-		
-		addTrigger = new JRadioButton("Add Trigger");
-		addTrigger.addActionListener(buildCont);
-		addTrigger.setActionCommand("AddTrigger");
-		
-		removeTrigger = new JRadioButton("Remove Trigger");
-		removeTrigger.addActionListener(buildCont);
-		removeTrigger.setActionCommand("RemoveTrigger");
-		
-		addKeyTrigger = new JRadioButton("Add Key Trigger");
-		addKeyTrigger.addActionListener(buildCont);
-		addKeyTrigger.setActionCommand("AddKeyTrigger");
 		
 		keyInfo = new JPanel();
-		keyInfo.setLayout(new BoxLayout(keyInfo, BoxLayout.Y_AXIS));
+		keyInfo.setLayout(new BoxLayout(keyInfo, BoxLayout.X_AXIS));
 		keyInfo.add(new JLabel("Key Pressed:"));
 		keyPressed = new JLabel();
 		keyInfo.add(keyPressed);
 		keyInfo.setVisible(false);
 		
-		removeKeyTrigger = new JRadioButton("Remove Key Trigger");
-		removeKeyTrigger.addActionListener(buildCont);
-		removeKeyTrigger.setActionCommand("RemoveKeyTrigger");
-		
-		addBall = new JRadioButton("Add Ball");
-		addBall.addActionListener(buildCont);
-		addBall.setActionCommand("AddBall");
-		
 		ballInfo = new JPanel();
-		ballInfo.setLayout(new BoxLayout(ballInfo, BoxLayout.Y_AXIS));
+		ballInfo.setLayout(new BoxLayout(ballInfo, BoxLayout.X_AXIS));
 		ballInfo.add(new JLabel("Ball X Velocity:"));
 		tfVX = new TextField();
 		tfVX.setMaximumSize(new Dimension(100,30));
@@ -186,17 +110,8 @@ public class CompleteViewContainer extends JFrame {
 		ballInfo.add(tfVY);
 		ballInfo.setVisible(false);
 		
-		moveBall = new JRadioButton("Move Ball");
-		moveBall.addActionListener(buildCont);
-		moveBall.setActionCommand("MoveBall");
-		
-		deleteBall = new JRadioButton("Delete Ball");
-		deleteBall.addActionListener(buildCont);
-		deleteBall.setActionCommand("DeleteBall");
-		
-		
 		absorberInfo = new JPanel();
-		absorberInfo.setLayout(new BoxLayout(absorberInfo, BoxLayout.Y_AXIS));
+		absorberInfo.setLayout(new BoxLayout(absorberInfo, BoxLayout.X_AXIS));
 		absorberInfo.add(new JLabel("Absorber Width:"));
 		absWidth = new TextField();
 		absWidth.setMaximumSize(new Dimension(100,30));
@@ -207,60 +122,124 @@ public class CompleteViewContainer extends JFrame {
 		absorberInfo.add(absHeight);
 		absorberInfo.setVisible(false);
 		
-		load = new JButton("Load");
-		load.setActionCommand("Load");
-		load.addActionListener(buildCont);
-		save = new JButton("Save");
-		save.addActionListener(buildCont);
-		save.setActionCommand("Save");
-		
-		
-		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.Y_AXIS));
-		buildButtonsPanel.add(absorber);
-		buildButtonsPanel.add(portal);
+		buildButtonsPanel.setLayout(new BoxLayout(buildButtonsPanel, BoxLayout.X_AXIS));
 		buildButtonsPanel.add(absorberInfo);
-		buildButtonsPanel.add(square);
-		buildButtonsPanel.add(triangle);
-		buildButtonsPanel.add(circle);
-		buildButtonsPanel.add(leftFlipper);
-		buildButtonsPanel.add(rightFlipper);
-		buildButtonsPanel.add(remove);
-		buildButtonsPanel.add(rotate);
-		buildButtonsPanel.add(moveGizmos);
-		buildButtonsPanel.add(addTrigger);
-		buildButtonsPanel.add(removeTrigger);
-		buildButtonsPanel.add(addKeyTrigger);
 		buildButtonsPanel.add(keyInfo);
-		buildButtonsPanel.add(removeKeyTrigger);
-		buildButtonsPanel.add(addBall);
 		buildButtonsPanel.add(ballInfo);
-		buildButtonsPanel.add(moveBall);
-		buildButtonsPanel.add(deleteBall);
-		buildButtonsPanel.add(load);
-		buildButtonsPanel.add(save);
-		
-		buttons.add(absorber);
-		buttons.add(portal);
-		buttons.add(square);
-		buttons.add(triangle);
-		buttons.add(circle);
-		buttons.add(leftFlipper);
-		buttons.add(rightFlipper);
-		buttons.add(remove);
-		buttons.add(rotate);
-		buttons.add(moveGizmos);
-		buttons.add(addTrigger);
-		buttons.add(removeTrigger);
-		buttons.add(addKeyTrigger);
-		buttons.add(removeKeyTrigger);
-		buttons.add(addBall);
-		buttons.add(moveBall);
-		buttons.add(deleteBall);
-	
-		
-		
 	}
-	private void buildInitial(){
+	
+	private void buildInitial() 
+	{
+		mapMenu = new JMenu("Map Control");
+		
+		JMenuItem loadMenu = new JMenuItem("Load Game Map");
+				  loadMenu.addActionListener(buildCont);
+				  loadMenu.setActionCommand("Load");
+					
+		JMenuItem saveMenu = new JMenuItem("Save Game Map");
+				  saveMenu.addActionListener(buildCont);
+				  saveMenu.setActionCommand("Save");
+				  
+		mapMenu.add(loadMenu);
+		mapMenu.add(saveMenu);
+		
+		buildGizmoMenu = new JMenu("Build Gizmos");
+			  
+		JMenuItem AbMenu = new JMenuItem("Add Absorber");
+				  AbMenu.addActionListener(buildCont);
+				  AbMenu.setActionCommand("Absorber");
+				  
+		JMenuItem SqMenu = new JMenuItem("Add Square");
+				  SqMenu.addActionListener(buildCont);
+				  SqMenu.setActionCommand("Square");
+				  
+		JMenuItem TrMenu = new JMenuItem("Add Triangle");
+				  TrMenu.addActionListener(buildCont);
+		          TrMenu.setActionCommand("Triangle");
+				  
+		JMenuItem CiMenu = new JMenuItem("Add Circle");
+				  CiMenu.addActionListener(buildCont);
+				  CiMenu.setActionCommand("Circle");
+				  
+		JMenuItem LfMenu = new JMenuItem("Add Left Flipper");
+				  LfMenu.addActionListener(buildCont);
+				  LfMenu.setActionCommand("LeftFlipper");
+				  
+		JMenuItem RfMenu = new JMenuItem("Add Right Flipper");
+				  RfMenu.addActionListener(buildCont);
+				  RfMenu.setActionCommand("LeftFlipper");
+				  
+		JMenuItem PoMenu = new JMenuItem("Add Portal");
+				  PoMenu.addActionListener(buildCont);
+				  PoMenu.setActionCommand("Portal");
+				  
+		buildGizmoMenu.add(AbMenu);
+		buildGizmoMenu.add(SqMenu);
+		buildGizmoMenu.add(TrMenu);
+		buildGizmoMenu.add(CiMenu);
+		buildGizmoMenu.add(LfMenu);
+		buildGizmoMenu.add(RfMenu);
+		buildGizmoMenu.add(PoMenu);
+		
+		buildBallMenu = new JMenu("Build Balls");
+
+		JMenuItem BaMenu = new JMenuItem("Add Ball");
+				  BaMenu.addActionListener(buildCont);
+				  BaMenu.setActionCommand("AddBall");
+
+		JMenuItem BrMenu = new JMenuItem("Remove Ball");
+				  BrMenu.addActionListener(buildCont);
+				  BrMenu.setActionCommand("DeleteBall");
+				  
+		buildBallMenu.add(BaMenu);
+		buildBallMenu.add(BrMenu);
+		
+		moveMenu = new JMenu("Move");
+		
+		JMenuItem MoMenu = new JMenuItem("Move Gizmo");
+				  MoMenu.addActionListener(buildCont);
+				  MoMenu.setActionCommand("Move");
+		
+		JMenuItem RmMenu = new JMenuItem("Remove Gizmo");
+				  RmMenu.addActionListener(buildCont);
+				  RmMenu.setActionCommand("Remove");
+		
+		JMenuItem RoMenu = new JMenuItem("Rotate Gizmo");
+				  RoMenu.addActionListener(buildCont);
+				  RoMenu.setActionCommand("Rotate");
+
+		JMenuItem BmMenu = new JMenuItem("Move Ball");
+				  BmMenu.addActionListener(buildCont);
+				  BmMenu.setActionCommand("MoveBall");
+				  
+		moveMenu.add(MoMenu);
+		moveMenu.add(BmMenu);
+		moveMenu.add(RmMenu);
+		moveMenu.add(RoMenu);
+		
+		triggerMenu = new JMenu("Triggers");
+		
+		JMenuItem AGTMenu = new JMenuItem("Add Gizmo Trigger");
+				  AGTMenu.addActionListener(buildCont);
+				  AGTMenu.setActionCommand("AddTrigger");
+					
+		JMenuItem AKTMenu = new JMenuItem("Add Key Trigger");
+				  AKTMenu.addActionListener(buildCont);
+				  AKTMenu.setActionCommand("AddKeyTrigger");
+					
+		JMenuItem RGTMenu = new JMenuItem("Remove Gizmo Trigger");
+				  RGTMenu.addActionListener(buildCont);
+				  RGTMenu.setActionCommand("RemoveTrigger");
+					
+		JMenuItem RKTMenu = new JMenuItem("Remove Key Trigger");
+				  RKTMenu.addActionListener(buildCont);
+				  RKTMenu.setActionCommand("RemoveKeyTrigger");
+				  
+				  
+		triggerMenu.add(AGTMenu);
+		triggerMenu.add(AKTMenu);
+		triggerMenu.add(RGTMenu);
+		triggerMenu.add(RKTMenu);
 		
 		/* menu bar setup */
 		menuBar = new JMenuBar();
@@ -278,14 +257,22 @@ public class CompleteViewContainer extends JFrame {
 		item.setActionCommand("Exit");
 		menu.add(item);
 		menuBar.add(menu);
+		
+		menuBar.add(mapMenu);
+		menuBar.add(buildGizmoMenu);
+		menuBar.add(buildBallMenu);
+		menuBar.add(moveMenu);
+		menuBar.add(triggerMenu);
+		
 		setJMenuBar(menuBar);
+		
 		/* menu bar setup */
-
 		playButtons();
 		buildButtons();
+		
 		buttonsPanel = new JPanel();
 		content = new JPanel();
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
 		buttonsPanel.add(playButtonsPanel);
 		buttonsPanel.add(buildButtonsPanel);
 		setContentPane(content);
@@ -295,7 +282,7 @@ public class CompleteViewContainer extends JFrame {
 
 
 		getContentPane().add(view, BorderLayout.WEST);
-		getContentPane().add(buttonsPanel, BorderLayout.EAST);
+		getContentPane().add(buttonsPanel, BorderLayout.NORTH);
 		setVisible(true);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -331,6 +318,11 @@ public class CompleteViewContainer extends JFrame {
 		playButtonsPanel.setVisible(false);
 		mode = false;
 		view.setMode(false);
+		mapMenu.setVisible(true);
+		buildGizmoMenu.setVisible(true);
+		buildBallMenu.setVisible(true);
+		moveMenu.setVisible(true);
+		triggerMenu.setVisible(true);
 		pack();
 		repaint();
 	}
@@ -340,6 +332,11 @@ public class CompleteViewContainer extends JFrame {
 		playButtonsPanel.setVisible(true);
 		mode = true;
 		view.setMode(true);
+		mapMenu.setVisible(false);
+		buildGizmoMenu.setVisible(false);
+		buildBallMenu.setVisible(false);
+		moveMenu.setVisible(false);
+		triggerMenu.setVisible(false);
 		pack();
 		repaint();
 	}
